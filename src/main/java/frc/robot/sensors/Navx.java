@@ -7,8 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
-//TODO: make not static
-
 public class Navx {
     //Instance Handling
     private static Navx m_pInstance;
