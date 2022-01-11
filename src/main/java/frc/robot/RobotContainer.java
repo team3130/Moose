@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class RobotContainer {
     // define subsystems here
 
-    // reminder that Singeltons are deprecated, please do not use them even for subsystems
+    // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
 

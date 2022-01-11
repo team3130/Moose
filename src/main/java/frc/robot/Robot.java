@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -15,8 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
 
@@ -26,8 +25,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.setDefaultOption("Default Auto", RobotMap.kDefaultAuto);
+    m_chooser.addOption("My Auto", RobotMap.kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
   }
 
@@ -62,10 +61,10 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
-      case kCustomAuto:
+      case RobotMap.kCustomAuto:
         // Put custom auto code here
         break;
-      case kDefaultAuto:
+      case RobotMap.kDefaultAuto:
       default:
         // Put default auto code here
         break;

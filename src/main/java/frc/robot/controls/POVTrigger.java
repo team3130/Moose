@@ -1,4 +1,4 @@
-package frc.team3130.robot.controls;
+package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
