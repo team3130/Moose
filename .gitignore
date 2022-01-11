@@ -238,3 +238,5 @@ fabric.properties
 .idea/gradle.xml
 
 gradle/wrapper/
+
+gradlew
