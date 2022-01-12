@@ -1,19 +1,16 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Shooter m_shooter;
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public Shoot(Shooter subsystem) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
+        m_shooter = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
@@ -21,7 +18,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_shooter.spinMotor(m_shooter.getSpeedFromShuffleboard());
     }
 
     /**
@@ -63,6 +60,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_shooter.spinMotor(0);
     }
 }
