@@ -1,9 +1,9 @@
-package frc.robot.commands;
+package frc.robot.team3130.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.team3130.subsystems.ExampleSubsystem;
 
 import java.util.Set;
 
