@@ -64,8 +64,7 @@ public class Node {
     }
 
     public void addPair(Pair<Double, Double> coords) {
-        poses.add(coords.getFirst());
-        poses.add(coords.getSecond());
+        poses.add(new Double[] {coords.getFirst(), coords.getSecond()});
     }
 
     /**
@@ -137,18 +136,18 @@ public class Node {
         return builder.append("\n").toString();
     }
 
-    public boolean canBeAPart(Pair<Double, Double> coords) {
+    public boolean canBeAPart(Double[] coords) {
         if (poses.size() < 2) {
-            return true;
+            return false;
         }
         
-        double slopeOld = (poses.get(1) - poses.get(0)) / (poses.get(1) - poses.get(0));
-        double slopeNew = (coords.getSecond() - poses.get(poses.size() - 1)) / (coords.getFirst() - poses.get(poses.size() - 1));
+        double slopeOld = (poses.get(1)[1] - poses.get(0)[1]) / (poses.get(1)[0] - poses.get(0)[0]);
+        double slopeNew = (coords[1] - poses.get(poses.size() - 1)[1]) / (coords[0] - poses.get(poses.size() - 1)[0]);
 
         if ((slopeNew > slopeOld + 1) || (slopeNew < slopeOld - 1)) {
             return false;
         }
 
-        return this.getDistance(new Node(coords.getFirst(), coords.getSecond())) <= 1;
+        return this.getDistance(new Node(coords[0], coords[1])) <= 1;
     }
 }

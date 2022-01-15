@@ -96,7 +96,7 @@ public class Graph {
         return false;
     }
 
-    public void addUnique(Pair<Double, Double> toBeAdded) {
+    public void addUnique(Double[] toBeAdded) {
         int numAppliesTo = 0;
         int[] indexApartOf = new int[nodes.size()];
         for (int i = 0; i < nodes.size(); i++) {
@@ -105,7 +105,7 @@ public class Graph {
             }
         }
 
-        Node toAdd = new Node(toBeAdded.getFirst(), toBeAdded.getSecond());
+        Node toAdd = new Node(toBeAdded[0], toBeAdded[1]);
 
         if (numAppliesTo == 0) {
             nodes.add(toAdd);

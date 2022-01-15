@@ -3,6 +3,8 @@ package frc.robot.team3130.SupportingClasses;
 import edu.wpi.first.math.Pair;
 import junit.framework.TestCase;
 
+import java.util.Arrays;
+
 public class BallManagerTest extends TestCase {
     public void testGetPath() {
         Graph graph = new Graph();
@@ -19,12 +21,16 @@ public class BallManagerTest extends TestCase {
         for (int time = 0; time < toAdd.length; time++) {
             for (int batch = 0; batch < toAdd[time].length; batch++) {
                 for (int coords = 0; coords < toAdd[time][batch].length; coords++) {
-                    graph.addUnique(new Pair<>((Math.random() * (max - min)) + min, (Math.random() * (max - min)) + min));
+                    Pair<Double, Double> add = new Pair<>((Math.random() * (max - min)) + min, (Math.random() * (max - min)) + min);
+                    graph.addUnique(add);
+                    System.out.print("(" + Math.round(add.getFirst()*100)/100 + ", " + Math.round(add.getSecond()*100)/100 + "), ");
+//                    toAdd[time][batch][coords] = add.getFirst();
+//                    toAdd[time][batch][coords] = add.getSecond();
                 }
+                System.out.println();
             }
+            System.out.println();
         }
-
-        System.out.println(graph);
-
+        System.out.println("\n\n\n" + graph);
     }
 }
