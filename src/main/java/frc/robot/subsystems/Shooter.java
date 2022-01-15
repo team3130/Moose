@@ -9,19 +9,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
 public class Shooter extends SubsystemBase {
-    private WPI_TalonSRX m_motor;
+    private WPI_TalonFX m_motor;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
 
     private NetworkTableEntry sped = tab.add("Speed", 0.5).getEntry();
-
+    private NetworkTableEntry RPM = tab.add("RPM", getRPM() ).getEntry();
+z
     //Create and define all standard data types needed
     public Shooter() {
-        m_motor = new WPI_TalonSRX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_motor = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
     }
 
     public void spinMotor(double speed) {
         m_motor.set(speed);
+    }
+
+    public double getRawSpeed(
+            return m_motor.getSelectedSensorVelocity();
+    )
+
+    public double getRPM(){
+        return getRawSpeed() / kMotorTicksPerRevolution;
     }
 
     public double getSpeedFromShuffleboard() {
@@ -29,4 +38,3 @@ public class Shooter extends SubsystemBase {
     }
 
 }
-
