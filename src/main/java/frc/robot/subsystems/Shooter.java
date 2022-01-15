@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -15,7 +16,7 @@ public class Shooter extends SubsystemBase {
 
     private NetworkTableEntry sped = tab.add("Speed", 0.5).getEntry();
     private NetworkTableEntry RPM = tab.add("RPM", getRPM() ).getEntry();
-z
+
     //Create and define all standard data types needed
     public Shooter() {
         m_motor = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
@@ -25,12 +26,12 @@ z
         m_motor.set(speed);
     }
 
-    public double getRawSpeed(
-            return m_motor.getSelectedSensorVelocity();
-    )
+    public double getRawSpeed() {
+        return m_motor.getSelectedSensorVelocity();
+    }
 
     public double getRPM(){
-        return getRawSpeed() / kMotorTicksPerRevolution;
+        return getRawSpeed() / RobotMap.kMotorTicksPerRevolution;
     }
 
     public double getSpeedFromShuffleboard() {

@@ -20,7 +20,7 @@ public class RobotMap {
      * CAN ID's
      */
 
-    public static final char CAN_SHOOTER_MOTOR = 0;
+    public static final char CAN_SHOOTER_MOTOR = 2;
 
     /**
      * Gamepad Button List
