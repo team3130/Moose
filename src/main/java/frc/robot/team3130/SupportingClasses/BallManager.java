@@ -17,7 +17,7 @@ public class BallManager {
      */
     public void addBalls(Pair<Double, Double>[] balls) {
         for (Pair<Double, Double> ball : balls) {
-            graph.addUnique(ball);
+            graph.addUnique(new Double[] {ball.getFirst(), ball.getSecond()});
         }
     }
 

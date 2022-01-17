@@ -63,8 +63,8 @@ public class Node {
         return degrees;
     }
 
-    public void addPair(Pair<Double, Double> coords) {
-        poses.add(new Double[] {coords.getFirst(), coords.getSecond()});
+    public void addPair(Double[] coords) {
+        poses.add(coords);
     }
 
     /**
@@ -126,14 +126,7 @@ public class Node {
     }
 
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < poses.size(); i++) {
-            builder.append("(").append(Arrays.toString(poses.get(i))).append(", ").append(Arrays.toString(poses.get(i))).append(")");
-            if (i != poses.size() - 1) {
-                builder.append(", ");
-            }
-        }
-        return builder.append("\n").toString();
+        return Arrays.toString(poses.get(poses.size() - 1));
     }
 
     public boolean canBeAPart(Double[] coords) {

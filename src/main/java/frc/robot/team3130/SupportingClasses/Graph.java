@@ -108,7 +108,6 @@ public class Graph {
         Node toAdd = new Node(toBeAdded[0], toBeAdded[1]);
 
         if (numAppliesTo == 0) {
-            nodes.add(toAdd);
             addNode(toAdd);
         }
 
