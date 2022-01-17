@@ -20,7 +20,11 @@ public class RobotMap {
      * CAN ID's
      */
 
-    public static final char CAN_SHOOTER_MOTOR = 2;
+    public static final char CAN_SHOOTER_MOTOR = 5;
+
+
+    public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
+    public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
 
     /**
      * Gamepad Button List

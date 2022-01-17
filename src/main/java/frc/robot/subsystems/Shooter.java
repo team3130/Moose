@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -15,7 +16,7 @@ public class Shooter extends SubsystemBase {
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
 
     private NetworkTableEntry sped = tab.add("Speed", 0.5).getEntry();
-    private NetworkTableEntry RPM = tab.add("RPM", getRPM() ).getEntry();
+    private NetworkTableEntry RPM = tab.add("RPM", 0).getEntry();
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -31,11 +32,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getRPM(){
-        return getRawSpeed() / RobotMap.kMotorTicksPerRevolution;
+        return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
     public double getSpeedFromShuffleboard() {
         return sped.getDouble(0.5);
     }
 
+    public void writeOutput() {
+        RPM.setNumber(getRPM());
+    }
+
+    @Override
+    public void periodic() {
+        writeOutput();
+    }
 }
