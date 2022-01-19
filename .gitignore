@@ -237,6 +237,4 @@ fabric.properties
 .idea/vcs.xml
 .idea/gradle.xml
 
-gradle/wrapper/
-
-gradlew
+.vscode/settings.json
