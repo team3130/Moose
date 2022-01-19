@@ -126,21 +126,14 @@ public class Node {
     }
 
     public String toString() {
-        return Arrays.toString(poses.get(poses.size() - 1));
+        StringBuilder builder = new StringBuilder();
+        for (Double[] pose : poses) {
+            builder.append("(").append(pose[0]).append(", ").append(pose[1]).append("), ");
+        }
+        return builder.toString();
     }
 
     public boolean canBeAPart(Double[] coords) {
-        if (poses.size() < 2) {
-            return false;
-        }
-        
-        double slopeOld = (poses.get(1)[1] - poses.get(0)[1]) / (poses.get(1)[0] - poses.get(0)[0]);
-        double slopeNew = (coords[1] - poses.get(poses.size() - 1)[1]) / (coords[0] - poses.get(poses.size() - 1)[0]);
-
-        if ((slopeNew > slopeOld + 1) || (slopeNew < slopeOld - 1)) {
-            return false;
-        }
-
-        return this.getDistance(new Node(coords[0], coords[1])) <= 1;
+        return this.getDistance(new Node(coords[0], coords[1])) <= 0.1;
     }
 }
