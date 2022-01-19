@@ -18,7 +18,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.spinMotor(m_shooter.getSpeedFromShuffleboard());
+        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
     }
 
     /**

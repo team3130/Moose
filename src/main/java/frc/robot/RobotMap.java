@@ -63,4 +63,9 @@ public class RobotMap {
     public static final int LST_AXS_RTRIGGER = 3;
     public static final int LST_AXS_RJOYSTICKX = 4;
     public static final int LST_AXS_RJOYSTICKY = 5;
+
+    public static double kFlywheelP = .22;
+    public static double kFlywheelI = 0.0;
+    public static double kFlywheelD = 12;
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 }
