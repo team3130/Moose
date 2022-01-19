@@ -5,16 +5,20 @@ public class RobotMap {
      * Navx related variables
      */
     public static final boolean kNavxReversed = true;
-
     /**
-     * Robot related constants
-     */
-    public static final String kDefaultAuto = "Default";
-    public static final String kCustomAuto = "My Auto";
-
+   * MotorThing
     /**
      * Gamepad Button List
      */
+    public static final int kMotorThingCanDevice = 0;
+
+
+
+
+
+
+
+
     public static final int LST_BTN_A = 1;
     public static final int LST_BTN_B = 2;
     public static final int LST_BTN_X = 3;
