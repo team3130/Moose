@@ -236,3 +236,5 @@ fabric.properties
 .idea/launch.xml
 .idea/vcs.xml
 .idea/gradle.xml
+
+.vscode/settings.json
