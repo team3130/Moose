@@ -7,8 +7,12 @@ public class RobotMap {
     public static final boolean kNavxReversed = true;
 
     /**
-     * Robot related constants
+     * grapplingHook
      */
+
+    public static final int kgrapplingHook = 0
+
+
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
 

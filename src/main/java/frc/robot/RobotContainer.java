@@ -7,13 +7,17 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class RobotContainer {
     // define subsystems here
-
+    private grapplingHook m_grapplingHook = new grapplingHook
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
 
     // make getters for subsystems here
 
+
+    public grapplingHook getM_grapplingHook() {
+        reurn m_grapplingHook;
+    }
 
     public RobotContainer() {
         defineButtonBindings();
@@ -23,6 +27,8 @@ public class RobotContainer {
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
-    private void defineButtonBindings() {}
+    private void defineButtonBindings() {
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTM_X).whenHeld(new gatekeepGrapplingHook());
 
+    }
 }
