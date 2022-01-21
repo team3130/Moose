@@ -6,7 +6,7 @@ public class RobotMap {
      */
     public static final boolean kNavxReversed = true;
 
-    public static final int WHEEL_GO_BRRRRRRRRRRRRRRRR = 0;
+    public static final int WHEEL_GO_BRRRRRRRRRRRRRRRR = 3;
 
     /**
      * Robot related constants
