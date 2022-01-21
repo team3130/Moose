@@ -7,8 +7,9 @@ public class RobotMap {
     public static final boolean kNavxReversed = true;
 
     /**
-     * Robot related constants
+     * motorgobRrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
      */
+    public static final int kmotorsubcandevice = 3;
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
 
