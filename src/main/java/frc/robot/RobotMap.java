@@ -6,6 +6,9 @@ public class RobotMap {
      */
     public static final boolean kNavxReversed = true;
 
+    //motor
+    public static final int kMotor_Subsystemcandevice = 3;
+
     /**
      * Robot related constants
      */
