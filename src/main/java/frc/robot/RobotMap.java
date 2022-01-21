@@ -10,11 +10,14 @@ public class RobotMap {
     /**
      * Gamepad Button List
      */
-    public static final int kMotorThingCanDevice = 0;
+    public static final int kMotorThingCanDevice = 3;
 
 
-
-
+/**
+     * Robot related constants
+     */
+    public static final String kDefaultAuto = "Default";
+    public static final String kCustomAuto = "My Auto";
 
 
 

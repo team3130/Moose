@@ -18,7 +18,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
+  RobotContainer m_robotContainer;
+  CommandScheduler m_scheduler = CommandScheduler.getInstance();
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", RobotMap.kDefaultAuto);
     m_chooser.addOption("My Auto", RobotMap.kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    m_robotContainer = new RobotContainer();
   }
 
   /**
@@ -77,7 +79,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_scheduler.run();
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
