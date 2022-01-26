@@ -15,6 +15,12 @@ public class RobotMap {
     public static final String kCustomAuto = "My Auto";
 
     /**
+     * CAN ID's
+     */
+
+    public static final int CAN_SHOOTER_MOTOR = 3;
+
+    /**
      * Gamepad Button List
      */
     public static final int LST_BTN_A = 1;

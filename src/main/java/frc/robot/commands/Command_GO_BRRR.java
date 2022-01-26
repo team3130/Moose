@@ -1,16 +1,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.WHEEL_GO_BRRRRRRRRRRRRRR;
+import frc.robot.subsystems.WheelBrrr;
 
-public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
+public class Command_GO_BRRR extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final WHEEL_GO_BRRRRRRRRRRRRRR m_subsystem;
+    private final WheelBrrr m_motorBRRR; 
 
-    public Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR(WHEEL_GO_BRRRRRRRRRRRRRR subsystem) {
+    public Command_GO_BRRR(WheelBrrr subsystem) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
+        m_motorBRRR = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
@@ -18,7 +18,7 @@ public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(0.5);
+        m_motorBRRR.spinMotor(5);
     }
 
     /**
@@ -60,6 +60,6 @@ public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.setSpeed(0);
+        m_motorBRRR.spinMotor(0);
     }
 }
