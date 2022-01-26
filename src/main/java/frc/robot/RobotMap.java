@@ -4,6 +4,8 @@ public class RobotMap {
     /**
      * Navx related variables
      */
+    public static final int CAN_SHOOTER_MOTOR = 5;
+
     public static final boolean kNavxReversed = true;
 
     public static final int WHEEL_GO_BRRRRRRRRRRRRRRRR = 0;
