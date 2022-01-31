@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Commands;
+import frc.robot.commands.ToggleClimber;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.SubsystemMotor;
 
 /**
@@ -11,13 +13,16 @@ import frc.robot.subsystems.SubsystemMotor;
 public class RobotContainer {
     // define subsystems here
     SubsystemMotor m_SubsystemMotor = new SubsystemMotor();
+    Climber m_climber = new Climber();
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
 
     // make getters for subsystems here
-
+    public Climber getClimber() {
+        return m_climber;
+    }
 
     public RobotContainer() {
         defineButtonBindings();
@@ -29,6 +34,7 @@ public class RobotContainer {
 
     private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Commands(m_SubsystemMotor));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new ToggleClimber(m_climber));
     }
 
 }

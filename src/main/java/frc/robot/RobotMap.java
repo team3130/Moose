@@ -51,4 +51,15 @@ public class RobotMap {
     public static final int LST_AXS_RJOYSTICKY = 5;
 
     public static final int KMOTORCANID = 3;
+
+
+
+    //to do change to actual value
+    public static final int CAN_PNU_MATIC_HUB = 7;
+
+    /**
+     * Pnematics
+     */
+    public static final int CLIMBER_ACTUATOR = 3;
+
 }
