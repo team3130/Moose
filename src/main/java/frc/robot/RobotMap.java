@@ -12,6 +12,10 @@ public class RobotMap {
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
 
+    //TODO: change to actualvalue
+    public static  final int CAN_PNU_MATIC_HUB = 7;
+
+    public  static final int Climber_Actuator = 3;
     /**
      * Gamepad Button List
      */
