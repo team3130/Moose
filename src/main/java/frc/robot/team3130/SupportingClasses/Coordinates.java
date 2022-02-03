@@ -12,7 +12,7 @@ public class Coordinates {
         translation(rotation(convert(x, y, diameter), botAngle), botX, botY);
     }
 
-    private double[] convert(double x, double y, double diameter) {
+    private static double[] convert(double x, double y, double diameter) {
         double[] coords = {
                 x * X_CONSTANT * Z_CONSTANT / diameter,
                 y * Y_CONSTANT * Z_CONSTANT / diameter,
@@ -22,7 +22,7 @@ public class Coordinates {
 
     }
 
-    private double[] rotation(double[] coords, double botAngle) {
+    private static double[] rotation(double[] coords, double botAngle) {
         double x = coords[0];
         double y = coords[1];
         coords[0] = Math.cos(botAngle) * x - Math.sin(botAngle) * y;
@@ -31,7 +31,7 @@ public class Coordinates {
 
     }
 
-    private void translation(double[] coords, double botX, double botY) {
+    private static void translation(double[] coords, double botX, double botY) {
         xPos = coords[0] + botX;
         yPos = coords[1] + botY;
         zPos = coords[2];
