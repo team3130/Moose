@@ -3,10 +3,10 @@ package frc.robot.team3130.SupportingClasses;
 public class Coordinates {
     private double xPos;
     private double yPos;
-    private double height;
-    private final double X_CONSTANT = 1; // TODO: determine this
-    private final double Y_CONSTANT = 1; // TODO: determine this
-    private final double HEIGHT_CONSTANT = 1; // TODO: determine this
+    private double zPos;
+    private static final double X_CONSTANT = 1; // TODO: determine this
+    private static final double Y_CONSTANT = 1; // TODO: determine this
+    private static final double HEIGHT_CONSTANT = 1; // TODO: determine this
 
     Coordinates(double x, double y, double diameter, double botX, double botY, double botAngle) {
         translation(rotation(convert(x, y, diameter), botAngle), botX, botY);
@@ -31,7 +31,7 @@ public class Coordinates {
 
     }
 
-    private static void translation(double[] coords, double botX, double botY) {
+    private void translation(double[] coords, double botX, double botY) {
         xPos = coords[0] + botX;
         yPos = coords[1] + botY;
         zPos = coords[2];
