@@ -1,34 +1,33 @@
 package frc.robot.team3130.SupportingClasses;
 
 public class Coordinates {
-    private double x;
-    private double y;
-    private double z;
-    private final double X_CONSTANT = 1;    //TODO: determine this
-    private final double Y_CONSTANT = 1;    //TODO: determine this
-    private final double Z_CONSTANT = 1;    //TODO: determine this
+    private double xPos;
+    private double yPos;
+    private double zPos;
+    private final double X_CONSTANT = 1; // TODO: determine this
+    private final double Y_CONSTANT = 1; // TODO: determine this
+    private final double Z_CONSTANT = 1; // TODO: determine this
 
-    Coordinates(double x, double y, double dia) {
-        convert(x, y, dia);
-        // convertSpherical(x, y, dia);
+    Coordinates(double x, double y, double diameter) {
+        convert(x, y, diameter);
     }
 
-    private void convert(double x, double y, double dia) {
-        this.z = Z_CONSTANT / dia;
-        this.x = x * z * X_CONSTANT;
-        this.y = y * z * Y_CONSTANT;
+    private void convert(double x, double y, double diameter) {
+        zPos = Z_CONSTANT / diameter;
+        xPos = x * zPos * X_CONSTANT;
+        yPos = y * zPos * Y_CONSTANT;
 
     }
 
     public double getX() {
-        return x;
+        return xPos;
     }
 
     public double getY() {
-        return y;
+        return yPos;
     }
 
     public double getZ() {
-        return z;
+        return zPos;
     }
 }
