@@ -1,40 +1,60 @@
 package frc.robot.team3130.SupportingClasses;
 
 public class Coordinates {
+    // field coords
     private double xPos;
     private double yPos;
     private double zPos;
+
+    // final constants
     private static final double X_CONSTANT = 1; // TODO: determine this
     private static final double Y_CONSTANT = 1; // TODO: determine this
     private static final double HEIGHT_CONSTANT = 1; // TODO: determine this
 
-    Coordinates(double x, double y, double diameter, double botX, double botY, double botAngle) {
-        translation(rotation(convert(x, y, diameter), botAngle), botX, botY);
+    Coordinates(double xCam, double yCam, double ballRad, double botX, double botY, double botZ, double botAngle) {
+        double[] coords = translation(rotation(dilation(xCam, yCam, ballRad), botAngle), botX, botY, botZ);
+        xPos = coords[0];
+        yPos = coords[1];
+        zPos = coords[2];
     }
 
-    private static double[] convert(double x, double y, double diameter) {
+    /**
+     * Finds the ball's distance from the camera and creates (X,Y,Z) coords
+     * with the camera position at the origin.
+     * Note: assume (0,0) is at the center of the camera image.
+     */
+    private static double[] dilation(double xCam, double yCam, double ballRad) {
         double[] coords = {
-                x * X_CONSTANT * HEIGHT_CONSTANT / diameter,
-                HEIGHT_CONSTANT / diameter,
-                y * Y_CONSTANT * HEIGHT_CONSTANT / diameter,
+                xCam * X_CONSTANT * HEIGHT_CONSTANT / ballRad,
+                HEIGHT_CONSTANT / ballRad,
+                yCam * Y_CONSTANT * HEIGHT_CONSTANT / ballRad,
         };
         return coords;
 
     }
 
+    /**
+     * Rotation matrix
+     * Rotates the axis by @param botAngle radians
+     */
     private static double[] rotation(double[] coords, double botAngle) {
-        double x = coords[0];
-        double y = coords[1];
-        coords[0] = Math.cos(botAngle) * x - Math.sin(botAngle) * y;
-        coords[1] = Math.sin(botAngle) * x + Math.cos(botAngle) * y;
+        double xPos = coords[0];
+        double yPos = coords[1];
+        coords[0] = Math.cos(botAngle) * xPos - Math.sin(botAngle) * yPos;
+        coords[1] = Math.sin(botAngle) * xPos + Math.cos(botAngle) * yPos;
         return coords;
 
     }
 
-    private void translation(double[] coords, double botX, double botY) {
-        xPos = coords[0] + botX;
-        yPos = coords[1] + botY;
-        zPos = coords[2];
+    /**
+     * Translation matrix
+     * Shifts the origin of the coordinate plane by @param botX 
+     */
+    private static double[] translation(double[] coords, double botX, double botY, double botZ) {
+        coords[0] = coords[0] + botX;
+        coords[1] = coords[1] + botY;
+        coords[2] = coords[2] + botZ;
+        return coords;
     }
 
     public double getX() {
