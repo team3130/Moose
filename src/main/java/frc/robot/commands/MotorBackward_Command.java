@@ -7,11 +7,11 @@ import frc.robot.subsystems.Motor_Subsystem;
 
 import java.util.Set;
 
-public class Motor_Command extends CommandBase {
+public class MotorBackward_Command extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Motor_Subsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public Motor_Command(Motor_Subsystem subsystem) {
+    public MotorBackward_Command(Motor_Subsystem subsystem) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
     }
@@ -21,7 +21,7 @@ public class Motor_Command extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(0.2);
+        m_subsystem.setSpeed(-0.2);
     }
 
     /**
