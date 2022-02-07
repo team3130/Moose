@@ -8,6 +8,7 @@ public class RobotMap {
 
     //motor
     public static final int kMotor_Subsystemcandevice = 3;
+    public static final int kMotor_Subsystem2candevice = 1;
 
     /**
      * Robot related constants
