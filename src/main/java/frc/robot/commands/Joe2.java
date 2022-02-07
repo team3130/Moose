@@ -1,16 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 
-public class Joe extends CommandBase {
+public class Joe2 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Intake m_subsystem2; //TODO: rename this to the subsystem this is assigned to
+    private final Intake m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public Joe(Intake subsystem) {
+    public Joe2(Intake subsystem) {
         //mapping to object passed through parameter
-        m_subsystem2 = subsystem;
+        m_subsystem = subsystem;
         m_requirements.add(subsystem);
     }
 
@@ -19,7 +18,7 @@ public class Joe extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem2.spinMoter(.75);
+        m_subsystem.spinMoter(-.75);
     }
 
     /**
@@ -61,6 +60,6 @@ public class Joe extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem2.spinMoter(0);
+        m_subsystem.spinMoter(0);
     }
 }

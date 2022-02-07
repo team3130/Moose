@@ -3,7 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR;
+import frc.robot.commands.Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR2;
 import frc.robot.commands.Joe;
+import frc.robot.commands.Joe2;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.WHEEL_GO_BRRRRRRRRRRRRRR;
 
@@ -29,5 +31,6 @@ public class RobotContainer {
 
     private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Joe(m_intake));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Joe2(m_intake));
     }
 }
