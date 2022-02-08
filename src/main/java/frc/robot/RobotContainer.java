@@ -2,10 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Drive_Forward;
 import frc.robot.commands.MotorBackward_Command;
 import frc.robot.commands.MotorBackward_Command2;
 import frc.robot.commands.MotorForward_Command;
-import frc.robot.commands.MotorForward_Command2;
+import frc.robot.commands.Turn1;
+import frc.robot.commands.Turn2;
 import frc.robot.subsystems.Motor_Subsystem;
 import frc.robot.subsystems.Motor_Subsystem2;
 
@@ -38,10 +40,9 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new MotorForward_Command(m_Motor_Subsystem));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new MotorBackward_Command(m_Motor_Subsystem));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new MotorForward_Command2(m_Motor_Subsystem2));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new MotorBackward_Command2(m_Motor_Subsystem2));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Drive_Forward(m_Motor_Subsystem, m_Motor_Subsystem2));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Turn1(m_Motor_Subsystem, m_Motor_Subsystem2));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Turn2(m_Motor_Subsystem, m_Motor_Subsystem2));
     }
 
 }

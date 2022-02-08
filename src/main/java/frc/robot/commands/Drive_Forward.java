@@ -8,13 +8,15 @@ import frc.robot.subsystems.Motor_Subsystem2;
 
 import java.util.Set;
 
-public class MotorForward_Command2 extends CommandBase {
+public class Drive_Forward extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Motor_Subsystem2 m_subsystem2; //TODO: rename this to the subsystem this is assigned to
+    private final Motor_Subsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Motor_Subsystem2 m_subsystem2;
 
-    public MotorForward_Command2(Motor_Subsystem2 subsystem) {
+    public Drive_Forward(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2) {
         //mapping to object passed through parameter
-        m_subsystem2 = subsystem;
+        m_subsystem = subsystem;
+        m_subsystem2 = subsystem2;
     }
 
     /**
@@ -22,6 +24,7 @@ public class MotorForward_Command2 extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_subsystem.setSpeed(0.3);
         m_subsystem2.setSpeed(0.3);
     }
 
@@ -64,6 +67,7 @@ public class MotorForward_Command2 extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
+        m_subsystem.setSpeed(0);
         m_subsystem2.setSpeed(0);
     }
 }
