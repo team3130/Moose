@@ -1,5 +1,10 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
 public class RobotMap {
     /**
      * Navx related variables
@@ -61,5 +66,12 @@ public class RobotMap {
      * Pnematics
      */
     public static final int CLIMBER_ACTUATOR = 3;
+
+
+    public static final int CAN_CHASSIS_MOTOR_FRONTR = 3;
+    public static final int CAN_CHASSIS_MOTOR_FRONTL = 2;
+
+
+    }
 
 }

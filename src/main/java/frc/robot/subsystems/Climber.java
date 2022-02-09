@@ -11,7 +11,7 @@ public class Climber extends SubsystemBase {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-    private Solenoid m_pnuematic; 
+    private Solenoid m_pnuematic;
 
     //Create and define all standard data types needed
     public Climber() {
