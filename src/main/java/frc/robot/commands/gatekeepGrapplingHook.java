@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.grapplingHook;
 import java.util.Set;
 
-public class ExampleCommand extends CommandBase {
+public class gatekeepGrapplingHook extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final grapplingHook m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public ExampleCommand(grapplingHook subsystem) {
+    public gatekeepGrapplingHook(grapplingHook subsystem) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
     }

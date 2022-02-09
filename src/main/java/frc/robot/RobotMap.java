@@ -10,7 +10,7 @@ public class RobotMap {
      * grapplingHook
      */
 
-    public static final int kgrapplingHook = 0
+    public static final int kgrapplingHook = 0;
 
 
     public static final String kDefaultAuto = "Default";
