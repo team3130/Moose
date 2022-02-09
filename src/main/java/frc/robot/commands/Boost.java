@@ -1,19 +1,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Motor_Subsystem;
-import frc.robot.subsystems.Motor_Subsystem2;
 
 
-public class Drive_Forward extends CommandBase {
+public class Boost extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Motor_Subsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
-    private final Motor_Subsystem2 m_subsystem2;
+    //private final ExampleSubsystem m_subsystem;
+    private boolean boost;
 
-    public Drive_Forward(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2) {
+    public Boost(boolean pboost) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_subsystem2 = subsystem2;
+        //m_subsystem = subsystem;
+        boost = pboost;
     }
 
     /**
@@ -21,8 +19,7 @@ public class Drive_Forward extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(0.3);
-        m_subsystem2.setSpeed(0.3);
+        boost = true;
     }
 
     /**
@@ -64,7 +61,6 @@ public class Drive_Forward extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.setSpeed(0);
-        m_subsystem2.setSpeed(0);
+        boost = false;
     }
 }

@@ -5,16 +5,21 @@ import frc.robot.subsystems.Motor_Subsystem;
 import frc.robot.subsystems.Motor_Subsystem2;
 
 
-public class Turn1 extends CommandBase {
+public class Drive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Motor_Subsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
     private final Motor_Subsystem2 m_subsystem2;
-    public boolean Turning1 = true;
+    private double speed1;
+    private double speed2;
+    private boolean boost;
 
-    public Turn1(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2) {
+    public Drive(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2, double Speed1, double Speed2, boolean pboost) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
         m_subsystem2 = subsystem2;
+        speed1 = Speed1;
+        speed2 = Speed2;
+        boost = pboost;
     }
 
     /**
@@ -22,9 +27,12 @@ public class Turn1 extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(0.3);
-        m_subsystem2.setSpeed(-0.3);
-
+        if (boost) {
+            speed1 = speed1 + speed1 * 0.4;
+            speed2 = speed2 + speed2 * 0.4;
+        }
+        m_subsystem.setSpeed(speed1);
+        m_subsystem2.setSpeed(speed2);
     }
 
     /**
@@ -66,8 +74,7 @@ public class Turn1 extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
+        m_subsystem.setSpeed(0);
         m_subsystem2.setSpeed(0);
-        m_subsystem2.setSpeed(0);
-        Turning1 = false;
     }
 }

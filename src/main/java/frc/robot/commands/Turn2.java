@@ -9,6 +9,7 @@ public class Turn2 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Motor_Subsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
     private final Motor_Subsystem2 m_subsystem2;
+    public boolean Turning2 = true;
 
     public Turn2(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2) {
         //mapping to object passed through parameter
@@ -67,5 +68,6 @@ public class Turn2 extends CommandBase {
     public void end(boolean interrupted) {
         m_subsystem2.setSpeed(0);
         m_subsystem.setSpeed(0);
+        Turning2 = false;
     }
 }
