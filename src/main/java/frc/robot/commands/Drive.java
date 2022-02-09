@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Motor_Subsystem;
 import frc.robot.subsystems.Motor_Subsystem2;
-
+import frc.robot.RobotContainer;
 
 public class Drive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
@@ -11,15 +11,13 @@ public class Drive extends CommandBase {
     private final Motor_Subsystem2 m_subsystem2;
     private double speed1;
     private double speed2;
-    private boolean boost;
 
-    public Drive(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2, double Speed1, double Speed2, boolean pboost) {
+    public Drive(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2, double Speed1, double Speed2) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
         m_subsystem2 = subsystem2;
         speed1 = Speed1;
         speed2 = Speed2;
-        boost = pboost;
     }
 
     /**
@@ -27,7 +25,7 @@ public class Drive extends CommandBase {
      */
     @Override
     public void initialize() {
-        if (boost) {
+        if (RobotContainer.boost) {
             speed1 = speed1 + speed1 * 0.4;
             speed2 = speed2 + speed2 * 0.4;
         }

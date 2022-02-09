@@ -1,17 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import frc.robot.RobotContainer;
 
 public class Boost extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     //private final ExampleSubsystem m_subsystem;
-    private boolean boost;
 
-    public Boost(boolean pboost) {
+    public Boost() {
         //mapping to object passed through parameter
         //m_subsystem = subsystem;
-        boost = pboost;
     }
 
     /**
@@ -19,7 +17,7 @@ public class Boost extends CommandBase {
      */
     @Override
     public void initialize() {
-        boost = true;
+        RobotContainer.boost = true;
     }
 
     /**
@@ -61,6 +59,6 @@ public class Boost extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        boost = false;
+        RobotContainer.boost = false;
     }
 }
