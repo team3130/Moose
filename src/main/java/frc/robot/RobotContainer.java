@@ -31,7 +31,7 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new gatekeepGrapplingHook());
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new gatekeepGrapplingHook(m_grapplingHook));
 
     }
 }
