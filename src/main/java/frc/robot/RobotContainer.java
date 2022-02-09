@@ -37,15 +37,9 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Boost());
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_N).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.1, 0.1));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_NE).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.1, 0.075));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_E).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.075, -0.075));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_SE).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.1, -0.075));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_S).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.075, -0.075));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_SW).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.075, 0.1));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_W).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.075, 0.075));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_POV_NW).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.075, 0.1));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.1, 0.1));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.075, -0.075));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.075, -0.075));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.075, 0.075));
     }
-
 }
