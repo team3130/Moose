@@ -4,15 +4,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Motor_Subsystem;
 import frc.robot.subsystems.Motor_Subsystem2;
 
-public class Drive extends CommandBase {
+public class Drive2 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Motor_Subsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
-    private double speed1;
+    private final Motor_Subsystem2 m_subsystem2;
+    private double speed2;
 
-    public Drive(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2, double Speed1) {
+    public Drive2(Motor_Subsystem subsystem, Motor_Subsystem2 subsystem2, double Speed2) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        speed1 = Speed1;
+        m_subsystem2 = subsystem2;
+        speed2 = Speed2;
     }
 
     /**
@@ -20,7 +20,7 @@ public class Drive extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(speed1);
+        m_subsystem2.setSpeed(speed2);
     }
 
     /**
@@ -62,10 +62,6 @@ public class Drive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        if (interrupted) {
-            
-        } else {
-            m_subsystem.setSpeed(0);
-        }
+        m_subsystem2.setSpeed(0);
     }
 }

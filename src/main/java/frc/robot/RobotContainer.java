@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Drive2;
 import frc.robot.subsystems.Motor_Subsystem;
 import frc.robot.subsystems.Motor_Subsystem2;
  
@@ -36,7 +37,7 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.3, 0.3));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, -0.3, -0.3));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.3));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Drive2(m_Motor_Subsystem, m_Motor_Subsystem2, 0.3));
     }
 }
