@@ -29,4 +29,8 @@ public class RobotContainer {
 
     private void defineButtonBindings() {}
 
+    public void outputToShuffleBoard() {
+        m_chassis.outputToShuffleboard();
+    }
+
 }
