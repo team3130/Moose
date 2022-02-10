@@ -21,7 +21,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -69,6 +69,6 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_chassis.configRampRate(0);
     }
 }

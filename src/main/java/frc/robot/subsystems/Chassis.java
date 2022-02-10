@@ -275,7 +275,7 @@ public class Chassis extends SubsystemBase {
      *
      * @param maxRampRateSeconds Minimum desired time to go from neutral to full throttle
      */
-    private void configRampRate(double maxRampRateSeconds) {
+    public void configRampRate(double maxRampRateSeconds) {
         m_rightMotorFront.configOpenloopRamp(maxRampRateSeconds);
         m_leftMotorFront.configOpenloopRamp(maxRampRateSeconds);
     }

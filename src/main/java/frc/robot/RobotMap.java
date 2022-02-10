@@ -27,6 +27,7 @@ public class RobotMap {
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.7;
     public static final double kDriveDeadband = 0.02;
+    public static final double kMaxRampRate = 0.7;
 
     /**
      * PID for Chassis
