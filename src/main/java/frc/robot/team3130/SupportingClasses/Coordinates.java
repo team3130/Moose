@@ -10,8 +10,9 @@ public class Coordinates {
     private static final double X_CONSTANT = 1; // TODO: determine this
     private static final double Y_CONSTANT = 1; // TODO: determine this
     private static final double HEIGHT_CONSTANT = 1; // TODO: determine this
+    
 
-    Coordinates(double xCam, double yCam, double ballRad, double botX, double botY, double botZ, double botAngle) {
+    public Coordinates(int xCam, int yCam, double ballRad, double botX, double botY, double botZ, double botAngle) {
         double[] coords = translation(rotation(dilation(xCam, yCam, ballRad), botAngle), botX, botY, botZ);
         xPos = coords[0];
         yPos = coords[1];
@@ -21,7 +22,7 @@ public class Coordinates {
     /**
      * Finds the ball's distance from the camera and creates (X,Y,Z) coords
      * with the camera position at the origin.
-     * Note: assume (0,0) is at the center of the camera image.
+     * assume (0,0) is at the center of the camera image.
      */
     private static double[] dilation(double xCam, double yCam, double ballRad) {
         double[] coords = {

@@ -1,5 +1,7 @@
 package frc.robot.team3130.SupportingClasses;
 
+import com.fasterxml.jackson.databind.util.EnumValues;
+
 import edu.wpi.first.math.Pair;
 
 public class BallManager {
@@ -13,11 +15,12 @@ public class BallManager {
 
     /**
      * add all the balls to their corresponding array in the Node class
+     * 
      * @param balls from nanos
      */
     public void addBalls(Pair<Double, Double>[] balls) {
         for (Pair<Double, Double> ball : balls) {
-            graph.addUnique(new Double[] {ball.getFirst(), ball.getSecond()});
+            graph.addNode(new BlueBall(ball.getFirst(), ball.getSecond()));
         }
     }
 
