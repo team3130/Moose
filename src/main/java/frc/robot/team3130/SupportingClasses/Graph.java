@@ -2,8 +2,6 @@ package frc.robot.team3130.SupportingClasses;
 
 import java.util.ArrayList;
 
-import javax.naming.spi.DirStateFactory;
-
 public class Graph {
     private int nodeCount = 25;
 
@@ -15,12 +13,14 @@ public class Graph {
             distances.add(new ArrayList<Double>(nodeCount));
     }
 
+    // Adds node to nodes ArrayList, then adds distances to graph
     public void addNode(Node node) {
         nodes.add(node);
         setDistances(nodes.indexOf(node));
     }
 
-    public void setDistances(int index) {
+    // Fills a new line in the matrix with distances to each existing node
+    private void setDistances(int index) {
         for (int j = 0; j < distances.size(); j++) {
             double distance = nodes.get(index).distance(nodes.get(j));
             if (index == j)
@@ -32,6 +32,7 @@ public class Graph {
         }
     }
 
+    // idk why I have this I guess just to make sure the graph full
     public void setAllDistances() {
         for (int i = 0; i < nodes.size(); i++) {
             for (int j = 0; j < nodes.size(); j++) {
@@ -40,15 +41,21 @@ public class Graph {
         }
     }
 
+    // Removes a node from the nodes ArrayList and removes corresponding distances from the graph
     public void clearNode(Node node) {
         int index = nodes.indexOf(node);
         if (index != -1) {
             clearDistances(index);
             nodes.remove(index);
-        }
-        else System.out.println("bruh wtf are you doing that's not even in the Graph");
+        } else
+            System.out.println("bruh wtf are you doing that's not even in the Graph");
     }
 
+    /**
+     * Clears the matrix along the indeces [index]
+     * 
+     * @param index
+     */
     public void clearDistances(int index) {
         for (int j = 0; j < distances.size(); j++) {
             distances.get(j).remove(index);
@@ -64,7 +71,7 @@ public class Graph {
             }
         }
         for (Node node : newNodes) {
-
+            addNode(node);
         }
     }
 
