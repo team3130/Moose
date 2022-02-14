@@ -73,7 +73,7 @@ public class Drive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        if (interrupted && RobotContainer.left && RobotContainer.right) {
+        if (interrupted) {
             m_subsystem.setSpeed(0.3);
             m_subsystem2.setSpeed(0.3);
         } else {

@@ -37,7 +37,7 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.3, 0));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0, 0.3));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenPressed(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0.3, 0));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new Drive(m_Motor_Subsystem, m_Motor_Subsystem2, 0, 0.3));
     }
 }
