@@ -12,6 +12,7 @@ public class Intake extends SubsystemBase {
 
     //Create necessary objects
     private WPI_TalonSRX m_motor;
+
     //Create and define all standard data types needed
     public Intake() {
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
