@@ -12,6 +12,8 @@ public class RobotMap {
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
 
+    public static final int kMotor_Subsystem2candevice = 0; // assign this a value!!!
+    
     /**
      * Gamepad Button List
      */
