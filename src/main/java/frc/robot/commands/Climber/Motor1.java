@@ -1,12 +1,7 @@
-package frc.robot.commands;
+package frc.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.ExampleSubsystem;
-
-import java.util.Set;
 
 public class Motor1 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
@@ -24,7 +19,7 @@ public class Motor1 extends CommandBase {
      */
     @Override
     public void initialize() {
-        Climber.setSpeed1(speed);
+        m_subsystem.setSpeed1(speed);
     }
 
     /**
@@ -66,7 +61,7 @@ public class Motor1 extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        Climber.setSpeed1(0);
+        m_subsystem.setSpeed1(0);
     }
 
 }
