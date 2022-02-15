@@ -41,7 +41,10 @@ public class Graph {
         }
     }
 
-    // Removes a node from the nodes ArrayList and removes corresponding distances from the graph
+    /**
+     * Removes a node from the nodes ArrayList and
+     * removes corresponding distances from the graph
+     */
     public void clearNode(Node node) {
         int index = nodes.indexOf(node);
         if (index != -1) {
@@ -73,6 +76,65 @@ public class Graph {
         for (Node node : newNodes) {
             addNode(node);
         }
+    }
+
+    public ArrayList<Node> shootingPath(Position position, ShootingPosition[] shoot) {
+        double shortest = Double.MAX_VALUE;
+        ArrayList<Node> path = new ArrayList<Node>(3);
+        if (nodes.size() == 1) {
+            for (int k = 0; k < shoot.length; k++) {
+                double distance = position.distance(nodes.get(0))
+                        + nodes.get(0).distance(shoot[k]);
+                if (shortest > distance) {
+                    shortest = distance;
+                    path.add(nodes.get(0));
+                    path.add(shoot[k]);
+                }
+            }
+        } else {
+            for (int i = 0; i < nodes.size(); i++) {
+                for (int j = 1; j < nodes.size(); j++) {
+                    if (i != j) {
+                        for (int k = 0; k < shoot.length; k++) {
+                            double distance = position.distance(nodes.get(i))
+                                    + distances.get(i).get(j)
+                                    + nodes.get(j).distance(shoot[k]);
+                            if (shortest > distance) {
+                                shortest = distance;
+                                path.add(nodes.get(i));
+                                path.add(nodes.get(j));
+                                path.add(shoot[k]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return path;
+    }
+
+    public ArrayList<Node> defensePath(Position position) {
+        double shortest = Double.MAX_VALUE;
+        ArrayList<Node> path = new ArrayList<Node>(2);
+
+        if (nodes.size() == 1) {
+            path.add(nodes.get(0));
+        } else {
+            for (int i = 0; i < distances.size(); i++) {
+                for (int j = 1; j < distances.get(i).size(); j++) {
+                    if (i != j) {
+                        double distance = position.distance(nodes.get(i))
+                                + distances.get(i).get(j);
+                        if (shortest > distance) {
+                            shortest = distance;
+                            path.add(nodes.get(i));
+                            path.add(nodes.get(j));
+                        }
+                    }
+                }
+            }
+        }
+        return path;
     }
 
 }

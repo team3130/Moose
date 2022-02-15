@@ -2,17 +2,17 @@ package frc.robot.team3130.SupportingClasses;
 
 public class CameraFOV {
 
-    private Node[] FOV;
+    private Position[] FOV;
 
     /**
      * Sets the bounds of what the camera can see
      *
-     * @param index = 0 for the far right corner
-     * @param index = 1 for the near right corner
-     * @param index = 2 for the near left corner
-     * @param index = 3 for the far left corner
+     * @param FOV[0] = far right corner
+     * @param FOV[1] = near right corner
+     * @param FOV[2] = near left corner
+     * @param FOV[3] = far left corner
      */
-    public CameraFOV(Node[] FOV) {
+    public CameraFOV(Position[] FOV) {
         this.FOV = FOV;
     }
 

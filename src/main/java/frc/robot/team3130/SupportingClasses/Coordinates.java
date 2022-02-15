@@ -12,8 +12,8 @@ public class Coordinates {
     private static final double HEIGHT_CONSTANT = 1; // TODO: determine this
     
 
-    public Coordinates(int xCam, int yCam, double ballRad, double botX, double botY, double botZ, double botAngle) {
-        double[] coords = translation(rotation(dilation(xCam, yCam, ballRad), botAngle), botX, botY, botZ);
+    public Coordinates(int xCam, int yCam, double ballRad, double botX, double botY, double botZ, double botYaw, double botPitch) {
+        double[] coords = translation(rotation(dilation(xCam, yCam, ballRad), botYaw, botPitch), botX, botY, botZ);
         xPos = coords[0];
         yPos = coords[1];
         zPos = coords[2];
@@ -38,11 +38,19 @@ public class Coordinates {
      * Rotation matrix
      * Rotates the axis by @param botAngle radians
      */
-    private static double[] rotation(double[] coords, double botAngle) {
+    private static double[] rotation(double[] coords, double yaw, double pitch) {
         double xPos = coords[0];
         double yPos = coords[1];
-        coords[0] = Math.cos(botAngle) * xPos - Math.sin(botAngle) * yPos;
-        coords[1] = Math.sin(botAngle) * xPos + Math.cos(botAngle) * yPos;
+        double zPos = coords[2];
+
+        //Correct for pitch
+        coords[1] = Math.cos(pitch) * yPos - Math.sin(pitch) * zPos;
+        coords[2] = Math.sin(pitch) * yPos + Math.cos(pitch) * zPos;
+
+        //Correct for yaw
+        coords[0] = Math.cos(yaw) * xPos - Math.sin(yaw) * yPos;
+        coords[1] = Math.sin(yaw) * xPos + Math.cos(yaw) * yPos;
+        
         return coords;
 
     }
