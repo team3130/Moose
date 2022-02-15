@@ -21,6 +21,7 @@ public class RobotMap {
      */
 
     public static final char CAN_SHOOTER_MOTOR = 5;
+    public static final int CAN_INDEXER = 3;
 
 
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11

@@ -1,18 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Indexer;
 
-public class Shoot extends CommandBase {
+public class Spindexer extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Shooter m_shooter;
-    private int sign;
+    private final Indexer m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private int direction;
 
-    public Shoot(Shooter subsystem, int sign) {
+    public Spindexer(Indexer subsystem, int direction) {
         //mapping to object passed through parameter
-        m_shooter = subsystem;
+        m_subsystem = subsystem;
         m_requirements.add(subsystem);
-        this.sign = sign;
+        this.direction = direction;
     }
 
     /**
@@ -20,7 +21,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard() * sign);
+        m_subsystem.setSpeed(0.5 * direction);
     }
 
     /**
@@ -29,6 +30,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
+
     }
 
     /**
@@ -61,6 +63,6 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.spinMotor(0);
+        m_subsystem.setSpeed(0);
     }
 }
