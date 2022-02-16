@@ -22,7 +22,11 @@ public class Intake extends SubsystemBase {
     public Intake() {
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
+        m_motor = new WPI_TalonSRX(RobotMap.CAN_SHOOTER_MOTOR);
     }
 
+    public void spinMotor(double speed) {
+        m_motor.set(speed);
+    }
 }
 
