@@ -13,6 +13,11 @@ public class RobotMap {
     public static final String kCustomAuto = "My Auto";
 
     /**
+     * CAN IDs
+     */
+    public static final int CAN_CLIMBER = -1;
+
+    /**
      * Gamepad Button List
      */
     public static final int LST_BTN_A = 1;
@@ -38,7 +43,6 @@ public class RobotMap {
     public static final int LST_POV_SW = 225;
     public static final int LST_POV_W = 270;
     public static final int LST_POV_NW = 315;
-
 
     /**
      * Gamepad Axis List
