@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -72,7 +73,7 @@ public class Chassis extends PIDSubsystem {
          * Shift false is low gear
          */
 
-        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, , RobotMap.PNM_SHIFT);
+        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_SHIFT);
 
         m_shifter.set(false);
 
