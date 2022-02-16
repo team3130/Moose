@@ -11,7 +11,7 @@ public class RobotMap {
      * Gamepad Button List
      */
     public static final int kMotorThingCanDevice = 3;
-
+    public static final int kMotorThing2CanDevice = 4;
 
 /**
      * Robot related constants

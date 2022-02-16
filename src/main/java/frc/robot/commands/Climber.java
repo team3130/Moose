@@ -3,12 +3,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.MotorThing;
 
-public class commose extends CommandBase {
+public class Climber extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final MotorThing m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public commose(MotorThing subsystem) {
+    public Climber(MotorThing subsystem) {
         //mapping to object passed through parameter
+        m_requirements.add(subsystem);
         m_subsystem = subsystem;
     }
 
@@ -19,6 +20,8 @@ public class commose extends CommandBase {
     public void initialize() {
     m_subsystem.setSpeed(0.4);
     }
+
+
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
