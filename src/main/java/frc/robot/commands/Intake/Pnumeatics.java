@@ -20,9 +20,9 @@ public class Pnumeatics extends CommandBase {
     @Override
     public void initialize() {
         if (deploy) {
-            deployIntake();
+            Intake.deployIntake();
         } else {
-            
+            Intake.retractIntake();
         }
     }
 

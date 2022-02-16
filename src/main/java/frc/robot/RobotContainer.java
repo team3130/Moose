@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Intake.Motor1;
+import frc.robot.commands.Intake.Pnumeatics;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -27,5 +28,8 @@ public class RobotContainer {
 
     private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Motor1(m_intake, 0.75));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Pnumeatics(m_intake, true));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Pnumeatics(m_intake, false));
+
     }
 }

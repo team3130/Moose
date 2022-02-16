@@ -29,15 +29,15 @@ public class Intake extends SubsystemBase {
         m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
     }
 
-    public void deployIntake() {
+    public static void deployIntake() {
         m_intakeSolenoid.set(true);
     }
 
-    public void retractIntake() {
+    public static void retractIntake() {
         m_intakeSolenoid.set(false);
     }
 
-    public void toggleIntake() {
+    public static void toggleIntake() {
         m_intakeSolenoid.set(!m_intakeSolenoid.get());
     }
 
