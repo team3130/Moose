@@ -72,7 +72,7 @@ public class Chassis extends PIDSubsystem {
          * Shift false is low gear
          */
 
-        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, RobotMap.PNM_SHIFT);
+        m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, , RobotMap.PNM_SHIFT);
 
         m_shifter.set(false);
 
