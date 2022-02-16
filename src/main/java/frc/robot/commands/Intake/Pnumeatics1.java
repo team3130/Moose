@@ -2,12 +2,13 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 
-public class Pnumeatics extends CommandBase {
+public class Pnumeatics1 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Pnumeatics m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Intake m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public Pnumeatics(ExampleSubsystem subsystem) {
+    public Pnumeatics1(Intake subsystem) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
     }
