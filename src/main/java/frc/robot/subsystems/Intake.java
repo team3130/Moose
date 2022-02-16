@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
@@ -11,6 +14,8 @@ public class Intake extends SubsystemBase {
 
     //Create necessary objects
     private WPI_TalonSRX m_motor;
+    private static Solenoid m_intakeSolenoid;
+    private static boolean deploy = false;
 
     private static final Intake instance = new Intake();
 
@@ -20,13 +25,28 @@ public class Intake extends SubsystemBase {
     }
 
     public Intake() {
-        // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
-        //       in the constructor or in the robot coordination class, such as RobotContainer.
         m_motor = new WPI_TalonSRX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
+    }
+
+    public void deployIntake() {
+        m_intakeSolenoid.set(true);
+    }
+
+    public void retractIntake() {
+        m_intakeSolenoid.set(false);
+    }
+
+    public void toggleIntake() {
+        m_intakeSolenoid.set(!m_intakeSolenoid.get());
     }
 
     public void spinMotor(double speed) {
-        m_motor.set(speed);
+        if () {
+            m_motor.set(speed);
+        } else {
+            m_motor.set(0);
+        }
     }
 }
 

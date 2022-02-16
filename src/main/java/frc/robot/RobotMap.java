@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 public class RobotMap {
     /**
      * Navx related variables
@@ -15,6 +17,13 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
+
+    /**
+     * Intake
+     */
+    public static final int CAN_PNMMODULE = 1;
+    public static final int PNM_INTAKE = 1;
+
 
     /**
      * Gamepad Button List
