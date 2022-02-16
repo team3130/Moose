@@ -12,6 +12,9 @@ public class RobotMap {
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
 
+    public static final int climber_moter1_int = 2;
+    public static final int climber_moter2_int = 3;
+
     /**
      * Gamepad Button List
      */
