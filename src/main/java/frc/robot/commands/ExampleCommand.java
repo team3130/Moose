@@ -14,6 +14,7 @@ public class ExampleCommand extends CommandBase {
     public ExampleCommand(ExampleSubsystem subsystem) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
