@@ -47,7 +47,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void spinMotor(double speed) {
-        if () {
+        if (!m_intakeSolenoid.get() && !m_intakeSolenoid2.get()) {
             m_motor.set(speed);
         } else {
             m_motor.set(0);
