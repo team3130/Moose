@@ -98,7 +98,6 @@ public class Chassis extends PIDSubsystem {
         SpeedControllerGroup m_right = new SpeedControllerGroup(m_rightMotorFront, m_rightMotorRear);
 
         m_drive = new DifferentialDrive(m_left, m_right);
-        m_drive.setRightSideInverted(false); //Motor inversion is already handled by talon configs
         m_drive.setDeadband(RobotMap.kDriveDeadband);
         m_drive.setSafetyEnabled(false); //feed() must be called to prevent motor disable TODO: check at GF
 
