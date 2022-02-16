@@ -238,3 +238,5 @@ fabric.properties
 .idea/gradle.xml
 
 .vscode/settings.json
+
+.SysId/
