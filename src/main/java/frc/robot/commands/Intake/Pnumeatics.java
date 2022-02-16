@@ -1,17 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class Pnumeatics extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Pnumeatics m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public Pnumeatics(ExampleSubsystem subsystem) {
         //mapping to object passed through parameter
         m_subsystem = subsystem;
     }
