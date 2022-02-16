@@ -6,10 +6,12 @@ import frc.robot.subsystems.Intake;
 public class Motor1 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_subsystem2; //TODO: rename this to the subsystem this is assigned to
+    private final double speed;
 
-    public Motor1(Intake subsystem) {
+    public Motor1(Intake subsystem, double Speed) {
         //mapping to object passed through parameter
         m_subsystem2 = subsystem;
+        speed = Speed;
         m_requirements.add(subsystem);
     }
 
@@ -18,7 +20,7 @@ public class Motor1 extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem2.spinMoter(.75);
+        m_subsystem2.spinMotor(speed);
     }
 
     /**
@@ -60,6 +62,6 @@ public class Motor1 extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem2.spinMoter(0);
+        m_subsystem2.spinMotor(0);
     }
 }

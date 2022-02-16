@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -13,13 +12,21 @@ public class Intake extends SubsystemBase {
     //Create necessary objects
     private WPI_TalonSRX m_motor;
 
+    private static final Intake instance = new Intake();
+
     //Create and define all standard data types needed
+    public static Intake getInstance() {
+        return instance;
+    }
+
     public Intake() {
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
-    m_motor = new WPI_TalonSRX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_motor = new WPI_TalonSRX(RobotMap.CAN_SHOOTER_MOTOR);
     }
 
-    public void spinMoter(double speed) {m_motor.set(speed); }
+    public void spinMotor(double speed) {
+        m_motor.set(speed);
+    }
 }
 
