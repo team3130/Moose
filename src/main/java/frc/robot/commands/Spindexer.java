@@ -21,7 +21,7 @@ public class Spindexer extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(0.5 * direction);
+        m_subsystem.setPercent(m_subsystem.getPercentFromShuffleboard());
     }
 
     /**

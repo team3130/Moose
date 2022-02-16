@@ -18,8 +18,8 @@ public class Shooter extends SubsystemBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
 
-    private NetworkTableEntry sped = tab.add("Falcon Set Speed in RPM", 3000).getEntry();
-    private NetworkTableEntry RPM = tab.add("Falcon RPM", 0).getEntry();
+    private NetworkTableEntry sped = tab.add("Speed in RPM", 3000).getEntry();
+    private NetworkTableEntry RPM = tab.add("RPM", 0).getEntry();
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -30,8 +30,6 @@ public class Shooter extends SubsystemBase {
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
                 RobotMap.kFlywheelF);
-
-        m_motor.setInverted(true);
     }
 
     public void spinMotor(double speed) {
@@ -77,5 +75,6 @@ public class Shooter extends SubsystemBase {
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
 
         m_motor.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        m_motor.getSelectedSensorPosition();
     }
 }
