@@ -28,6 +28,7 @@ public class RobotContainer {
 
     private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Motor1(m_intake, 0.75));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new Motor1(m_intake, -0.75));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Pnumeatics(m_intake, true));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Pnumeatics(m_intake, false));
 

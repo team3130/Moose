@@ -16,7 +16,6 @@ public class Intake extends SubsystemBase {
     private WPI_TalonSRX m_motor;
     private static Solenoid m_intakeSolenoid;
     private static Solenoid m_intakeSolenoid2;
-    private static boolean deploy = false;
 
     private static final Intake instance = new Intake();
 
@@ -31,12 +30,12 @@ public class Intake extends SubsystemBase {
         m_intakeSolenoid2 = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
     }
 
-    public static void deployIntake() {
+    public void deployIntake() {
         m_intakeSolenoid.set(true);
         m_intakeSolenoid2.set(true);
     }
 
-    public static void retractIntake() {
+    public void retractIntake() {
         m_intakeSolenoid.set(false);
         m_intakeSolenoid2.set(false);
     }

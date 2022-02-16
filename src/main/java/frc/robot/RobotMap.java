@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-
 public class RobotMap {
     /**
      * Navx related variables
