@@ -24,7 +24,7 @@ public class Climb extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_climber.spinMotor(100101 * spinrection);
+        m_climber.spinMotor(0.100101 * spinrection);
     }
 
     /**
