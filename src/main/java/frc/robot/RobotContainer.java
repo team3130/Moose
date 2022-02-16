@@ -2,12 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR;
-import frc.robot.commands.Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR2;
-import frc.robot.commands.Joe;
-import frc.robot.commands.Joe2;
+import frc.robot.commands.Intake.Motor1;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.WHEEL_GO_BRRRRRRRRRRRRRR;
 
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
@@ -30,6 +26,6 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Joe(m_intake));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Motor1(m_intake));
     }
 }

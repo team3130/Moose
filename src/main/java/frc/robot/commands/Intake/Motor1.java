@@ -1,14 +1,13 @@
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 
-public class Joe extends CommandBase {
+public class Motor1 extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_subsystem2; //TODO: rename this to the subsystem this is assigned to
 
-    public Joe(Intake subsystem) {
+    public Motor1(Intake subsystem) {
         //mapping to object passed through parameter
         m_subsystem2 = subsystem;
         m_requirements.add(subsystem);
