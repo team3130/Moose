@@ -1,12 +1,13 @@
 package frc.robot.team3130.SupportingClasses;
 
+import javax.swing.text.Position;
 import java.util.ArrayList;
 
 public class Graph {
     private int nodeCount = 25;
 
     ArrayList<Node> nodes = new ArrayList<Node>(nodeCount);
-    ArrayList<ArrayList<Double>> distances = new ArrayList<ArrayList<Double>>(nodeCount);
+    ArrayList<ArrayList<Double>> distances = new ArrayList<>(nodeCount);
 
     public Graph() {
         for (int i = 0; i < nodes.size(); i++)
@@ -78,9 +79,15 @@ public class Graph {
         }
     }
 
-    public ArrayList<Node> shootingPath(Position position, ShootingPosition[] shoot) {
+    /**
+     * generates a path to shoot balls
+     * @param position current position of the bot
+     * @param shoot list of shooting positions
+     * @return the path in terms of nodes
+     */
+    public ArrayList<Node> shootingPath(Node position, Node[] shoot) {
         double shortest = Double.MAX_VALUE;
-        ArrayList<Node> path = new ArrayList<Node>(3);
+        ArrayList<Node> path = new ArrayList<>(3);
         if (nodes.size() == 1) {
             for (int k = 0; k < shoot.length; k++) {
                 double distance = position.distance(nodes.get(0))
@@ -113,9 +120,9 @@ public class Graph {
         return path;
     }
 
-    public ArrayList<Node> defensePath(Position position) {
+    public ArrayList<Node> defensePath(Node position) {
         double shortest = Double.MAX_VALUE;
-        ArrayList<Node> path = new ArrayList<Node>(2);
+        ArrayList<Node> path = new ArrayList<>(2);
 
         if (nodes.size() == 1) {
             path.add(nodes.get(0));

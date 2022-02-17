@@ -1,27 +1,38 @@
 package frc.robot.team3130.SupportingClasses;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+
 import java.lang.Math;
 
-public abstract class Node {
-    private double xPos;
-    private double yPos;
+public class Node {
+    private Pose2d pose;
     
     public Node(double xPos, double yPos) {
-        this.xPos = xPos;
-        this.yPos = yPos;
+        pose = new Pose2d(xPos, yPos, new Rotation2d());
+    }
+
+    public Node(double xPos, double yPos, Rotation2d rotation2d) {
+        pose = new Pose2d(xPos, yPos, rotation2d);
     }
 
     public double distance(Node other) {
-        return Math.sqrt(Math.pow(this.xPos - other.xPos, 2) + Math.pow(this.yPos - other.yPos, 2));
+        return Math.sqrt(Math.pow(this.pose.getX() - other.pose.getX(), 2) + Math.pow(this.pose.getY() - other.pose.getY(), 2));
     }
 
     public double getX() {
-        return xPos;
+        return pose.getX();
     }
 
     public double getY() {
-        return yPos;
+        return pose.getY();
     }
 
-    public abstract String nodeType();
+    public Rotation2d getRotation() {
+        return pose.getRotation();
+    }
+
+    public Pose2d getPos() {
+        return pose;
+    }
 }

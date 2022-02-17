@@ -1,6 +1,10 @@
 package frc.robot.team3130;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.util.Units;
+import frc.robot.team3130.SupportingClasses.Node;
 
 public class RobotMap {
     /**
@@ -28,6 +32,13 @@ public class RobotMap {
     public static final double kMaxTurnThrottle = 0.7;
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
+
+    /**
+     * Auton
+     */
+    public static final Pose2d[] kShootingPoses = {new Pose2d(-1, -1, new Rotation2d(-1))}; //TODO: fill with actual values
+    public static final double kMaxVelocityMetersPerSec = 3;
+    public static final double kMaxAccelerationMetersPerSecondSq = 3;
 
     /**
      * PID for Chassis

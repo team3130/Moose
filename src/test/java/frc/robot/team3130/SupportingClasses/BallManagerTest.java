@@ -1,5 +1,6 @@
 package frc.robot.team3130.SupportingClasses;
 
+import frc.robot.team3130.subsystems.Chassis;
 import junit.framework.TestCase;
 
 import java.util.Arrays;
@@ -7,7 +8,7 @@ import java.util.Arrays;
 public class BallManagerTest extends TestCase {
     public void testGetPath() {
         Graph graph = new Graph();
-        BallManager manager = new BallManager(graph);
+        BallManager manager = new BallManager(graph, new Chassis());
 
         // max allowed value
         double max = 15;
@@ -24,11 +25,12 @@ public class BallManagerTest extends TestCase {
 
         for (Double[][] temp : toAdd) {
             for (Double[] coords : temp) {
-                graph.addNode(new BlueBall(coords[0], coords[1]));
+                graph.addNode(new Node(coords[0], coords[1]));
             }
         }
         for (int i = 0; i < graph.nodes.size(); i++) {
             System.out.println(i + ": " + graph.nodes.get(i));
         }
+        assertEquals(1, 1);
     }
 }
