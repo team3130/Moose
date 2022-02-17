@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  RobotContainer m_robotContainer;
+  CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -27,6 +29,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", RobotMap.kDefaultAuto);
     m_chooser.addOption("My Auto", RobotMap.kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    m_robotContainer = new RobotContainer();
   }
 
   /**
@@ -37,7 +40,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    m_robotContainer.outputToShuffleBoard();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -76,7 +81,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_scheduler.run();
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
@@ -93,4 +100,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  /** This function is called once when test mode is enabled */
+  public void simulationInit() {}
+
+  /** This Function is called periodically in simulations such as glass */
+  @Override
+  public void simulationPeriodic() {}
 }

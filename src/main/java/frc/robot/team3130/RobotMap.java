@@ -1,5 +1,7 @@
 package frc.robot.team3130;
 
+import edu.wpi.first.math.util.Units;
+
 public class RobotMap {
     /**
      * Navx related variables
@@ -11,6 +13,50 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
+
+    /**
+     * Chassis
+     */
+    public static final double kChassisMaxVoltage = 12.0;
+    // the distance between the left and the right wheels: IN METERS
+    public static final double trackDistance = 0.69;
+    public static final double kEncoderResolution = 4096;
+    public static final double kChassisLowGearRatio = 0.1;
+    public static final double kChassisHighGearRatio = 0.1;
+    public static final double kWheelDiameter = Units.inchesToMeters(4); //TODO: Check if changed to six inch wheels
+    public static final double kMaxHighGearDriveSpeed = 0.8;
+    public static final double kMaxTurnThrottle = 0.7;
+    public static final double kDriveDeadband = 0.02;
+    public static final double kMaxRampRate = 0.7;
+
+    /**
+     * PID for Chassis
+     */
+    public static double lowGearkS = 0.615;
+    public static double lowGearkV = 0.0402;
+    public static double lowGearkA = 0.0117;
+
+    public static double highGearkS = 0.819;
+    public static double highGearkV = 0.0343;
+    public static double highGearkA = 0.00437;
+
+    /**
+     * CAN ID's
+     */
+    //TODO: FIND REAL VALUES
+    public static final int CAN_PNMMODULE = 1;
+
+    //TODO: FIND REAL VALUES
+    public static final int CAN_CHASSIS_MOTOR_FRONTR = 3;
+    //TODO: FIND REAL VALUES
+    public static final int CAN_CHASSIS_MOTOR_FRONTL = 2;
+    //TODO: FIND REAL VALUES
+    public static final int CAN_CHASSIS_MOTOR_BACKR = 4;
+    //TODO: FIND REAL VALUES
+    public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
+
+    //TODO: FIND REAL VALUES
+    public static final int PNM_Shift = 5;
 
     /**
      * Gamepad Button List

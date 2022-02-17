@@ -52,6 +52,14 @@ public class Navx {
     }
 
     /**
+     * get the angle in radians
+     * @return the angle as a rotation 2d (in radians)
+     */
+    public static Rotation2d getRotation() {
+        return (m_bNavXPresent) ? m_navX.getRotation2d() : new Rotation2d(-1);
+    }
+
+    /**
      * Returns the current rate of change of the robots heading
      *
      * <p> getRate() returns the rate of change of the angle the robot is facing,
@@ -73,22 +81,6 @@ public class Navx {
      */
     public static double getHeading() {
         return Math.IEEEremainder(getAngle(), 360);
-    }
-
-
-    /**
-     * This will return angle in degrees and will return values higher than 360 so after one full rotation
-     * and a degree it would return 361
-     * @return rotation in degrees
-     */
-    public static Rotation2d getRotation(){
-        try {
-            return Rotation2d.fromDegrees(Math.IEEEremainder(getAngle(),360));
-        }
-        catch (NullPointerException L){
-            DriverStation.reportError("Unable to get Robot Rotation", L.getStackTrace());
-            return new Rotation2d();
-        }
     }
 
     public static boolean getNavxPresent() {

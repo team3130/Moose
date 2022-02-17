@@ -1,15 +1,18 @@
 package frc.robot.team3130.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.team3130.subsystems.ExampleSubsystem;
+import frc.robot.team3130.RobotContainer;
+import frc.robot.RobotMap;
+import frc.robot.team3130.subsystems.Chassis;
 
-public class ExampleCommand extends CommandBase {
+public class DefaultDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public DefaultDrive(Chassis chassis) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
+        m_chassis = chassis;
+        m_requirements.add(chassis);
     }
 
     /**
@@ -17,7 +20,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -26,7 +29,13 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void execute() {
+        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        if (m_chassis.isShifted()) {
+            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
+        }
+        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
+        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -59,6 +68,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_chassis.configRampRate(0);
     }
 }
