@@ -1,18 +1,17 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Climber;
 
-public class Motor1 extends CommandBase {
+public class Climber_Motor extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Intake m_subsystem2; //TODO: rename this to the subsystem this is assigned to
+    private final Climber m_subsystem; //TODO: rename this to the subsystem this is assigned to
     private final double speed;
 
-    public Motor1(Intake subsystem, double Speed) {
+    public Climber_Motor(Climber subsystem, double Speed) {
         //mapping to object passed through parameter
-        m_subsystem2 = subsystem;
+        m_subsystem = subsystem;
         speed = Speed;
-        m_requirements.add(subsystem);
     }
 
     /**
@@ -20,7 +19,7 @@ public class Motor1 extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem2.spinMotor(speed);
+        m_subsystem.setSpeed(speed);
     }
 
     /**
@@ -62,6 +61,7 @@ public class Motor1 extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem2.spinMotor(0);
+        m_subsystem.setSpeed(0);
     }
+
 }
