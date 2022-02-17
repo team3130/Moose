@@ -48,7 +48,7 @@ public class Chassis extends PIDSubsystem {
      * the constructor to get the instance of this class.
      */
 
-    private Chassis() {
+    public Chassis() {
         super(new PIDController(1, 0, 0));//TODO: Set Turn PID
 
         m_leftMotorFront = new WPI_TalonFX(RobotMap.CAN_LEFTMOTORFRONT);

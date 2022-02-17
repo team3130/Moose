@@ -1,9 +1,9 @@
 package frc.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Intake;
 
-public class Pnumeatics extends CommandBase {
+public class Pnumeatics extends InstantCommand {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_subsystem; //TODO: rename this to the subsystem this is assigned to
     private final boolean deploy;
@@ -49,11 +49,6 @@ public class Pnumeatics extends CommandBase {
      *
      * @return whether this command has finished.
      */
-    @Override
-    public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
-    }
 
     /**
      * The action to take when the command ends. Called when either the command
