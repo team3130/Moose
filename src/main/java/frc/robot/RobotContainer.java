@@ -2,10 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-<<<<<<< HEAD
 import frc.robot.commands.Intake.Intake_Motor;
-=======
->>>>>>> bf817d7f8e45ac30ac07e1a04254c7e18d8a7c4a
 import frc.robot.commands.Intake.Pnumeatics;
 import frc.robot.subsystems.Intake;
 
