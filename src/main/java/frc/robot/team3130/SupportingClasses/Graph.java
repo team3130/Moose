@@ -6,12 +6,13 @@ import java.util.ArrayList;
 public class Graph {
     private int nodeCount = 25;
 
-    ArrayList<Node> nodes = new ArrayList<Node>(nodeCount);
+    ArrayList<Node> nodes = new ArrayList<>(nodeCount);
     ArrayList<ArrayList<Double>> distances = new ArrayList<>(nodeCount);
 
     public Graph() {
-        for (int i = 0; i < nodes.size(); i++)
-            distances.add(new ArrayList<Double>(nodeCount));
+        for (int i = 0; i < nodes.size(); i++) {
+            distances.add(new ArrayList<>(nodeCount));
+        }
     }
 
     // Adds node to nodes ArrayList, then adds distances to graph
@@ -24,8 +25,9 @@ public class Graph {
     private void setDistances(int index) {
         for (int j = 0; j < distances.size(); j++) {
             double distance = nodes.get(index).distance(nodes.get(j));
-            if (index == j)
+            if (index == j) {
                 distances.get(index).set(j, distance);
+            }
             else {
                 distances.get(index).set(j, distance);
                 distances.get(j).set(index, distance);
@@ -51,8 +53,9 @@ public class Graph {
         if (index != -1) {
             clearDistances(index);
             nodes.remove(index);
-        } else
+        } else {
             System.out.println("bruh wtf are you doing that's not even in the Graph");
+        }
     }
 
     /**
