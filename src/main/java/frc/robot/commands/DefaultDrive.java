@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.ExampleSubsystem;
 
 public class DefaultDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
@@ -36,7 +35,7 @@ public class DefaultDrive extends CommandBase {
         }
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
-        m_chassis.driveArcade(moveSpeed * 0.5 * (m_chassis.getRightSensitivityFromShuffleboard() + m_chassis.getLeftSensitivityFromShuffleboard()), turnSpeed * RobotMap.kMaxTurnThrottle * 0.5 * (m_chassis.getRightSensitivityFromShuffleboard() + m_chassis.getLeftSensitivityFromShuffleboard()), true);
+        m_chassis.driveArcade(moveSpeed * 0.5 * m_chassis.getMoveSpeedSensitivityFromShuffleboard(), turnSpeed * m_chassis.getTurnSpeedSensitivityFromShuffleboard() * RobotMap.kMaxTurnThrottle * 0.5 * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() + m_chassis.getTurnSpeedSensitivityFromShuffleboard()), true);
     }
 
     /**

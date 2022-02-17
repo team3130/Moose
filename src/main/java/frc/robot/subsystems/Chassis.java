@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,7 +14,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -62,23 +60,23 @@ public class Chassis extends SubsystemBase {
     private NetworkTableEntry I = tab.add("Chassis I", 0).getEntry();
     private NetworkTableEntry D = tab.add("Chassis D", 0).getEntry();
 
-    private NetworkTableEntry sliderRight = tab
-            .add("Right Sensitivity", 0.75)
+    private NetworkTableEntry sliderMove = tab
+            .add("Move Speed Sensitivity", 0.75)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
-    private NetworkTableEntry sliderLeft = tab
-            .add("Left Sensitivity", 0.75)
+    private NetworkTableEntry sliderTurn = tab
+            .add("Turn Speed Sensitivity", 0.75)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
-    public double getRightSensitivityFromShuffleboard() {
-        return sliderRight.getDouble(0.75);
+    public double getMoveSpeedSensitivityFromShuffleboard() {
+        return sliderMove.getDouble(0.75);
     }
 
-    public double getLeftSensitivityFromShuffleboard() {
-        return sliderLeft.getDouble(0.75);
+    public double getTurnSpeedSensitivityFromShuffleboard() {
+        return sliderTurn.getDouble(0.75);
     }
 
     // Create and define all standard data types needed
