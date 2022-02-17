@@ -34,6 +34,12 @@ public class BallManager {
         }
     }
 
+    /**
+     * Should be protected with its own thread so that the bot
+     *  doesn't stall out
+     *  Generate a trajectory based on balls
+     * @return Trajectory for auton using cv
+     */
     public Trajectory getPath() {
         TrajectoryConfig config = new TrajectoryConfig(RobotMap.kMaxVelocityMetersPerSec, RobotMap.kMaxAccelerationMetersPerSecondSq); //TODO: MAKE THE TRAJECTORY CONFIG
 
