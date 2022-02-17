@@ -2,7 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+<<<<<<< HEAD
 import frc.robot.commands.Intake.Intake_Motor;
+=======
+import frc.robot.commands.Climber.Motor;
+import frc.robot.commands.Intake.Motor1;
+>>>>>>> bf817d7f8e45ac30ac07e1a04254c7e18d8a7c4a
 import frc.robot.commands.Intake.Pnumeatics;
 import frc.robot.subsystems.Intake;
 
@@ -31,6 +36,5 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new Intake_Motor(m_intake, -0.75));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Pnumeatics(m_intake, true));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Pnumeatics(m_intake, false));
-
     }
 }
