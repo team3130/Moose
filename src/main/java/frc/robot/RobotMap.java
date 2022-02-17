@@ -16,41 +16,40 @@ public class RobotMap {
     public static final String kCustomAuto = "My Auto";
 
     /**
+     * Climber
+     */
+    public static final int kMotor_Subsystem2candevice; //add value!
+
+
+    /**
      * Intake
      */
-    public static final int CAN_PNMMODULE = 1;
-    public static final int PNM_INTAKE = 1;
+    public static final int CAN_PNMMODULE; //add value!
+    public static final int PNM_INTAKE; //add value!
+    public static final int CAN_Intake_MOTOR; //add value!
 
     /**
      * Chassis
      */
-    public static final int CAN_SHOOTER_MOTOR = 5;
     public static Pose2d kChassisStartingPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)); //-49.37 for shoot5 auto TODO: Permanent solution for this
-
     public static double kChassisMaxVoltage = 12.0;
-
     public static double kChassisWidth = 28.0; //Chassis with from edge to edge in inches
     public static double kChassisLengthBumpers = 39.0; //FIXME
     public static double kLWheelDiameter = 6.0; // Center wheel diameter in inches
     public static double kRWheelDiameter = 6.0; // Center wheel diameter in inches
-
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxTurnThrottle = 0.7; // Applied on top of max drive speed
-
     public static double kChassisCodesPerRev = 2048;
     public static double kLChassisTicksPerInch = 1500;
     public static double kRChassisTicksPerInch = 1500;
-
     public static double kDriveDeadband = 0.02;
     public static double kDriveMaxRampRate = 0.7; // Minimum seconds from 0 to 100
-    
     public static double kMPChassisP = 5.47;
     public static double kMPChassisI = 0.0;
     public static double kMPChassisD = 0.0;
     public static double kMPChassisF = 1023.0 / (92.0 * (kLChassisTicksPerInch + kRChassisTicksPerInch) / 2.0); //Checked 3/23
     public static double kChassisShiftWait = 0.07;
     public static double kChassisMPOutputDeadband = 0.01;
-
     public static final int CAN_RIGHTMOTORFRONT = 2;
     public static final int CAN_RIGHTMOTORREAR = 3;
     public static final int CAN_LEFTMOTORFRONT = 4;
