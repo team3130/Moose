@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Intake() {
-        m_motor = new WPI_TalonSRX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_motor = new WPI_TalonSRX(RobotMap.CAN_Intake_MOTOR);
         m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
         m_intakeSolenoid2 = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
     }
