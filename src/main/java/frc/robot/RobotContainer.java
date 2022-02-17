@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 <<<<<<< HEAD
 import frc.robot.commands.Intake.Intake_Motor;
 =======
-import frc.robot.commands.Climber.Motor;
-import frc.robot.commands.Intake.Motor1;
 >>>>>>> bf817d7f8e45ac30ac07e1a04254c7e18d8a7c4a
 import frc.robot.commands.Intake.Pnumeatics;
 import frc.robot.subsystems.Intake;
