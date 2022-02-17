@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotMap;
 
 public class Hopper extends SubsystemBase {
 
@@ -20,7 +21,7 @@ public class Hopper extends SubsystemBase {
     }
     
     public Hopper() {
-        
+        m_motor2 = new WPI_TalonFX(RobotMap.kMotor_Subsystem1candevice);
     }
 
     public void setSpeed(double speed) {
