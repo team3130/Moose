@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-    private WPI_TalonSRX m_motor;
+    private WPI_TalonSRX m_motor3;
     private static Solenoid m_intakeSolenoid;
     private static Solenoid m_intakeSolenoid2;
 
@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
     }
 
     public Intake() {
-        m_motor = new WPI_TalonSRX(RobotMap.CAN_Intake_MOTOR);
+        m_motor3 = new WPI_TalonSRX(RobotMap.CAN_Intake_MOTOR);
         m_intakeSolenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
         m_intakeSolenoid2 = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE);
     }
@@ -47,9 +47,9 @@ public class Intake extends SubsystemBase {
 
     public void spinMotor(double speed) {
         if (!m_intakeSolenoid.get() && !m_intakeSolenoid2.get()) {
-            m_motor.set(speed);
+            m_motor3.set(speed);
         } else {
-            m_motor.set(0);
+            m_motor3.set(0);
         }
     }
 }

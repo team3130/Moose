@@ -20,6 +20,10 @@ public class RobotMap {
      */
     public static final int kMotor_Subsystem2candevice; //add value!
 
+    /**
+     * Hopper
+     */
+    public static final int kMotor_Subsystem1candevice; //add value!
 
     /**
      * Intake
