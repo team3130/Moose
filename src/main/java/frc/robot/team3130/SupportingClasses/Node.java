@@ -7,7 +7,7 @@ import java.lang.Math;
 
 public class Node {
     private Pose2d pose;
-    
+
     public Node(double xPos, double yPos) {
         pose = new Pose2d(xPos, yPos, new Rotation2d());
     }
@@ -17,7 +17,16 @@ public class Node {
     }
 
     public double distance(Node other) {
-        return Math.sqrt(Math.pow(this.pose.getX() - other.pose.getX(), 2) + Math.pow(this.pose.getY() - other.pose.getY(), 2));
+        return Math.sqrt(
+                Math.pow(this.pose.getX() - other.pose.getX(), 2) + Math.pow(this.pose.getY() - other.pose.getY(), 2));
+    }
+
+    public double angleInRadians(Node to) {
+        return Math.atan2(to.pose.getY() - this.pose.getY(), to.pose.getX() - this.pose.getX());
+    }
+
+    public double angleInRadians(Node to, Node from) {
+        return (from.angleInRadians(this) + this.angleInRadians(to)) / 2;
     }
 
     public double getX() {
