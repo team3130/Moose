@@ -35,7 +35,7 @@ public class DefaultDrive extends CommandBase {
         }
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed;
 
-        m_chassis.driveArcade(moveSpeed * m_chassis.getMoveSpeedSensitivityFromShuffleboard(), turnSpeed * m_chassis.getTurnSpeedSensitivityFromShuffleboard(), true);
+        m_chassis.driveArcade(moveSpeed * m_chassis.getMoveSpeedSensitivityFromShuffleboard(), turnSpeed * RobotMap.kMaxTurnThrottle * m_chassis.getTurnSpeedSensitivityFromShuffleboard(), true);
     }
 
     /**
