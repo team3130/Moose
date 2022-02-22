@@ -47,14 +47,18 @@ public class RobotMap {
     public static final int CAN_PNMMODULE = 1;
 
     //TODO: FIND REAL VALUES
-    public static final int CAN_CHASSIS_MOTOR_FRONTR = 3;
+    public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
     //TODO: FIND REAL VALUES
-    public static final int CAN_CHASSIS_MOTOR_FRONTL = 2;
+    public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
     //TODO: FIND REAL VALUES
-    public static final int CAN_CHASSIS_MOTOR_BACKR = 4;
+    public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
     //TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
 
+    /**
+     * PNM IDs
+     */
+    
     //TODO: FIND REAL VALUES
     public static final int PNM_Shift = 5;
 
