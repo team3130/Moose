@@ -39,7 +39,6 @@ public class RobotContainer {
     private void defineButtonBindings() {
 //        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Commands(m_SubsystemMotor));
 //        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new ToggleClimber(m_climber));
-//
 
     }
 
