@@ -61,22 +61,22 @@ public class Chassis extends SubsystemBase {
     private NetworkTableEntry D = tab.add("Chassis D", 0).getEntry();
 
     private NetworkTableEntry sliderMove = tab
-            .add("Move Speed Sensitivity", 0.75)
+            .add("Move Speed Sensitivity", 7.5)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 1))
+            .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
     private NetworkTableEntry sliderTurn = tab
-            .add("Turn Speed Sensitivity", 0.75)
+            .add("Turn Speed Sensitivity", 7.5)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 1))
+            .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
 
     public double getMoveSpeedSensitivityFromShuffleboard() {
-        return sliderMove.getDouble(0.75);
+        return sliderMove.getDouble(7.5);
     }
 
     public double getTurnSpeedSensitivityFromShuffleboard() {
-        return sliderTurn.getDouble(0.75);
+        return sliderTurn.getDouble(7.5);
     }
 
     // Create and define all standard data types needed
