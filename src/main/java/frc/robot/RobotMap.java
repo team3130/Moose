@@ -44,7 +44,7 @@ public class RobotMap {
      * CAN ID's
      */
     //TODO: FIND REAL VALUES
-    public static final int CAN_PNMMODULE = 1;
+    public static final int CAN_PNMMODULE = 8;
 
     //TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
@@ -60,7 +60,7 @@ public class RobotMap {
      */
     
     //TODO: FIND REAL VALUES
-    public static final int PNM_Shift = 5;
+    public static final int PNM_Shift = 0;
 
     /**
      * Gamepad Button List

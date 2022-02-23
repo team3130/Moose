@@ -1,7 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultDrive;
+import frc.robot.commands.Shift;
 import frc.robot.subsystems.Chassis;
 
 /**
@@ -27,7 +29,9 @@ public class RobotContainer {
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
-    private void defineButtonBindings() {}
+    private void defineButtonBindings() {
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new Shift(m_chassis));
+    }
 
     public void outputToShuffleBoard() {
         m_chassis.outputToShuffleboard();
