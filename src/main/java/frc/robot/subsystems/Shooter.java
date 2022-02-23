@@ -4,6 +4,8 @@ import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -20,6 +22,7 @@ public class Shooter extends SubsystemBase {
 
     private NetworkTableEntry sped = tab.add("Speed in RPM", 3000).getEntry();
     private NetworkTableEntry RPM = tab.add("RPM", 0).getEntry();
+    private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -50,6 +53,7 @@ public class Shooter extends SubsystemBase {
 
     public void writeOutput() {
         RPM.setNumber(getRPM());
+        shooterVoltageOut.setNumber(m_motor.getMotorOutputVoltage());
     }
 
     @Override

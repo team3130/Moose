@@ -19,6 +19,7 @@ public class Indexer extends SubsystemBase {
     private WPI_TalonSRX m_indexer;
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
     private NetworkTableEntry indexerReadPercent = tab.add("IndexerRead%", 0).getEntry();
+    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
   
 
     //Create and define all standard data types needed
@@ -37,6 +38,16 @@ public class Indexer extends SubsystemBase {
     public double getPercentFromShuffleboard(){
         return indexerReadPercent.getDouble(0);
     }
+
+    public void writeOutput() {
+        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
+    }
+
+    @Override
+    public void periodic() {
+        writeOutput();
+    }
+
 
 
 }
