@@ -21,8 +21,8 @@ public class RobotMap {
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = 0.69;
     public static final double kEncoderResolution = 4096;
-    public static final double kChassisLowGearRatio = 0.1;
-    public static final double kChassisHighGearRatio = 0.1;
+    public static final double kChassisLowGearRatio = 0.1; //TODO: GET REAL VALUES
+    public static final double kChassisHighGearRatio = 0.1; //TODO: GET REAL VALUES
     public static final double kWheelDiameter = Units.inchesToMeters(4); //TODO: Check if changed to six inch wheels
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.7;
@@ -46,20 +46,14 @@ public class RobotMap {
     //TODO: FIND REAL VALUES
     public static final int CAN_PNMMODULE = 8;
 
-    //TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
-    //TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
-    //TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
-    //TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
 
     /**
      * PNM IDs
      */
-    
-    //TODO: FIND REAL VALUES
     public static final int PNM_Shift = 0;
 
     /**
