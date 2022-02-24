@@ -54,12 +54,9 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spindexer(m_indexer, 1));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Spindexer(m_indexer, -1));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new magazziCommand(m_magazine));
-    }
-    private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new deployintake(m_intakesubsystem));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intakesubsystem));
     }
-
 
     public void outputToShuffleBoard() {
         m_chassis.outputToShuffleboard();

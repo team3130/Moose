@@ -14,12 +14,18 @@ public class intakesubsystem extends SubsystemBase {
     //Create necessary objects
     private WPI_TalonSRX m_motor;
     private Solenoid m_solenoid;
+    private WPI_TalonSRX m_Magazine;
+
 
     //Create and define all standard data types needed
 
     public intakesubsystem() {
         m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
+    }
+
+    public void Magazine_spinny(double speed) {
+        m_Magazine.set(speed);
     }
 
     public boolean toggleIntake() {

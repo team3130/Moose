@@ -20,7 +20,6 @@ public class Indexer extends SubsystemBase {
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
     private NetworkTableEntry indexerReadPercent = tab.add("IndexerRead%", 0).getEntry();
     private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
-  
 
     //Create and define all standard data types needed
     public Indexer() {
