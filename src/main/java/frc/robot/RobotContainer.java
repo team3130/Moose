@@ -2,12 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.Shift;
 import frc.robot.commands.deployintake;
 import frc.robot.commands.spintake;
-import frc.robot.subsystems.Chassis;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.intakesubsystem;
 
 /**
@@ -38,8 +34,7 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new Shift(m_chassis));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new deployintake(m_intakesubsystem));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new deployintake(m_intakesubsystem));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intakesubsystem));
     }
 

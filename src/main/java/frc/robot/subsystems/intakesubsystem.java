@@ -12,32 +12,27 @@ public class intakesubsystem extends SubsystemBase {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-    private WPI_TalonSRX m_Motor;
-    private Solenoid m_RightPnuematic;
-    private Solenoid m_LeftPnuematic;
+    private WPI_TalonSRX m_motor;
+    private Solenoid m_solenoid;
 
     //Create and define all standard data types needed
 
     public intakesubsystem() {
-        m_Motor = new WPI_TalonSRX(RobotMap.KINTAKEMOTORCANID);
-        m_LeftPnuematic = new Solenoid(RobotMap.CAN_PNU_MATIC_HUB, PneumaticsModuleType.CTREPCM, RobotMap.INTAKE_ACTUATOR_LEFT);
-        m_RightPnuematic = new Solenoid(RobotMap.CAN_PNU_MATIC_HUB, PneumaticsModuleType.CTREPCM, RobotMap.INTAKE_ACTUATOR_RIGHT);
-
+        m_motor = new WPI_TalonSRX(RobotMap.KINTAKEMOTORCANID);
+        m_solenoid = new Solenoid(RobotMap.CAN_PNU_MATIC_HUB, PneumaticsModuleType.CTREPCM, RobotMap.INTAKE_ACTUATOR_LEFT);
     }
 
     public boolean toggleIntake() {
-        assert m_RightPnuematic.get() == m_LeftPnuematic.get();
-        m_LeftPnuematic.toggle();
-        m_RightPnuematic.toggle();
-        return m_RightPnuematic.get();
+        m_solenoid.toggle();
+        return m_solenoid.get();
     }
 
     public boolean toggled() {
-        return m_RightPnuematic.get();
+        return m_solenoid.get();
     }
 
     public void spinny(double speed) {
-        m_Motor.set(speed);
+        m_motor.set(speed);
     }
 
 }

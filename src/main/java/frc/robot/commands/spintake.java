@@ -19,7 +19,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public void initialize() {
-    m_intakesubsystem.spinny(0.4);
+    m_intakesubsystem.spinny(-0.8);
     }
 
     /**
@@ -28,11 +28,11 @@ public class spintake extends CommandBase {
      */
     @Override
     public void execute() {
-        if (!m_intakesubsystem.toggled()) {
-            m_intakesubsystem.spinny(0);
+        if (m_intakesubsystem.toggled()) {
+            m_intakesubsystem.spinny(0.8);
         }
         else {
-            m_intakesubsystem.spinny(0.4);
+            m_intakesubsystem.spinny(0);
         }
     }
 

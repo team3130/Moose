@@ -13,8 +13,9 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
-    public static final int KINTAKEMOTORCANID = 4; //TODO give this a real value
-    public static final int CAN_PNU_MATIC_HUB =7;
+    public static final int KINTAKEMOTORCANID = 9;
+    public static final int CAN_PNU_MATIC_HUB = 8;
+    public static final int INTAKE_ACTUATOR_LEFT = 1;
 
     /**
      * Chassis
