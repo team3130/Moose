@@ -24,6 +24,10 @@ public class Shooter extends SubsystemBase {
     private NetworkTableEntry RPM = tab.add("RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
+    private WPI_TalonSRX m_indexer;
+    private NetworkTableEntry indexerReadPercent = tab.add("IndexerRead%", 0).getEntry();
+    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
+
     //Create and define all standard data types needed
     public Shooter() {
         m_motor = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
@@ -55,6 +59,22 @@ public class Shooter extends SubsystemBase {
         RPM.setNumber(getRPM());
         shooterVoltageOut.setNumber(m_motor.getMotorOutputVoltage());
     }
+    public void Indexer() {
+
+        m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
+    }
+
+
+    public void setPercent(double percent){
+
+        m_indexer.set(ControlMode.PercentOutput, percent);
+    }
+
+    public double getPercentFromShuffleboard(){
+
+        return indexerReadPercent.getDouble(0);
+    }
+
 
     @Override
     public void periodic() {
