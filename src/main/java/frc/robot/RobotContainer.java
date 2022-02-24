@@ -30,8 +30,7 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new magazziCommand(m_Magazine));
-        // TODO uhhhhhh check everything about Magazine pls caleb idk what i'm doing but also Button A is a placeholder. when in doubt, it's juhae's fault
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new magazziCommand(m_Magazine));
     }
 
 }
