@@ -6,13 +6,13 @@ import frc.robot.subsystems.Indexer;
 
 public class Spindexer extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Indexer m_subsystem; //TODO: rename this to the subsystem this is assigned to
-    private int direction;
+    private final Indexer m_indexer;
+    private final int direction;
 
-    public Spindexer(Indexer subsystem, int direction) {
+    public Spindexer(Indexer indexer, int direction) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_indexer = indexer;
+        m_requirements.add(m_indexer);
         this.direction = direction;
     }
 
@@ -21,7 +21,7 @@ public class Spindexer extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setPercent(m_subsystem.getPercentFromShuffleboard());
+        m_indexer.setPercent(m_indexer.getPercentFromShuffleboard() * direction);
     }
 
     /**
@@ -49,7 +49,6 @@ public class Spindexer extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -63,6 +62,6 @@ public class Spindexer extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.setSpeed(0);
+        m_indexer.setSpeed(0);
     }
 }
