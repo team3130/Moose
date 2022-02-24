@@ -1,17 +1,18 @@
-package frc.robot.commands;
+package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.ExampleSubsystem;
 
-public class Shift extends CommandBase {
+public class DefaultDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
 
-    public Shift(Chassis subsystem) {
+    public DefaultDrive(Chassis chassis) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
     }
 
     /**
@@ -19,7 +20,7 @@ public class Shift extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.shift();
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -28,7 +29,13 @@ public class Shift extends CommandBase {
      */
     @Override
     public void execute() {
+        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        if (m_chassis.isShifted()) {
+            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
+        }
+        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
 
+        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -48,7 +55,7 @@ public class Shift extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return true;
+        return false;
     }
 
     /**
@@ -61,6 +68,6 @@ public class Shift extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_chassis.configRampRate(0);
     }
 }

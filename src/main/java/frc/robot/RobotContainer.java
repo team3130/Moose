@@ -2,9 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DefaultDrive;
-import frc.robot.commands.deployintake;
-import frc.robot.commands.spintake;
+import frc.robot.commands.Chassis.DefaultDrive;
+import frc.robot.commands.Intake.deployintake;
+import frc.robot.commands.Intake.spintake;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.intakesubsystem;
 

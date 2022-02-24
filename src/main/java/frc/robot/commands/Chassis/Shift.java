@@ -1,18 +1,17 @@
-package frc.robot.commands;
+package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.ExampleSubsystem;
 
-public class DefaultDrive extends CommandBase {
+public class Shift extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_subsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public DefaultDrive(Chassis chassis) {
+    public Shift(Chassis subsystem) {
         //mapping to object passed through parameter
-        m_chassis = chassis;
-        m_requirements.add(chassis);
+        m_subsystem = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
@@ -20,7 +19,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_subsystem.shift();
     }
 
     /**
@@ -29,13 +28,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if (m_chassis.isShifted()) {
-            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
-        }
-        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
 
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -55,7 +48,7 @@ public class DefaultDrive extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return true;
     }
 
     /**
@@ -68,6 +61,6 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0);
+
     }
 }

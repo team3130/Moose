@@ -1,14 +1,14 @@
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.intakesubsystem;
 
-public class deployintake extends CommandBase {
+public class spintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final intakesubsystem m_intakesubsystem; //TODO: rename this to the subsystem this is assigned to
 
-    public deployintake(intakesubsystem subsystem) {
+    public spintake(intakesubsystem subsystem) {
         //mapping to object passed through parameter
         m_intakesubsystem = subsystem;
         m_requirements.add(m_intakesubsystem);
@@ -19,7 +19,7 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_intakesubsystem.toggleIntake();
+    m_intakesubsystem.spinny(-0.8);
     }
 
     /**
@@ -28,7 +28,12 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void execute() {
-
+        if (m_intakesubsystem.toggled()) {
+            m_intakesubsystem.spinny(0.8);
+        }
+        else {
+            m_intakesubsystem.spinny(0);
+        }
     }
 
     /**
@@ -47,7 +52,8 @@ public class deployintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        // TODO: Make this return true when this Command no longer needs to run execute()
+        return false;
     }
 
     /**
@@ -60,6 +66,6 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_intakesubsystem.spinny(0);
     }
 }

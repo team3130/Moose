@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
 
 public class Chassis extends SubsystemBase {
@@ -249,7 +250,7 @@ public class Chassis extends SubsystemBase {
 
     /**
      * The default method for driving (used in
-     * {@link frc.robot.commands.DefaultDrive})
+     * {@link DefaultDrive})
      * Drive in tank drive
      * 
      * @param moveThrottle  Left input throttle
