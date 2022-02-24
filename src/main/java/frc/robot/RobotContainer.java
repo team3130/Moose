@@ -6,6 +6,8 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.Spindexer;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
+import frc.robot.commands.magazziCommand;
+import frc.robot.subsystems.Magazine;
 
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
@@ -14,12 +16,16 @@ public class RobotContainer {
     // define subsystems here
     Shooter m_shooter = new Shooter();
     Indexer m_indexer = new Indexer();
+    Magazine m_magazine = new Magazine();
+
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
 
     // make getters for subsystems here
-
+    public Magazine getMagazine() {
+        return m_magazine;
+    }
 
     public RobotContainer() {
         defineButtonBindings();
@@ -34,6 +40,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Shoot(m_shooter, -1));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spindexer(m_indexer, 1));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Spindexer(m_indexer, -1));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new magazziCommand(m_magazine));
     }
 
 }

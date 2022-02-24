@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  RobotContainer m_robotContainer;
+  CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
   CommandScheduler scheduler = CommandScheduler.getInstance();
-
-  public RobotContainer m_robotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -84,8 +84,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    scheduler.run();
+    m_scheduler.run();
   }
+
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}

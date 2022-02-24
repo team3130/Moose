@@ -1,20 +1,17 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Magazine;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class magazziCommand extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Magazine m_Magazine; //TODO: rename this to the subsystem this is assigned to
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public magazziCommand(Magazine magazine) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_Magazine = magazine;
+        m_requirements.add(m_Magazine);
     }
 
     /**
@@ -22,7 +19,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_Magazine.spinny(0.2);
     }
 
     /**
@@ -64,6 +61,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_Magazine.spinny(0);
     }
 }

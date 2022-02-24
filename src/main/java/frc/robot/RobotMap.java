@@ -11,6 +11,7 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
+    public static final int KMAGAZINEMOTORCANID = 4; //TODO give this a real value
 
     public static final double kMotorGearRatio = 1;
     public static final double kMotorTicksPerRevolution = 2048;
