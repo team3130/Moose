@@ -239,4 +239,10 @@ fabric.properties
 
 .vscode/settings.json
 
+simgui-ds.json
+
+simgui-window.json
+
+simgui.json
+
 .SysId/
