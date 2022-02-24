@@ -30,6 +30,8 @@ public class RobotMap {
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
+    public static final double angleOffset = 2; // Arbitrary value for how many degrees offset the target should be before shooting
+
     /**
      * Chassis
      */
