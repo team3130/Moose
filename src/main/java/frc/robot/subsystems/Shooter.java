@@ -37,6 +37,8 @@ public class Shooter extends SubsystemBase {
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
                 RobotMap.kFlywheelF);
+        m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
+
     }
 
     public void spinMotor(double speed) {
@@ -58,10 +60,6 @@ public class Shooter extends SubsystemBase {
     public void writeOutput() {
         RPM.setNumber(getRPM());
         shooterVoltageOut.setNumber(m_motor.getMotorOutputVoltage());
-    }
-    public void Indexer() {
-
-        m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
     }
 
 
