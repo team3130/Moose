@@ -18,8 +18,8 @@ public class intakesubsystem extends SubsystemBase {
     //Create and define all standard data types needed
 
     public intakesubsystem() {
-        m_motor = new WPI_TalonSRX(RobotMap.KINTAKEMOTORCANID);
-        m_solenoid = new Solenoid(RobotMap.CAN_PNU_MATIC_HUB, PneumaticsModuleType.CTREPCM, RobotMap.INTAKE_ACTUATOR_LEFT);
+        m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
+        m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
     }
 
     public boolean toggleIntake() {

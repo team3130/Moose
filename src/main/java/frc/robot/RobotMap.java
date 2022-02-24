@@ -13,9 +13,6 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
-    public static final int KINTAKEMOTORCANID = 9;
-    public static final int CAN_PNU_MATIC_HUB = 8;
-    public static final int INTAKE_ACTUATOR_LEFT = 1;
 
     /**
      * Chassis
@@ -46,17 +43,20 @@ public class RobotMap {
     /**
      * CAN ID's
      */
+    public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
+    public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
+    public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
+    public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
+
     public static final int CAN_PNMMODULE = 8;
 
-    public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
-    public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
-    public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
-    public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
+    public static final int CAN_INTAKE_MOTOR = 9;
 
     /**
      * PNM IDs
      */
     public static final int PNM_Shift = 0;
+    public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
 
     /**
      * Gamepad Button List
