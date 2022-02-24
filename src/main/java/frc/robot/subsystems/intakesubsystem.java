@@ -31,11 +31,12 @@ public class intakesubsystem extends SubsystemBase {
         m_RightPnuematic.toggle();
         return m_RightPnuematic.get();
     }
+
     public boolean toggled() {
         return m_RightPnuematic.get();
     }
 
-    public void spinny(double speed){
+    public void spinny(double speed) {
         m_Motor.set(speed);
     }
 
