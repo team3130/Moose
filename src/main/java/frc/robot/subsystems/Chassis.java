@@ -100,10 +100,10 @@ public class Chassis extends SubsystemBase {
         m_rightMotorFront.enableVoltageCompensation(true);
         m_leftMotorFront.enableVoltageCompensation(true);
 
-        // TODO: CHECK ALL OF THESE BEFORE PUTTING THE BOT ON THE GROUND
-        m_rightMotorFront.setInverted(false);
+
+        m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
-        m_rightMotorBack.setInverted(false);
+        m_rightMotorBack.setInverted(true);
         m_leftMotorBack.setInverted(false);
 
         // configure the motor groups
@@ -457,6 +457,8 @@ public class Chassis extends SubsystemBase {
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Robot position Y", m_odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Robot rotation", m_odometry.getPoseMeters().getRotation().getDegrees());
+
+        SmartDashboard.putBoolean("Shifted", m_shifter.get());
 
     }
 

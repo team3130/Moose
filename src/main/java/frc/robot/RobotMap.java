@@ -43,7 +43,6 @@ public class RobotMap {
     /**
      * CAN ID's
      */
-    //TODO: FIND REAL VALUES
     public static final int CAN_PNMMODULE = 8;
 
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
