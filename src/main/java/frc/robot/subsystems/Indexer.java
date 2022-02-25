@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -26,7 +25,7 @@ public class Indexer extends SubsystemBase {
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
     }
 
-    public void setSpeed(double sped) {
+    public void setspeed(double sped) {
         m_indexer.set(sped);
     }
 

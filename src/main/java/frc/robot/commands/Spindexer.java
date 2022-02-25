@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Indexer;
 
 public class Spindexer extends CommandBase {
@@ -62,6 +61,6 @@ public class Spindexer extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_indexer.setSpeed(0);
+        m_indexer.setspeed(0);
     }
 }
