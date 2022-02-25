@@ -30,7 +30,7 @@ public class faceTarget extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.driveArcade(0, Limelight.GetInstance().getTx() / 27, true);
+        m_chassis.driveArcade(0, (Limelight.GetInstance().getTx() / 27) * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
