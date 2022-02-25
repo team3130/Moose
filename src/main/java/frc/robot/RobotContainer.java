@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Chassis.Shift;
+import frc.robot.commands.Chassis.faceTarget;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.Chassis.DefaultDrive;
@@ -48,6 +50,8 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intake));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new faceTarget(m_chassis));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
     }
 
     public void outputToShuffleBoard() {
