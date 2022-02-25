@@ -247,7 +247,7 @@ public class Chassis extends SubsystemBase {
      * resets odometry, to be called in rare situations
      * @param pose the pose to set odometry to
      */
-    private void resetOdometry(Pose2d pose) {
+    public void resetOdometry(Pose2d pose) {
         resetEncoders();
         Navx.resetNavX();
         m_odometry.resetPosition(pose, Navx.getRotation());
