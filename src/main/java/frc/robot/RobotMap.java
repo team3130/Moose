@@ -31,6 +31,24 @@ public class RobotMap {
     public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
 
     /**
+     * Limelight
+     */
+    public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
+    public static final double kLimelightLatencyMs = 11.0; // Image capture latency
+
+    public static final double kLimelightPitch =  -45;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO: FIND FOR 2022
+    public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
+    public static final double kLimelightHeight = 0.84;     // Height of camera aperture from the ground
+    public static final double kLimelightLength = 9.5;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
+    public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
+    public static final double kLimelightCalibrationDist = 120.0; // Exact horizontal distance between target and lens TODO: FIND FOR 2022
+
+    public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
+
+    public static final double angleOffset = 2; // Arbitrary value for how many degrees offset the target should be before shooting
+
+    /**
      * Chassis
      */
     public static final double kChassisMaxVoltage = 12.0;
