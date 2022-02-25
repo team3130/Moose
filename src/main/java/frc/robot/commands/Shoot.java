@@ -1,17 +1,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
+    private final Indexer m_indexer;
+    private final Magazine m_magazine;
     private int sign;
 
-    public Shoot(Shooter subsystem, int sign) {
+    public Shoot(Shooter shooter, Indexer indexer, Magazine magazine, int sign) {
         //mapping to object passed through parameter
-        m_shooter = subsystem;
-        m_requirements.add(subsystem);
+        m_shooter = shooter;
+        m_indexer = indexer;
+        m_magazine = magazine;
+
+        m_requirements.add(shooter);
+        m_requirements.add(indexer);
+        m_requirements.add(magazine);
+
         this.sign = sign;
     }
 
@@ -21,6 +31,7 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard() * sign);
+        m_magazine.spinny(0.2 * sign);
     }
 
     /**
@@ -29,6 +40,9 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
+        if(m_shooter.getRPM() > 0.8 * m_shooter.getSpeedFromShuffleboard()) {
+            m_indexer.setSpeed(m_indexer.getPercentFromShuffleboard() * sign);
+        }
     }
 
     /**
@@ -62,5 +76,7 @@ public class Shoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.spinMotor(0);
+        m_indexer.setPercent(0);
+        m_magazine.spinny(0);
     }
 }
