@@ -12,6 +12,7 @@ import frc.robot.commands.Intake.deployintake;
 import frc.robot.commands.Intake.spintake;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake_Pnuematic;
 
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
@@ -21,6 +22,7 @@ public class RobotContainer {
     Shooter m_shooter = new Shooter();
     Chassis m_chassis = new Chassis();
     MotorIntake m_motorintake = new MotorIntake();
+    Intake_Pnuematic m_intake_pnuematic = new Intake_Pnuematic();
 
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
@@ -28,6 +30,8 @@ public class RobotContainer {
 
     public MotorIntake getIntake() {
         return m_motorintake;
+    public Intake_Pnuematic getIntake() {
+        return m_intake_pnuematic;
     }
 
     public Chassis getChassis() {
@@ -51,6 +55,8 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_motorintake));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake_pnuematic));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intake));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new faceTarget(m_chassis));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
     }
