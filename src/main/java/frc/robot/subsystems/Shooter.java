@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-import static frc.robot.util.Utils.configPIDF;
+import static frc.robot.utils.Utils.configPIDF;
 
 public class Shooter extends SubsystemBase {
     private WPI_TalonFX m_flywheel;
