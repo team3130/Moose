@@ -1,7 +1,6 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MotorIntake;
 
 public class spintake extends CommandBase {
@@ -19,7 +18,8 @@ public class spintake extends CommandBase {
      */
     @Override
     public void initialize() {
-    m_motorintake.spinny(-0.8);
+        m_motorintake.spinny(-0.8);
+        m_motorintake.Magazine_spinny(0.6);
     }
 
     /**
