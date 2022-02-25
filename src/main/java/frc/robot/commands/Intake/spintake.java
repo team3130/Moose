@@ -27,12 +27,6 @@ public class spintake extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_intake.toggled()) {
-            m_intake.spinny(0.8);
-        }
-        else {
-            m_intake.spinny(0);
-        }
     }
 
     /**

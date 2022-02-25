@@ -104,7 +104,7 @@ public class Chassis extends SubsystemBase {
 
         m_rightMotorFront.setInverted(true);
         m_leftMotorFront.setInverted(false);
-        m_rightMotorBack.setInverted(false);
+        m_rightMotorBack.setInverted(true);
         m_leftMotorBack.setInverted(false);
 
         // configure the motor groups
