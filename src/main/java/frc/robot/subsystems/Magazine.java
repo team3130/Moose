@@ -10,15 +10,15 @@ public class Magazine extends SubsystemBase {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-    private WPI_TalonSRX m_Magazine;
+    private WPI_TalonSRX m_magazine;
 
     //Create and define all standard data types needed
     public Magazine() {
-        m_Magazine = new WPI_TalonSRX(RobotMap.KMAGAZINEMOTORCANID);
+        m_magazine = new WPI_TalonSRX(RobotMap.KMAGAZINEMOTORCANID);
     }
 
     public void spinny(double speed) {
-        m_Magazine.set(speed);
+        m_magazine.set(speed);
     }
 }
 
