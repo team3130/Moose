@@ -33,6 +33,8 @@ public class Shooter extends SubsystemBase {
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
                 RobotMap.kFlywheelF);
+        m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
+
     }
 
     public void spinMotor(double speed) {
@@ -55,6 +57,18 @@ public class Shooter extends SubsystemBase {
         RPM.setNumber(getRPM());
         shooterVoltageOut.setNumber(m_motor.getMotorOutputVoltage());
     }
+
+
+    public void setPercent(double percent){
+
+        m_indexer.set(ControlMode.PercentOutput, percent);
+    }
+
+    public double getPercentFromShuffleboard(){
+
+        return indexerReadPercent.getDouble(0);
+    }
+
 
     @Override
     public void periodic() {
