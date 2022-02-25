@@ -25,7 +25,7 @@ public class Indexer extends SubsystemBase {
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
     }
 
-    public void setspeed(double sped) {
+    public void setSpeed(double sped) {
         m_indexer.set(sped);
     }
 

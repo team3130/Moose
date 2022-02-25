@@ -61,6 +61,6 @@ public class Spindexer extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_indexer.setspeed(0);
+        m_indexer.setSpeed(0);
     }
 }
