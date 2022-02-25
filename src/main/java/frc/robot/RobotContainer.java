@@ -11,7 +11,6 @@ import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Intake.deployintake;
 import frc.robot.commands.Intake.spintake;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Intake_Pnuematic;
 
 /**
@@ -28,9 +27,11 @@ public class RobotContainer {
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-    public MotorIntake getIntake() {
+    public MotorIntake getIntakeMotor() {
         return m_motorintake;
-    public Intake_Pnuematic getIntake() {
+    }
+
+    public Intake_Pnuematic getIntakePnuematic() {
         return m_intake_pnuematic;
     }
 
@@ -53,10 +54,8 @@ public class RobotContainer {
 
     private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_motorintake));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake_pnuematic));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intake));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new faceTarget(m_chassis));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
     }
