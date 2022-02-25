@@ -55,7 +55,7 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new Spindexer(m_indexer, -1));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new deployintake(m_intakesubsystem));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new spintake(m_intakesubsystem));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenHeld(new Shift(m_chassis));/\
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenHeld(new Shift(m_chassis));
     }
 
 
