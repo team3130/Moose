@@ -17,7 +17,7 @@ public class Shoot extends CommandBase {
         m_indexer = indexer;
         direction = Direction;
         m_requirements.add(subsystem);
-        m_requirements.add(indexer);
+        m_requirements.add(m_indexer);
         this.sign = sign;
     }
 
@@ -27,7 +27,7 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard() * sign);
-        new Spindexer(m_indexer, direction);
+        m_indexer.setPercent(m_indexer.getPercentFromShuffleboard() * direction);
     }
 
     /**

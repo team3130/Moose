@@ -16,8 +16,6 @@ public class intakesubsystem extends SubsystemBase {
     private Solenoid m_solenoid;
     private WPI_TalonSRX m_Magazine;
 
-
-    private WPI_TalonSRX m_Magazine;
     //Create and define all standard data types needed
 
     public intakesubsystem() {
