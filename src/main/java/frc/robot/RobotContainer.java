@@ -3,9 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.Shoot1;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
-import frc.robot.commands.magazziCommand;
 import frc.robot.subsystems.Magazine;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Intake.deployintake;
@@ -47,9 +47,9 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter, 1));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Shoot(m_shooter, -1));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenHeld(new magazziCommand(m_magazine));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot1(m_shooter, m_indexer, m_magazine, 1));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Shoot1(m_shooter, m_indexer, m_magazine, -1));
+
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intakesubsystem));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intakesubsystem));
     }
