@@ -2,15 +2,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Shoot;
-import frc.robot.subsystems.Indexer;
+import frc.robot.commands.Shooter.Shoot;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Magazine;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Intake.deployintake;
 import frc.robot.commands.Intake.spintake;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.intakesubsystem;
+import frc.robot.subsystems.Intake;
 
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
@@ -18,22 +16,23 @@ import frc.robot.subsystems.intakesubsystem;
 public class RobotContainer {
     // define subsystems here
     Shooter m_shooter = new Shooter();
-    Indexer m_indexer = new Indexer();
-    Magazine m_magazine = new Magazine();
     Chassis m_chassis = new Chassis();
-    intakesubsystem m_intakesubsystem = new intakesubsystem();
+    Intake m_intake = new Intake();
 
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-
-    // make getters for subsystems here
-    public Magazine getMagazine() {
-        return m_magazine;
+    public Intake getIntake() {
+        return m_intake;
     }
-    public intakesubsystem getintakesubsystem() {
-        return m_intakesubsystem;
+
+    public Chassis getChassis() {
+        return m_chassis;
+    }
+
+    public Shooter getShooter() {
+        return m_shooter;
     }
 
     public RobotContainer() {
@@ -46,10 +45,9 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter, m_indexer, 1, 0));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Shoot(m_shooter, m_indexer, -1, 0));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intakesubsystem));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intakesubsystem));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_intake));
     }
 
     public void outputToShuffleBoard() {

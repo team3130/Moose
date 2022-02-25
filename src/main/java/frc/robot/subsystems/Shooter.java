@@ -5,18 +5,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
 import static frc.robot.util.Utils.configPIDF;
 
 public class Shooter extends SubsystemBase {
-    private WPI_TalonFX m_motor;
+    private WPI_TalonFX m_flywheel;
+    private WPI_TalonSRX m_indexer;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
 
@@ -24,25 +23,27 @@ public class Shooter extends SubsystemBase {
     private NetworkTableEntry RPM = tab.add("RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
+    private NetworkTableEntry indexerReadPercent = tab.add("IndexerRead%", 0.5).getEntry();
+    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
+
     //Create and define all standard data types needed
     public Shooter() {
-        m_motor = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
 
-        configPIDF(m_motor,
+        configPIDF(m_flywheel,
                 RobotMap.kFlywheelP,
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
                 RobotMap.kFlywheelF);
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
-
     }
 
     public void spinMotor(double speed) {
-        m_motor.set(speed);
+        m_flywheel.set(speed);
     }
 
     public double getRawSpeed() {
-        return m_motor.getSelectedSensorVelocity();
+        return m_flywheel.getSelectedSensorVelocity();
     }
 
     public double getRPM(){
@@ -55,18 +56,17 @@ public class Shooter extends SubsystemBase {
 
     public void writeOutput() {
         RPM.setNumber(getRPM());
-        shooterVoltageOut.setNumber(m_motor.getMotorOutputVoltage());
+        shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
+        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
     }
 
 
-    public void setPercent(double percent){
-
+    public void setIndexerPercent(double percent){
         m_indexer.set(ControlMode.PercentOutput, percent);
     }
 
-    public double getPercentFromShuffleboard(){
-
-        return indexerReadPercent.getDouble(0);
+    public double getIndexerPercentFromShuffleboard() {
+        return indexerReadPercent.getDouble(0.5);
     }
 
 
@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase {
      * @param spin percent of max voltage output
      */
     public void setOpenLoop(double spin) {
-        m_motor.set(ControlMode.PercentOutput, spin);
+        m_flywheel.set(ControlMode.PercentOutput, spin);
     }
 
     public void stop() {
@@ -91,8 +91,7 @@ public class Shooter extends SubsystemBase {
     public void setSpeed(double rpm) {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
-
-        m_motor.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
-        m_motor.getSelectedSensorPosition();
+        m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        m_flywheel.getSelectedSensorPosition();
     }
 }

@@ -1,24 +1,16 @@
-package frc.robot.commands;
+package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Indexer;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private final Indexer m_indexer;
-    private int direction;
-    private int sign;
 
-    public Shoot(Shooter subsystem, Indexer indexer, int sign, int Direction) {
+    public Shoot(Shooter subsystem) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
-        m_indexer = indexer;
-        direction = Direction;
         m_requirements.add(subsystem);
-        m_requirements.add(m_indexer);
-        this.sign = sign;
     }
 
     /**
@@ -26,7 +18,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard() * sign);
+        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
     }
 
     /**
@@ -36,7 +28,7 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         if (m_shooter.getRPM() < m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_indexer.setPercent(m_indexer.getPercentFromShuffleboard() * direction);
+            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
         } 
     }
 

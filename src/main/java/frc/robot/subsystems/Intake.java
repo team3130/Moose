@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-public class intakesubsystem extends SubsystemBase {
+public class Intake extends SubsystemBase {
 
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
@@ -18,7 +18,7 @@ public class intakesubsystem extends SubsystemBase {
 
     //Create and define all standard data types needed
 
-    public intakesubsystem() {
+    public Intake() {
         m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
         m_magazine = new WPI_TalonSRX(RobotMap.KMAGAZINEMOTORCANID);
