@@ -13,6 +13,22 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
+    public static final int KMAGAZINEMOTORCANID = 4; //TODO give this a real value
+
+    public static final double kMotorGearRatio = 1;
+    public static final double kMotorTicksPerRevolution = 2048;
+
+
+    /**
+     * CAN ID's
+     */
+
+    public static final char CAN_SHOOTER_MOTOR = 5;
+    public static final int CAN_INDEXER = 3;
+
+
+    public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
+    public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
 
     /**
      * Chassis
@@ -95,4 +111,9 @@ public class RobotMap {
     public static final int LST_AXS_RTRIGGER = 3;
     public static final int LST_AXS_RJOYSTICKX = 4;
     public static final int LST_AXS_RJOYSTICKY = 5;
+
+    public static double kFlywheelP = .22;
+    public static double kFlywheelI = 0.0;
+    public static double kFlywheelD = 12;
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 }
