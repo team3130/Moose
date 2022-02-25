@@ -13,20 +13,26 @@ public class RobotMap {
      */
     public static final String kDefaultAuto = "Default";
     public static final String kCustomAuto = "My Auto";
-    public static final int KMAGAZINEMOTORCANID = 4; //TODO give this a real value
-
-    public static final double kMotorGearRatio = 1;
-    public static final double kMotorTicksPerRevolution = 2048;
-
 
     /**
      * CAN ID's
      */
+    public static final int CAN_INDEXER = 2;
+    public static final int CAN_MAGAZINE_MOTOR = 4;
 
-    public static final char CAN_SHOOTER_MOTOR = 5;
-    public static final int CAN_INDEXER = 3;
+    public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
+    public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
+    public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
+    public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
 
+    public static final int CAN_PNMMODULE = 8;
 
+    public static final char CAN_SHOOTER_MOTOR = 7;
+    public static final int CAN_INTAKE_MOTOR = 9;
+
+    /**
+     * Flywheel
+     */
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
 
@@ -73,18 +79,6 @@ public class RobotMap {
     public static double highGearkS = 0.819;
     public static double highGearkV = 0.0343;
     public static double highGearkA = 0.00437;
-
-    /**
-     * CAN ID's
-     */
-    public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
-    public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
-    public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
-    public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
-
-    public static final int CAN_PNMMODULE = 8;
-
-    public static final int CAN_INTAKE_MOTOR = 9;
 
     /**
      * PNM IDs

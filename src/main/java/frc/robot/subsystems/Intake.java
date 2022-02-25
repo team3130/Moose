@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
-        m_magazine = new WPI_TalonSRX(RobotMap.KMAGAZINEMOTORCANID);
+        m_magazine = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR);
     }
 
     public void Magazine_spinny(double speed) {
