@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonSRX m_indexer;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
+    private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
     private NetworkTableEntry sped = tab.add("Shooter Write RPM", 3000).getEntry();
     private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
