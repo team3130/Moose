@@ -54,8 +54,8 @@ public class RobotContainer {
 
     private void defineButtonBindings() {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Shoot(m_shooter));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spintake(m_motorintake));
-        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenPressed(new deployintake(m_intake_pnuematic));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new spintake(m_motorintake));
+        new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenPressed(new deployintake(m_intake_pnuematic));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new faceTarget(m_chassis));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
     }

@@ -19,7 +19,7 @@ public class spintake extends CommandBase {
     @Override
     public void initialize() {
         m_motorintake.spinny(-0.8);
-        m_motorintake.Magazine_spinny(0.6);
+        m_motorintake.Magazine_spinny(-0.6);
     }
 
     /**
@@ -61,5 +61,6 @@ public class spintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_motorintake.spinny(0);
+        m_motorintake.Magazine_spinny(0);
     }
 }
