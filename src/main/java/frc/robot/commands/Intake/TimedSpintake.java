@@ -1,16 +1,24 @@
 package frc.robot.commands.Intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake_Pnuematic;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 
-public class deployintake extends CommandBase {
+public class TimedSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Intake_Pnuematic m_intake; //TODO: rename this to the subsystem this is assigned to
+    private final Intake m_intake;
+    private Timer timer;
 
-    public deployintake(Intake_Pnuematic subsystem) {
+    /**
+     * Meant to be run in a sequential command group with {@link DeployAndSpintake}
+     * @param intake {@link Intake}
+     */
+    public TimedSpintake(Intake intake) {
         //mapping to object passed through parameter
-        m_intake = subsystem;
+        m_intake = intake;
         m_requirements.add(m_intake);
+        timer = new Timer();
     }
 
     /**
@@ -18,7 +26,9 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_intake.toggleIntake();
+        m_intake.setSpeed(0.8);
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -46,7 +56,7 @@ public class deployintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        return timer.get() >= 3;
     }
 
     /**
@@ -59,6 +69,8 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_intake.setSpeed(0);
+        timer.stop();
+        timer.reset();
     }
 }

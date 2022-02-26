@@ -1,16 +1,16 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Magazine;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MotorIntake;
+import frc.robot.subsystems.Magazine;
 
-public class spintake extends CommandBase {
+public class Spinzine extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final MotorIntake m_motorintake; //TODO: rename this to the subsystem this is assigned to
+    private final Magazine m_magazine;
 
-    public spintake(MotorIntake subsystem) {
-        //mapping to object passed through parameter
-        m_motorintake = subsystem;
-        m_requirements.add(m_motorintake);
+    public Spinzine(Magazine magazine) {
+        // mapping to object passed through parameter
+        m_magazine = magazine;
+        m_requirements.add(m_magazine);
     }
 
     /**
@@ -18,8 +18,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_motorintake.spinny(-0.8);
-        m_motorintake.Magazine_spinny(-0.6);
+        m_magazine.setSpeed(0.6);
     }
 
     /**
@@ -28,6 +27,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public void execute() {
+
     }
 
     /**
@@ -60,7 +60,6 @@ public class spintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_motorintake.spinny(0);
-        m_motorintake.Magazine_spinny(0);
+        m_magazine.setSpeed(0);
     }
 }

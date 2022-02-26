@@ -32,6 +32,7 @@ public class Shooter extends SubsystemBase {
     //Create and define all standard data types needed
     public Shooter() {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_flywheel.setInverted(true);
 
         configPIDF(m_flywheel,
                 RobotMap.kFlywheelP,
