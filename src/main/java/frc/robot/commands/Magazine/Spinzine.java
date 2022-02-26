@@ -6,11 +6,13 @@ import frc.robot.subsystems.Magazine;
 public class Spinzine extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Magazine m_magazine;
+    private final int direction;
 
-    public Spinzine(Magazine magazine) {
+    public Spinzine(Magazine magazine, int direction) {
         // mapping to object passed through parameter
         m_magazine = magazine;
         m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -18,7 +20,7 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_magazine.setSpeed(0.6);
+        m_magazine.setSpeed(0.6 * direction);
     }
 
     /**

@@ -4,19 +4,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
 public class DeployAndSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_intake;
+    private final Magazine m_magazine;
 
     /**
      * Meant to be run in a sequential command group with {@link TimedSpintake}
      * @param intake {@link Intake}
      */
-    public DeployAndSpintake(Intake intake) {
+    public DeployAndSpintake(Intake intake, Magazine magazine) {
         //mapping to object passed through parameter
         m_intake = intake;
+        m_magazine = magazine;
         m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
     }
 
     /**
@@ -65,6 +69,6 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.deployIntake(false);
-        CommandScheduler.getInstance().schedule(new TimedSpintake(m_intake));
+        CommandScheduler.getInstance().schedule(new TimedSpintake(m_intake, m_magazine));
     }
 }
