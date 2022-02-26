@@ -28,7 +28,8 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         if (m_shooter.getRPM() < m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
+           // m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
+           m_shooter.setIndexerSpeed(m_shooter.getIndexerSpeedFromShuffleboard());
         } 
     }
 

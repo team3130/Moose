@@ -31,10 +31,17 @@ public class RobotMap {
     public static final int CAN_INTAKE_MOTOR = 9;
 
     /**
-     * Flywheel
+     * Shooter
      */
+
+    //
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
-    public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
+    public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);// TODO: Figure out why the 10 works (It works, but why??)
+    public static final double kFlywheelGearRatio = 1.0;
+
+    public static final double kIndexerGearRatio = 5.0;
+    public static final double kIndexerRPMtoNativeUnitsScalar = RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0);
+    public static final double kIndexerTicksPerRevolution = 2048; //TODO: Find real value 
 
     /**
      * Limelight

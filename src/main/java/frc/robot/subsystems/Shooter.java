@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -19,11 +20,13 @@ public class Shooter extends SubsystemBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Motor");
 
-    private NetworkTableEntry sped = tab.add("Speed in RPM", 3000).getEntry();
-    private NetworkTableEntry RPM = tab.add("RPM", 0).getEntry();
+    private NetworkTableEntry sped = tab.add("Shooter Write RPM", 3000).getEntry();
+    private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
-    private NetworkTableEntry indexerReadPercent = tab.add("IndexerRead%", 0.5).getEntry();
+    private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", 0.5).getEntry();
+    private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", 3000).getEntry();
+    private NetworkTableEntry indexerReadRPM = tab.add("Indexer Write RPM", 0).getEntry();
     private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
 
     //Create and define all standard data types needed
@@ -36,10 +39,12 @@ public class Shooter extends SubsystemBase {
                 RobotMap.kFlywheelD,
                 RobotMap.kFlywheelF);
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
+        m_indexer.setNeutralMode(NeutralMode.Coast);
+        
     }
 
     public void spinMotor(double speed) {
-        m_flywheel.set(speed);
+        m_flywheel.set(speed/RobotMap.kFlywheelGearRatio);
     }
 
     public double getRawSpeed() {
@@ -54,6 +59,10 @@ public class Shooter extends SubsystemBase {
         return sped.getDouble(3000);
     }
 
+    public double getIndexerSpeedFromShuffleboard(){
+        return indexerRPM.getDouble(3000);
+    }
+
     public void writeOutput() {
         RPM.setNumber(getRPM());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
@@ -66,8 +75,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getIndexerPercentFromShuffleboard() {
-        return indexerReadPercent.getDouble(0.5);
+        return indexerPercent.getDouble(0.5);
     }
+
+   
 
 
     @Override
@@ -93,5 +104,15 @@ public class Shooter extends SubsystemBase {
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.getSelectedSensorPosition();
+    
+
     }
+
+    public void setIndexerSpeed(double rpm){
+        m_indexer.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kIndexerRPMtoNativeUnitsScalar, rpm));
+        m_indexer.getSelectedSensorVelocity(); 
+
+    }
+
+
 }
