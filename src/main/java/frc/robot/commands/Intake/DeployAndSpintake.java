@@ -1,6 +1,8 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.robot.subsystems.Intake;
 
 public class DeployAndSpintake extends CommandBase {
@@ -63,5 +65,6 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.deployIntake(false);
+        CommandScheduler.getInstance().schedule(new TimedSpintake(m_intake));
     }
 }
