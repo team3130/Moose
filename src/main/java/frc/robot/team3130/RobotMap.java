@@ -1,10 +1,10 @@
 package frc.robot.team3130;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.util.Units;
 import frc.robot.team3130.SupportingClasses.Node;
+import frc.robot.team3130.SupportingClasses.Pose;
 
 public class RobotMap {
     /**
@@ -19,6 +19,27 @@ public class RobotMap {
     public static final String kCustomAuto = "My Auto";
 
     /**
+     * Drivetrain Characterization for Trajectory Planning
+     */
+    // TODO: Find real values for ALL of these.
+    public static final double ksVolts = 0.22;
+    public static final double kvVoltSecondsPerMeter = 1.98;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+
+    public static final double kPDriveVel = 8.5;
+
+    public static final double kTrackwidthMeters = 0.69;
+
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
+            kTrackwidthMeters);
+
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+    /**
      * Chassis
      */
     public static final double kChassisMaxVoltage = 12.0;
@@ -27,7 +48,7 @@ public class RobotMap {
     public static final double kEncoderResolution = 4096;
     public static final double kChassisLowGearRatio = 0.1;
     public static final double kChassisHighGearRatio = 0.1;
-    public static final double kWheelDiameter = Units.inchesToMeters(4); //TODO: Check if changed to six inch wheels
+    public static final double kWheelDiameter = Units.inchesToMeters(4); // TODO: Check if changed to six inch wheels
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.7;
     public static final double kDriveDeadband = 0.02;
@@ -36,7 +57,7 @@ public class RobotMap {
     /**
      * Auton
      */
-    public static final Pose2d[] kShootingPoses = {new Pose2d(-1, -1, new Rotation2d(-1))}; //TODO: fill with actual values
+    public static final Pose[] kShootingPoses = { new Pose(-1, -1, -1) }; // TODO: fill with actual values
     public static final double kMaxVelocityMetersPerSec = 3;
     public static final double kMaxAccelerationMetersPerSecondSq = 3;
 
@@ -54,19 +75,19 @@ public class RobotMap {
     /**
      * CAN ID's
      */
-    //TODO: FIND REAL VALUES
+    // TODO: FIND REAL VALUES
     public static final int CAN_PNMMODULE = 1;
 
-    //TODO: FIND REAL VALUES
+    // TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 3;
-    //TODO: FIND REAL VALUES
+    // TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_FRONTL = 2;
-    //TODO: FIND REAL VALUES
+    // TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_BACKR = 4;
-    //TODO: FIND REAL VALUES
+    // TODO: FIND REAL VALUES
     public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
 
-    //TODO: FIND REAL VALUES
+    // TODO: FIND REAL VALUES
     public static final int PNM_Shift = 5;
 
     /**
@@ -96,7 +117,6 @@ public class RobotMap {
     public static final int LST_POV_W = 270;
     public static final int LST_POV_NW = 315;
 
-
     /**
      * Gamepad Axis List
      */
@@ -106,4 +126,5 @@ public class RobotMap {
     public static final int LST_AXS_RTRIGGER = 3;
     public static final int LST_AXS_RJOYSTICKX = 4;
     public static final int LST_AXS_RJOYSTICKY = 5;
+
 }

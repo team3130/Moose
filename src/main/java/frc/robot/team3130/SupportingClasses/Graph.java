@@ -88,7 +88,7 @@ public class Graph {
      * @param shoot list of shooting positions
      * @return the path in terms of nodes
      */
-    public ArrayList<Node> shootingPath(Node position, Node[] shoot) {
+    public ArrayList<Node> shootingPath(Pose position, Pose[] shoot) {
         double shortest = Double.MAX_VALUE;
         ArrayList<Node> path = new ArrayList<>(3);
         if (nodes.size() == 1) {
@@ -123,7 +123,7 @@ public class Graph {
         return path;
     }
 
-    public ArrayList<Node> defensePath(Node position) {
+    public ArrayList<Node> defensePath(Pose position) {
         double shortest = Double.MAX_VALUE;
         ArrayList<Node> path = new ArrayList<>(2);
 

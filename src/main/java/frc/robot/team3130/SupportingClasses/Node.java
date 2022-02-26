@@ -1,28 +1,24 @@
 package frc.robot.team3130.SupportingClasses;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-
 import java.lang.Math;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 public class Node {
-    private Pose2d pose;
+    private double xPos;
+    private double yPos;
 
     public Node(double xPos, double yPos) {
-        pose = new Pose2d(xPos, yPos, new Rotation2d());
-    }
-
-    public Node(double xPos, double yPos, Rotation2d rotation2d) {
-        pose = new Pose2d(xPos, yPos, rotation2d);
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
     public double distance(Node other) {
-        return Math.sqrt(
-                Math.pow(this.pose.getX() - other.pose.getX(), 2) + Math.pow(this.pose.getY() - other.pose.getY(), 2));
+        return Math.sqrt(Math.pow(this.xPos - other.xPos, 2) + Math.pow(this.yPos - other.yPos, 2));
     }
 
     public double angleInRadians(Node to) {
-        return Math.atan2(to.pose.getY() - this.pose.getY(), to.pose.getX() - this.pose.getX());
+        return Math.atan2(to.yPos - this.yPos, to.xPos - this.xPos);
     }
 
     public double angleInRadians(Node to, Node from) {
@@ -30,18 +26,14 @@ public class Node {
     }
 
     public double getX() {
-        return pose.getX();
+        return xPos;
     }
 
     public double getY() {
-        return pose.getY();
+        return yPos;
     }
 
-    public Rotation2d getRotation() {
-        return pose.getRotation();
-    }
-
-    public Pose2d getPos() {
-        return pose;
+    public Translation2d toTranslation2d() {
+        return new Translation2d(xPos, yPos);
     }
 }
