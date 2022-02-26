@@ -44,9 +44,7 @@ public class Shooter extends SubsystemBase {
         
     }
 
-    public void spinMotor(double speed) {
-        m_flywheel.set(speed/RobotMap.kFlywheelGearRatio);
-    }
+
 
     public double getRawSpeed() {
         return m_flywheel.getSelectedSensorVelocity();

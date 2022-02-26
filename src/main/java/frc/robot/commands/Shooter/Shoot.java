@@ -62,7 +62,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.spinMotor(0);
+        m_shooter.setSpeed(0);
         m_shooter.setIndexerPercent(0);
     }
 }

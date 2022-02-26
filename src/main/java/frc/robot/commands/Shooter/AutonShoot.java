@@ -1,32 +1,24 @@
-package frc.robot.commands.Chassis;
+package frc.robot.commands.Shooter;
 
-
-
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 
 import java.util.Set;
 
-public class AutonDrive extends CommandBase {
+public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
-    private Timer timer = new Timer();
+    private final Shooter m_shooter; //TODO: rename this to the subsystem this is assigned to
     private double timeLimit = 5;
-     
+    private Timer timer = new Timer();
 
-    public AutonDrive(Chassis subsystem) {
+    public AutonShoot(Shooter subsystem) {
         //mapping to object passed through parameter
-        m_chassis = subsystem;
+        m_shooter = subsystem;
         m_requirements.add(subsystem);
-        
-
     }
 
     /**
@@ -35,7 +27,6 @@ public class AutonDrive extends CommandBase {
     @Override
     public void initialize() {
         timer.start();
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
 
     }
 
@@ -45,8 +36,14 @@ public class AutonDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -0.5 * RobotMap.kMaxHighGearDriveSpeed; //Currently running on low gear (week 0), but it go ZOOM anyway
-        m_chassis.driveArcade(moveSpeed, 0, true);
+        double shooterSpeed = 3000; //TODO: find correct speed
+        double indexerSpeed = 2000;
+        
+        m_shooter.setSpeed(shooterSpeed); 
+
+        if (m_shooter.getRPM() >= shooterSpeed - 50) {
+            m_shooter.setIndexerSpeed(indexerSpeed);//POTENTIAL FAILURE POINT: if shooter doesn't work tomorrow it could be this rpm implementation
+        } 
 
     }
 
@@ -67,6 +64,7 @@ public class AutonDrive extends CommandBase {
     @Override
     public boolean isFinished() {
         // TODO: Make this return true when this Command no longer needs to run execute()
+
          
         if(timer.get() >= timeLimit){
             timer.stop();
@@ -74,6 +72,8 @@ public class AutonDrive extends CommandBase {
         }
 
         else{return false;}
+      
+
     }
 
     /**
@@ -86,9 +86,9 @@ public class AutonDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0); //idk if this really needs to be here
-        m_chassis.driveArcade(0, 0, true);
-      
+        m_shooter.setIndexerSpeed(0);
+        m_shooter.setSpeed(0);
 
     }
 }
+
