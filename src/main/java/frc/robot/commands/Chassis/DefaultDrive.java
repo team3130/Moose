@@ -4,10 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
+import java.util.Random;
 
 public class DefaultDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
+    Random Rand = new Random();
+    int rand = Rand.nextInt(2);
 
     public DefaultDrive(Chassis chassis) {
         //mapping to object passed through parameter
@@ -34,8 +37,13 @@ public class DefaultDrive extends CommandBase {
             moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
         }
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
-
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
+        
+        if (rand == 0) {
+            m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
+        } else if (rand == 1) {}
+        else {
+            System.out.println("my life is a lie");
+        }
     }
 
     /**
