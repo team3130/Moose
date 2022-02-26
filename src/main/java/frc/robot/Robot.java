@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Chassis.AutonDrive;
+import frc.robot.commands.Shooter.AutonShoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -60,23 +63,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    CommandScheduler.getInstance().schedule(new SequentialCommandGroup(new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis())));
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case RobotMap.kCustomAuto:
-        // Put custom auto code here
-        break;
-      case RobotMap.kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
   }
 
   /** This function is called once when teleop is enabled. */
