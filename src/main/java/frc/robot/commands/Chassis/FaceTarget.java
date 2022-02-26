@@ -7,7 +7,7 @@ import frc.robot.subsystems.Chassis;
 
 public class FaceTarget extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis;
 
     public FaceTarget(Chassis chassis) {
         //mapping to object passed through parameter

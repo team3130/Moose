@@ -11,9 +11,9 @@ import java.util.Set;
 
 public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Shooter m_shooter; //TODO: rename this to the subsystem this is assigned to
-    private double timeLimit = 5;
-    private Timer timer = new Timer();
+    private final Shooter m_shooter;
+    private final double timeLimit = 5;
+    private final Timer timer = new Timer();
 
     public AutonShoot(Shooter subsystem) {
         //mapping to object passed through parameter
@@ -26,8 +26,8 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void initialize() {
+        timer.reset();
         timer.start();
-
     }
 
     /**
@@ -63,17 +63,7 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-
-         
-        if(timer.get() >= timeLimit){
-            timer.stop();
-            return true;
-        }
-
-        else{return false;}
-      
-
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -88,7 +78,7 @@ public class AutonShoot extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.setIndexerSpeed(0);
         m_shooter.setSpeed(0);
-
+        timer.stop();
     }
 }
 

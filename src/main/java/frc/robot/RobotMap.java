@@ -37,7 +37,7 @@ public class RobotMap {
     //
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
-    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;// TODO: Figure out why the 10 works (It works, but why??)
+    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
@@ -70,7 +70,7 @@ public class RobotMap {
     public static final double kEncoderResolution = 4096;
     public static final double kChassisLowGearRatio = 0.1; //TODO: GET REAL VALUES
     public static final double kChassisHighGearRatio = (double) 58 / 60; //TODO: GET REAL VALUES
-    public static final double kWheelDiameter = Units.inchesToMeters(4); //TODO: Check if changed to six inch wheels
+    public static final double kWheelDiameter = Units.inchesToMeters(4);
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.7;
     public static final double kDriveDeadband = 0.02;

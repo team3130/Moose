@@ -6,7 +6,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 
 public class Shift extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_subsystem;
 
     public Shift(Chassis subsystem) {
         //mapping to object passed through parameter
@@ -47,7 +47,6 @@ public class Shift extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return true;
     }
 
