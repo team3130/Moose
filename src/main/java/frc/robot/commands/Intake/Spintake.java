@@ -8,11 +8,13 @@ import frc.robot.subsystems.Magazine;
 public class Spintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_intake;
+    private final int direction;
 
-    public Spintake(Intake intake) {
+    public Spintake(Intake intake, int direction) {
         //mapping to object passed through parameter
         m_intake = intake;
         m_requirements.add(m_intake);
+        this.direction = direction;
     }
 
     /**
@@ -20,7 +22,7 @@ public class Spintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_intake.setSpeed(0.8);
+        m_intake.setSpeed(0.8 * direction);
     }
 
     /**

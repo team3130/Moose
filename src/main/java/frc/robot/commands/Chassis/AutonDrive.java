@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -18,13 +19,14 @@ public class AutonDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis;
     private final Timer timer = new Timer();
-    private double timeLimit = 5;
+    private double timeLimit;
      
 
-    public AutonDrive(Chassis subsystem) {
+    public AutonDrive(Chassis subsystem, double time) {
         //mapping to object passed through parameter
         m_chassis = subsystem;
         m_requirements.add(subsystem);
+        timeLimit = time;
     }
 
     /**
@@ -43,8 +45,8 @@ public class AutonDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -0.5 * RobotMap.kMaxHighGearDriveSpeed; //Currently running on low gear (week 0), but it go ZOOM anyway
-        m_chassis.driveArcade(moveSpeed, 0, true);
+        double moveSpeed = -0.4; //Currently running on low gear (week 0), but it go ZOOM anyway
+        m_chassis.driveArcade(moveSpeed,0, false);
     }
 
     /**

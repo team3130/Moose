@@ -56,12 +56,13 @@ public class RobotContainer {
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
         new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new DeployIntake(m_intake));
 
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new DeployAndSpintake(m_intake, m_magazine));
+        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine)).whenReleased(new TimedSpintake(m_intake, m_magazine));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Shoot(m_shooter));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Spinzine(m_magazine, -1));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenPressed(new FaceTarget(m_chassis));
+        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spintake(m_intake, -1));
+        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spintake(m_intake, 1));
     }
 
     public void outputToShuffleBoard() {

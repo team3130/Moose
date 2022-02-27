@@ -69,6 +69,5 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.deployIntake(false);
-        CommandScheduler.getInstance().schedule(new TimedSpintake(m_intake, m_magazine));
     }
 }

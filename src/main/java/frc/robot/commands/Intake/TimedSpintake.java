@@ -30,6 +30,8 @@ public class TimedSpintake extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_intake.deployIntake(false);
+
         m_intake.setSpeed(0.8);
         m_magazine.setSpeed(0.6);
         timer.reset();

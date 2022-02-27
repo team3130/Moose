@@ -38,6 +38,6 @@ public class Intake extends SubsystemBase {
     }
 
     public void deployIntake(boolean deploy) {
-        m_solenoid.set(true);
+        m_solenoid.set(deploy);
     }
 }

@@ -12,7 +12,7 @@ import java.util.Set;
 public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private final double timeLimit = 5;
+    private final double timeLimit = 3;
     private final Timer timer = new Timer();
 
     public AutonShoot(Shooter subsystem) {
@@ -36,13 +36,13 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void execute() {
-        double shooterSpeed = 3000; //TODO: find correct speed
-        double indexerSpeed = 2000;
+        double shooterSpeed = 3200; //TODO: find correct speed
+        double indexerSpeed = 0.5;
         
         m_shooter.setSpeed(shooterSpeed); 
 
         if (m_shooter.getRPM() >= shooterSpeed - 50) {
-            m_shooter.setIndexerSpeed(indexerSpeed);//POTENTIAL FAILURE POINT: if shooter doesn't work tomorrow it could be this rpm implementation
+            m_shooter.setIndexerPercent(indexerSpeed);//POTENTIAL FAILURE POINT: if shooter doesn't work tomorrow it could be this rpm implementation
         } 
 
     }

@@ -72,7 +72,7 @@ public class RobotMap {
     public static final double kChassisHighGearRatio = (double) 58 / 60; //TODO: GET REAL VALUES
     public static final double kWheelDiameter = Units.inchesToMeters(4);
     public static final double kMaxHighGearDriveSpeed = 0.8;
-    public static final double kMaxTurnThrottle = 0.7;
+    public static final double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
 

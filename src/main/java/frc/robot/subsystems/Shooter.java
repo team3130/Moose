@@ -20,14 +20,14 @@ public class Shooter extends SubsystemBase {
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
-    private NetworkTableEntry sped = tab.add("Shooter Write RPM", 3000).getEntry();
+    private NetworkTableEntry sped = tab.add("Shooter Write RPM", 3200).getEntry();
     private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
     private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", 0.5).getEntry();
-    private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", 3000).getEntry();
-    private NetworkTableEntry indexerReadRPM = tab.add("Indexer Write RPM", 0).getEntry();
-    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
+    private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", 1000).getEntry();
+    // private NetworkTableEntry indexerReadRPM = tab.add("Indexer Write RPM", 0).getEntry();
+//    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -55,17 +55,17 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getSpeedFromShuffleboard() {
-        return sped.getDouble(3000);
+        return sped.getDouble(3200);
     }
 
     public double getIndexerSpeedFromShuffleboard(){
-        return indexerRPM.getDouble(3000);
+        return indexerRPM.getDouble(1000);
     }
 
     public void writeOutput() {
         RPM.setNumber(getRPM());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
-        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
+//        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
     }
 
 
@@ -76,9 +76,6 @@ public class Shooter extends SubsystemBase {
     public double getIndexerPercentFromShuffleboard() {
         return indexerPercent.getDouble(0.5);
     }
-
-   
-
 
     @Override
     public void periodic() {
@@ -103,8 +100,6 @@ public class Shooter extends SubsystemBase {
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.getSelectedSensorPosition();
-    
-
     }
 
     public void setIndexerSpeed(double rpm){

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Chassis.AutonDrive;
@@ -63,7 +64,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    CommandScheduler.getInstance().schedule(new SequentialCommandGroup(new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis())));
+    scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
   }
 
   /** This function is called periodically during autonomous. */
