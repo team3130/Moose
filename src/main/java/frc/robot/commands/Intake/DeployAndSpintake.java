@@ -10,17 +10,19 @@ public class DeployAndSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_intake;
     private final Magazine m_magazine;
+    private final int direction;
 
     /**
      * Meant to be run in a sequential command group with {@link TimedSpintake}
      * @param intake {@link Intake}
      */
-    public DeployAndSpintake(Intake intake, Magazine magazine) {
+    public DeployAndSpintake(Intake intake, Magazine magazine, int direction) {
         //mapping to object passed through parameter
         m_intake = intake;
         m_magazine = magazine;
         m_requirements.add(m_intake);
         m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -29,7 +31,7 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void initialize() {
         m_intake.deployIntake(true);
-        m_intake.setSpeed(0.8);
+        m_intake.setSpeed(0.8 * direction);
     }
 
     /**
@@ -69,5 +71,6 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.deployIntake(false);
+        m_intake.setSpeed(0);
     }
 }
