@@ -10,6 +10,8 @@
 *.o
 *.obj
 
+*.yml
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -238,3 +240,11 @@ fabric.properties
 .idea/gradle.xml
 
 .vscode/settings.json
+
+simgui-ds.json
+
+simgui-window.json
+
+simgui.json
+
+.SysId/

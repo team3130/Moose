@@ -1,19 +1,23 @@
-package frc.robot.commands;
+package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 
 import java.util.Set;
 
-public class ExampleCommand extends CommandBase {
+public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Shooter m_shooter;
+    private final double timeLimit = 3;
+    private final Timer timer = new Timer();
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public AutonShoot(Shooter subsystem) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
+        m_shooter = subsystem;
         m_requirements.add(subsystem);
     }
 
@@ -22,7 +26,8 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -31,6 +36,14 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void execute() {
+        double shooterSpeed = 3200; //TODO: find correct speed
+        double indexerSpeed = 0.5;
+        
+        m_shooter.setSpeed(shooterSpeed); 
+
+        if (m_shooter.getRPM() >= shooterSpeed - 50) {
+            m_shooter.setIndexerPercent(indexerSpeed);//POTENTIAL FAILURE POINT: if shooter doesn't work tomorrow it could be this rpm implementation
+        } 
 
     }
 
@@ -50,8 +63,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -64,6 +76,9 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_shooter.setIndexerSpeed(0);
+        m_shooter.setSpeed(0);
+        timer.stop();
     }
 }
+

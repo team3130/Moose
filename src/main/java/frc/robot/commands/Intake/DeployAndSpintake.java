@@ -1,20 +1,28 @@
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class DeployAndSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Intake m_intake;
+    private final Magazine m_magazine;
+    private final int direction;
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    /**
+     * Meant to be run in a sequential command group with {@link TimedSpintake}
+     * @param intake {@link Intake}
+     */
+    public DeployAndSpintake(Intake intake, Magazine magazine, int direction) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_intake = intake;
+        m_magazine = magazine;
+        m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -22,7 +30,8 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_intake.deployIntake(true);
+        m_intake.setSpeed(0.8 * direction);
     }
 
     /**
@@ -49,10 +58,7 @@ public class ExampleCommand extends CommandBase {
      * @return whether this command has finished.
      */
     @Override
-    public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
-    }
+    public boolean isFinished() {return false;}
 
     /**
      * The action to take when the command ends. Called when either the command
@@ -64,6 +70,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_intake.deployIntake(false);
+        m_intake.setSpeed(0);
     }
 }

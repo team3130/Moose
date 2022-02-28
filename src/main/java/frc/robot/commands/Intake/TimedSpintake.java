@@ -1,20 +1,28 @@
-package frc.robot.commands;
+package frc.robot.commands.Intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class TimedSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Intake m_intake;
+    private final Magazine m_magazine;
+    private Timer timer;
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    /**
+     * Meant to be run in a sequential command group with {@link DeployAndSpintake}
+     * @param intake {@link Intake}
+     */
+    public TimedSpintake(Intake intake, Magazine magazine) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_intake = intake;
+        m_magazine = magazine;
+        m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
+        timer = new Timer();
     }
 
     /**
@@ -22,7 +30,12 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_intake.deployIntake(false);
 
+        m_intake.setSpeed(0.8);
+        m_magazine.setSpeed(0.6);
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -50,8 +63,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return timer.get() >= 3;
     }
 
     /**
@@ -64,6 +76,9 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_intake.setSpeed(0);
+        m_magazine.setSpeed(0);
+        timer.stop();
+        timer.reset();
     }
 }

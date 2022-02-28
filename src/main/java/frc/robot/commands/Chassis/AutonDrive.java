@@ -1,16 +1,32 @@
-package frc.robot.commands;
+package frc.robot.commands.Chassis;
 
+
+
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.WHEEL_GO_BRRRRRRRRRRRRRR;
 
-public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
+import java.util.Set;
+
+public class AutonDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final WHEEL_GO_BRRRRRRRRRRRRRR m_subsystem;
+    private final Chassis m_chassis;
+    private final Timer timer = new Timer();
+    private double timeLimit;
+     
 
-    public Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR(WHEEL_GO_BRRRRRRRRRRRRRR subsystem) {
+    public AutonDrive(Chassis subsystem, double time) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
+        m_chassis = subsystem;
+        m_requirements.add(subsystem);
+        timeLimit = time;
     }
 
     /**
@@ -18,7 +34,9 @@ public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.setSpeed(0.5);
+        timer.reset();
+        timer.start();
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -27,7 +45,8 @@ public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
      */
     @Override
     public void execute() {
-
+        double moveSpeed = -0.4; //Currently running on low gear (week 0), but it go ZOOM anyway
+        m_chassis.driveArcade(moveSpeed,0, false);
     }
 
     /**
@@ -46,8 +65,7 @@ public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -60,6 +78,8 @@ public class Command_GO_BRRRRRRRRRRRRRRRRRRRRRRRR extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.setSpeed(0);
+        m_chassis.configRampRate(0);
+        m_chassis.driveArcade(0, 0, true);
+        timer.stop();
     }
 }

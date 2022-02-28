@@ -1,19 +1,15 @@
-package frc.robot.commands;
+package frc.robot.commands.Shooter;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Shooter m_shooter;
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public Shoot(Shooter subsystem) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
+        m_shooter = subsystem;
         m_requirements.add(subsystem);
     }
 
@@ -22,7 +18,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
     }
 
     /**
@@ -31,7 +27,9 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void execute() {
-
+        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
+            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
+        } 
     }
 
     /**
@@ -50,7 +48,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -64,6 +61,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_shooter.setSpeed(0);
+        m_shooter.setIndexerPercent(0);
     }
 }

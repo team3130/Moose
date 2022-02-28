@@ -8,6 +8,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.Chassis.AutonDrive;
+import frc.robot.commands.Shooter.AutonShoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,6 +25,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   RobotContainer m_robotContainer;
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
+
+  CommandScheduler scheduler = CommandScheduler.getInstance();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -41,7 +48,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    m_robotContainer.outputToShuffleBoard();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -55,23 +64,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case RobotMap.kCustomAuto:
-        // Put custom auto code here
-        break;
-      case RobotMap.kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    m_scheduler.run();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -99,4 +98,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  /** This function is called once when test mode is enabled */
+  public void simulationInit() {}
+
+  /** This Function is called periodically in simulations such as glass */
+  @Override
+  public void simulationPeriodic() {}
 }

@@ -1,20 +1,18 @@
-package frc.robot.commands;
+package frc.robot.commands.Magazine;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Magazine;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class Spinzine extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Magazine m_magazine;
+    private final int direction;
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
-        //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+    public Spinzine(Magazine magazine, int direction) {
+        // mapping to object passed through parameter
+        m_magazine = magazine;
+        m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -22,7 +20,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_magazine.setSpeed(0.6 * direction);
     }
 
     /**
@@ -50,7 +48,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -64,6 +61,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_magazine.setSpeed(0);
     }
 }

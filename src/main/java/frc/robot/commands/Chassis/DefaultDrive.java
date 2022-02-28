@@ -1,20 +1,18 @@
-package frc.robot.commands;
+package frc.robot.commands.Chassis;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.Chassis;
 
-import java.util.Set;
-
-public class ExampleCommand extends CommandBase {
+public class DefaultDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final ExampleSubsystem m_subsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis;
 
-    public ExampleCommand(ExampleSubsystem subsystem) {
+    public DefaultDrive(Chassis chassis) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
     }
 
     /**
@@ -22,7 +20,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -31,7 +29,13 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void execute() {
+        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        if (m_chassis.isShifted()) {
+            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
+        }
+        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
 
+        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -50,7 +54,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -64,6 +67,6 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_chassis.configRampRate(0);
     }
 }
