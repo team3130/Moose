@@ -35,11 +35,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    // driver options
     m_chooser_driver.setDefaultOption("Cody", "Cody");
-    m_chooser_weapons.setDefaultOption("Ben", "Ben");
-    m_chooser_weapons.addOption("Parker", "Parker");
     m_chooser_driver.addOption("Maddie", "Maddie");
     SmartDashboard.putData("Driver", m_chooser_driver);
+    // weapon options
+    m_chooser_weapons.setDefaultOption("Ben", "Ben");
+    m_chooser_weapons.addOption("Parker", "Parker");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
   }
