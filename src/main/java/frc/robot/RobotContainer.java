@@ -70,7 +70,7 @@ public class RobotContainer {
 
         // weapons controls
         if (Robot.m_chooser_weapons.getSelected() == null) {
-            System.out.print("m_chooser_driver.getSelected() = null!");
+            System.out.print("m_chooser_weapons.getSelected() = null!");
         } else if (Robot.m_chooser_weapons.getSelected() == "Ben") {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
