@@ -67,9 +67,9 @@ public class RobotMap {
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = 0.69;
-    public static final double kEncoderResolution = 4096;
+    public static final double kEncoderResolution = 2048;
     public static final double kChassisLowGearRatio = 0.1; //TODO: GET REAL VALUES
-    public static final double kChassisHighGearRatio = (double) 58 / 60; //TODO: GET REAL VALUES
+    public static final double kChassisHighGearRatio = 0.0542560554;
     public static final double kWheelDiameter = Units.inchesToMeters(4);
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.9;
