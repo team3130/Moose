@@ -62,7 +62,7 @@ public class Shooter extends SubsystemBase {
         return indexerRPM.getDouble(1000);
     }
 
-    public void writeOutput() {
+    public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
@@ -77,10 +77,6 @@ public class Shooter extends SubsystemBase {
         return indexerPercent.getDouble(0.5);
     }
 
-    @Override
-    public void periodic() {
-        writeOutput();
-    }
 
     /**
      * Spin the turret flywheel at a raw percent VBus value

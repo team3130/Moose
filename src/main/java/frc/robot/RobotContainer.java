@@ -33,7 +33,7 @@ public class RobotContainer {
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-    public Intake getIntakeMotor() {
+    public Intake getIntake() {
         return m_intake;
     }
 
@@ -44,6 +44,8 @@ public class RobotContainer {
     public Shooter getShooter() {
         return m_shooter;
     }
+
+    public Magazine getMagazine() {return m_magazine;}
 
     public RobotContainer() {
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
@@ -93,5 +95,6 @@ public class RobotContainer {
 
     public void outputToShuffleBoard() {
         m_chassis.outputToShuffleboard();
+        m_shooter.outputToShuffleboard();
     }
 }

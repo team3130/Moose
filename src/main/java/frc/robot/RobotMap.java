@@ -28,6 +28,13 @@ public class RobotMap {
     public static final char CAN_SHOOTER_MOTOR = 7;
     public static final int CAN_INTAKE_MOTOR = 9;
 
+
+    /**
+     * Intake
+     */
+    public static final double kIntakeRetractTime = 0.4;
+
+
     /**
      * Shooter
      */
@@ -87,9 +94,9 @@ public class RobotMap {
     public static double ChassiskI = 0;
     public static double ChassiskD = 0;
 
-    public static double ChassiskS = 0.819;
-    public static double ChassiskV = 0.0343;
-    public static double ChassiskA = 0.00437;
+    public static double ChassiskS = 0.6475;
+    public static double ChassiskV = 2.1534;
+    public static double ChassiskA = 0.25695;
 
     /**
      * PNM IDs

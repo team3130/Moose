@@ -16,10 +16,6 @@ public class Magazine extends SubsystemBase {
     //Create necessary objects
     private WPI_TalonSRX m_magazine;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Intake");
-    private NetworkTableEntry magRPM = tab.add("Magazine Write RPM", 0).getEntry();
-    private NetworkTableEntry intakeRPM = tab.add("Intake Write RPM", 0).getEntry();
-
     //Create and define all standard data types needed
     public Magazine() {
         m_magazine = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR);

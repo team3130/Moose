@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.SupportingClassess.Chooser;
 import frc.robot.commands.Chassis.AutonDrive;
 import frc.robot.commands.Shooter.AutonShoot;
 
@@ -21,11 +22,17 @@ import frc.robot.commands.Shooter.AutonShoot;
  * project.
  */
 public class Robot extends TimedRobot {
+  CommandScheduler m_scheduler = CommandScheduler.getInstance();
+
+  private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
   private String m_autoSelected;
+
   private final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
   private final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
-  RobotContainer m_robotContainer;
-  CommandScheduler m_scheduler = CommandScheduler.getInstance();
+
+  private RobotContainer m_robotContainer;
+  private Chooser m_chooser;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,6 +49,8 @@ public class Robot extends TimedRobot {
     m_chooser_weapons.addOption("Parker", "Parker");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
+    m_chooser = new Chooser(m_autonChooser, m_robotContainer);
+    m_chooser.add3Ball();
   }
 
   /**
@@ -68,7 +77,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
+
+    m_scheduler.schedule(m_chooser.getCommand());
+    // week 0 auton attempt
+    /*
+    m_scheduler.schedule(
+            new SequentialCommandGroup(
+                    new AutonDrive(m_robotContainer.getChassis(), 0.75),
+                    new AutonShoot(m_robotContainer.getShooter()),
+                    new AutonDrive(m_robotContainer.getChassis(), 0.6)
+            )
+    );
+    */
   }
 
   /** This function is called periodically during autonomous. */
@@ -99,14 +119,18 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+  }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
 
   /** This function is called once when test mode is enabled */
-  public void simulationInit() {}
+  public void simulationInit() {
+    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+  }
 
   /** This Function is called periodically in simulations such as glass */
   @Override

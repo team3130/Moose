@@ -159,7 +159,7 @@ public class Chassis extends SubsystemBase {
      *
      * @return The absolute distance of the left side in meters
      */
-    private double getDistanceHighGearL() {
+    private double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
                 * (1 / RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
@@ -169,7 +169,7 @@ public class Chassis extends SubsystemBase {
      *
      * @return The absolute distance of the right side in meters
      */
-    private double getDistanceHighGearR() {
+    private double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
                 * (1 / RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
@@ -180,7 +180,7 @@ public class Chassis extends SubsystemBase {
      *
      * @return Current speed of the front left motor (meters per second)
      */
-    public double getSpeedHighGearL() {
+    public double getSpeedL() {
         return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
                 * (1 / RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
     }
@@ -190,7 +190,7 @@ public class Chassis extends SubsystemBase {
      *
      * @return Current speed of the front right motor (meters per second)
      */
-    public double getSpeedHighGearR() {
+    public double getSpeedR() {
         return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
                 * (1 / RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
     }
@@ -202,7 +202,7 @@ public class Chassis extends SubsystemBase {
     @Override
     public void periodic() {
         // update odometry for relevant positional data
-        m_odometry.update(Navx.getRotation(), getDistanceHighGearL(), getDistanceHighGearR());
+        m_odometry.update(Navx.getRotation(), getDistanceL(), getDistanceR());
     }
 
     /**
@@ -253,7 +253,7 @@ public class Chassis extends SubsystemBase {
      * @return Current speed of the robot
      */
     public double getSpeed() {
-        return 0.5 * (getSpeedHighGearL() + getSpeedHighGearR());
+        return 0.5 * (getSpeedL() + getSpeedR());
     }
 
     /**
@@ -351,7 +351,7 @@ public class Chassis extends SubsystemBase {
      * @return wheel speeds as a {@link DifferentialDrive} object
      */
     public DifferentialDriveWheelSpeeds getSpeeds() {
-        return new DifferentialDriveWheelSpeeds(getSpeedHighGearL() / 10, getSpeedHighGearR() / 10);
+        return new DifferentialDriveWheelSpeeds(getSpeedL() / 10, getSpeedR() / 10);
     }
 
     /**
@@ -390,16 +390,16 @@ public class Chassis extends SubsystemBase {
      */
     public void outputToShuffleboard() {
         // current velocity
-        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedHighGearR());
-        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedHighGearL());
+        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
+        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
 
         // percent output of motors
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
         // shifting
-        SmartDashboard.putNumber("Chassis Distance R", getDistanceHighGearR());
-        SmartDashboard.putNumber("Chassis Distance L", getDistanceHighGearL());
+        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         // bot position
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
