@@ -22,11 +22,10 @@ import frc.robot.commands.Shooter.AutonShoot;
  */
 public class Robot extends TimedRobot {
   private String m_autoSelected;
-  public static final SendableChooser<String> m_chooser = new SendableChooser<>();
+  public static final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
+  public static final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
   RobotContainer m_robotContainer;
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
-
-  CommandScheduler scheduler = CommandScheduler.getInstance();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,9 +33,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Cody", "Cody");
-    m_chooser.addOption("Ben", "Ben");
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // driver options
+    m_chooser_driver.setDefaultOption("Cody", "Cody");
+    m_chooser_driver.addOption("Maddie", "Maddie");
+    SmartDashboard.putData("Driver", m_chooser_driver);
+    // weapon options
+    m_chooser_weapons.setDefaultOption("Ben", "Ben");
+    m_chooser_weapons.addOption("Parker", "Parker");
+    SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
   }
 
@@ -64,7 +68,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
+    m_scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
   }
 
   /** This function is called periodically during autonomous. */
