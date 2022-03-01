@@ -67,9 +67,8 @@ public class RobotMap {
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = 0.69;
-    public static final double kEncoderResolution = 2048;
-    public static final double kChassisLowGearRatio = 0.1; //TODO: GET REAL VALUES
-    public static final double kChassisHighGearRatio = 0.0542560554;
+    public static final double kEncoderResolution = 2048; // checked 2/28/22
+    public static final double kChassisGearRatio = 0.0542560554; // checked 2/28/22 (For high gear)
     public static final double kWheelDiameter = Units.inchesToMeters(4);
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.9;
@@ -79,13 +78,9 @@ public class RobotMap {
     /**
      * PID for Chassis
      */
-    public static double lowGearkS = 0.615;
-    public static double lowGearkV = 0.0402;
-    public static double lowGearkA = 0.0117;
-
-    public static double highGearkS = 0.819;
-    public static double highGearkV = 0.0343;
-    public static double highGearkA = 0.00437;
+    public static double ChassiskS = 0.819;
+    public static double ChassiskV = 0.0343;
+    public static double ChassiskA = 0.00437;
 
     /**
      * PNM IDs
