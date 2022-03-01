@@ -57,7 +57,7 @@ public class RobotContainer {
     private void defineButtonBindings() {
         // driver controls
         if (Robot.m_chooser_driver.getSelected() == null) {
-            System.out.print("m_chooser_driver.getSelected = null!");
+            System.out.print("m_chooser_driver.getSelected() = null!");
         } else if (Robot.m_chooser_driver.getSelected() == "Cody") {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
@@ -69,7 +69,18 @@ public class RobotContainer {
         }
 
         // weapons controls
-        if (Robot.m_chooser_weapons.getSelected() == "Ben") {
+        if (Robot.m_chooser_weapons.getSelected() == null) {
+            System.out.print("m_chooser_driver.getSelected() = null!");
+        } else if (Robot.m_chooser_weapons.getSelected() == "Ben") {
+            new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
+            new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
+            new TriggerButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Shoot(m_shooter));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Spinzine(m_magazine, -1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spintake(m_intake, -1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spintake(m_intake, 1));
+        } else if (Robot.m_chooser_weapons.getSelected() == "Parker") {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Shoot(m_shooter));
