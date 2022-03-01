@@ -22,7 +22,7 @@ import frc.robot.commands.Shooter.AutonShoot;
  */
 public class Robot extends TimedRobot {
   private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  public static final SendableChooser<String> m_chooser = new SendableChooser<>();
   RobotContainer m_robotContainer;
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
@@ -34,8 +34,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", RobotMap.kDefaultAuto);
-    m_chooser.addOption("My Auto", RobotMap.kCustomAuto);
+    m_chooser.setDefaultOption("Cody", "Cody");
+    m_chooser.addOption("Ben", "Ben");
     SmartDashboard.putData("Auto choices", m_chooser);
     m_robotContainer = new RobotContainer();
   }

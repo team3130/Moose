@@ -11,8 +11,6 @@ public class RobotMap {
     /**
      * Robot related constants
      */
-    public static final String kDefaultAuto = "Default";
-    public static final String kCustomAuto = "My Auto";
 
     /**
      * CAN ID's
