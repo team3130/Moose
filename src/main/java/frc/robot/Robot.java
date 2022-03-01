@@ -22,8 +22,8 @@ import frc.robot.commands.Shooter.AutonShoot;
  */
 public class Robot extends TimedRobot {
   private String m_autoSelected;
-  public static final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
-  public static final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
+  private final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
+  private final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
   RobotContainer m_robotContainer;
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
@@ -79,7 +79,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+  }
 
   /** This function is called periodically during operator control. */
   @Override
