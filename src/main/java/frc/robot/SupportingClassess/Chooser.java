@@ -9,10 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.FaceTarget;
@@ -50,6 +47,7 @@ public class Chooser {
 
     public SequentialCommandGroup add3Ball() {
         Chassis chassis = container.getChassis();
+        // lambda to build trajectories
         Function<Path, Trajectory> trajectoryFactory =
                 (Path path) -> {
                     Trajectory toReturn = new Trajectory();
@@ -63,6 +61,7 @@ public class Chooser {
                     return toReturn;
                 };
 
+        // lambda to build RamseteCommands
         Function<Trajectory, RamseteCommand> cmdFactory = (Trajectory trajectory) -> new RamseteCommand(
                 trajectory,
                 chassis::getPose,
@@ -86,10 +85,11 @@ public class Chooser {
         RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("FirstBall.wpilib.json")));
         RamseteCommand goToFirstShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("Start.wpilib.json")));
         ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new Shoot(container.getShooter()));
-        // deploy again
+        RamseteCommand toSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("ToSecondBall.wpilib.json")));
+        // deploy again in parallel
         RamseteCommand SecondBallAndShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("SecondBallAndShoot.wpilib.json")));
         // shoot again
-        return new SequentialCommandGroup(PathOne, deployIntake, GoToFirstBall, goToFirstShoot, shoot, deployIntake, SecondBallAndShoot, shoot);
+        return new SequentialCommandGroup(PathOne, new ParallelCommandGroup(deployIntake, GoToFirstBall), goToFirstShoot, shoot, toSecondBall, new ParallelCommandGroup(deployIntake, SecondBallAndShoot), shoot);
     }
 
     /**
