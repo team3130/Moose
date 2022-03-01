@@ -41,6 +41,8 @@ public class DefaultDrive extends CommandBase {
         
         if (velocity == 1) {
             m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
+        } else {
+            int crash = 1 / 0;
         }
     }
 
