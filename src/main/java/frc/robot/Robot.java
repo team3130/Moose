@@ -27,8 +27,6 @@ public class Robot extends TimedRobot {
   RobotContainer m_robotContainer;
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
-  CommandScheduler scheduler = CommandScheduler.getInstance();
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -70,7 +68,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
+    m_scheduler.schedule(new SequentialCommandGroup(new AutonDrive(m_robotContainer.getChassis(), 0.75) , new AutonShoot(m_robotContainer.getShooter()), new AutonDrive(m_robotContainer.getChassis(), 0.6)));
   }
 
   /** This function is called periodically during autonomous. */
