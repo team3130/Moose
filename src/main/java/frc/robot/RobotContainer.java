@@ -55,13 +55,16 @@ public class RobotContainer {
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
     private void defineButtonBindings() {
-        if (Robot.m_chooser.getSelected() == null) {
+        if (Robot.m_chooser_driver.getSelected() == null) {
             System.out.print("m_chooser.getSelected = null!");
-        } else if (Robot.m_chooser.getSelected() == "Cody") {
+        } else if (Robot.m_chooser_driver.getSelected() == "Cody") {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new DeployIntake(m_intake));
-        } else if (Robot.m_chooser.getSelected() == "Ben") {
+        } 
+        if () {
+
+        } else if (Robot.m_chooser_weapons.getSelected() == "Ben") {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Shoot(m_shooter));
