@@ -65,7 +65,7 @@ public class RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new DeployIntake(m_intake));
-        }
+        }        
 
         // weapons controls
         if (Robot.m_chooser_weapons.getSelected() == null) {
