@@ -7,12 +7,14 @@ import frc.robot.subsystems.Shooter;
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private double timeStamp;
+    private double timeToRun = 5;
+    private Timer timer;
 
     public Shoot(Shooter subsystem) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
+        timer = new Timer();
     }
 
     /**
@@ -21,7 +23,8 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
-        timeStamp  = Timer.getFPGATimestamp();
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -51,13 +54,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-<<<<<<< HEAD
-        if (Timer.getFPGATimestamp() - timeStamp == 5000) {
-         timeStamp = 0; 
-        }
-=======
->>>>>>> 4c494998fd829670fe3455df029ae7f5a0bd66fb
-        return false;
+        return timer.get() >= timeToRun;
     }
 
     /**
@@ -72,5 +69,6 @@ public class Shoot extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.setSpeed(0);
         m_shooter.setIndexerPercent(0);
+        timer.stop();
     }
 }
