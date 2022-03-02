@@ -117,8 +117,8 @@ public class Chassis extends SubsystemBase {
         m_drive.setSafetyEnabled(false);
 
         m_feedforward = new SimpleMotorFeedforward(RobotMap.ChassiskS, RobotMap.ChassiskV, RobotMap.ChassiskA);
-        m_leftPIDController = new PIDController(2.05, 0, 0);
-        m_rightPIDConttroller = new PIDController(2.05, 0, 0);
+        m_leftPIDController = new PIDController(RobotMap.ChassiskP, RobotMap.ChassiskI, RobotMap.ChassiskD);
+        m_rightPIDConttroller = new PIDController(RobotMap.ChassiskP, RobotMap.ChassiskI, RobotMap.ChassiskD);
 
         // kinematics and odometry
         m_kinematics = new DifferentialDriveKinematics(RobotMap.trackDistance);
@@ -380,8 +380,8 @@ public class Chassis extends SubsystemBase {
      * @param rightVolts voltage on the right side
      */
     public void setOutput(double leftVolts, double rightVolts) {
-        m_leftMotorFront.setVoltage(leftVolts);
-        m_rightMotorFront.setVoltage(rightVolts);
+        m_motorsLeft.setVoltage(leftVolts);
+        m_motorsRight.setVoltage(rightVolts);
         m_drive.feed();
     }
 
