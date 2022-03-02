@@ -1,11 +1,13 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
+    private double timeStamp;
 
     public Shoot(Shooter subsystem) {
         //mapping to object passed through parameter
@@ -19,6 +21,7 @@ public class Shoot extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
+        timeStamp  = Timer.getFPGATimestamp();
     }
 
     /**
@@ -48,7 +51,9 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
+        if (Timer.getFPGATimestamp() - timeStamp == 5000) {
+         timeStamp = 0; 
+        }
         return false;
     }
 
