@@ -41,7 +41,6 @@ public class Limelight {
 
     private Matrix<N3, N3> rotation;      // Own rotation
     private Matrix<N3, N1> translation;   // Own translation
-    private Matrix<N3, N1> tilt;          // Turret tilt
     private Matrix<N3, N1> realVector;
     private Matrix<N3, N1> sideVector;
 
@@ -71,12 +70,6 @@ public class Limelight {
                 RobotMap.kLimelightOffset,
                 RobotMap.kLimelightHeight,
                 RobotMap.kLimelightLength
-        );
-        tilt = Algebra.buildVector(
-            Math.toRadians(0),
-            0,
-            Math.toRadians(0)
-                //FIXME ask Mikhail about what values this should be, used to be Turret Roll and Yaw
         );
         realVector = Algebra.buildVector(0, 0, 0);
         sideVector = Algebra.buildVector(0, 0, 0);
@@ -109,12 +102,12 @@ public class Limelight {
     /**
      * Read data from the Limelight and update local values
      */
-    public void updateData(Chassis chassis) {
+    public void updateData() {
         x_targetOffsetAngle = txFilter.calculate(getTx());
         y_targetOffsetAngle = tyFilter.calculate(getTy());
         area = getArea();
         skew = tsFilter.calculate(getSkew());
-        realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle, chassis);
+        realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
 
         // A side vector is a point somewhere on the line that connects
         // the two top corners of the target, i.e. the top edge.
@@ -122,47 +115,24 @@ public class Limelight {
         double realSkew = Math.toRadians(skew < -45 ? skew + 90 : skew);
         double side_x = x_targetOffsetAngle + Math.cos(realSkew);
         double side_y = y_targetOffsetAngle + Math.sin(realSkew);
-        sideVector = calcPosition(side_x, side_y, chassis);
+        sideVector = calcPosition(side_x, side_y);
     }
 
-    /**
-     * Calculate additional rotation matrix due to robot's tilt
-     * If the plane in which the turret is turning is not level
-     * then we need to compensate for this tilt.
-     * @param heading the angle in degrees from the turret's encoder
-     * @return rotation matrix to compensate for the tilt
-     */
-    Matrix<N3,N3> turretRotation(double heading) {
-        // Heading is where the turret is facing relative to the robot
-        // so convert it to the robot's heading relative to the turret (negative)
-        // and create a rotation matrix from this rotation
-        Matrix<N3,N3> turn = Algebra.Rodrigues(
-            Algebra.buildVector(0, Math.toRadians(-heading), 0)
-        );
-        // Now using this new rotation rotate the tilt vector and create
-        // another rotation matrix which is the compensation rotation we want
-        return Algebra.Rodrigues(turn.times(tilt));
-    }
 
     /**
      * Build a "unit" vector in 3-D and rotate it from camera's
-     * coordinates to real (robot's (turret's)) coordinates
+     * coordinates to real (robot's) coordinates
      *
      * @param ax horizontal angle, left is positive
      * @param ay vertical angle, up is positive
-     * @param heading turret's turn angle for tilt compensation
      * @return a vector pointing to the direction but with the length = 1
      */
-    public Matrix<N3, N1> levelVector(double ax, double ay, double heading) {
+    public Matrix<N3, N1> levelVector(double ax, double ay) {
         // Convert degrees from the vision to unit coordinates
         double ux = Math.tan(Math.toRadians(ax));
         double uy = Math.tan(Math.toRadians(ay));
         // Do two rotations: for LimeLight mount and for robot tilt
-        return turretRotation(heading).times(
-            rotation.times(
-                Algebra.buildVector(ux, uy, 1)
-            )
-        );
+        return rotation.times(Algebra.buildVector(ux, uy, 1));
     }
 
     /**
@@ -172,10 +142,10 @@ public class Limelight {
      * @param ay Vertical Offset From Crosshair To Target
      * @return resulting vector from the Turret's origin to the target
      */
-    public Matrix<N3, N1> calcPosition(double ax, double ay, Chassis chassis) {
+    public Matrix<N3, N1> calcPosition(double ax, double ay) {
 
         // Find where the vector is actually pointing
-        Matrix<N3, N1> v0 = levelVector(ax, ay, chassis.getAngle());
+        Matrix<N3, N1> v0 = levelVector(ax, ay);
 
         // Scaling ratio based on the known height of the vision target
         double c = (RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight) / v0.get(1, 0);
@@ -258,8 +228,8 @@ public class Limelight {
     /**
      * Calibrate the tilt angle of the Limelight
      */
-    public double calibrate(Chassis chassis) {
-        updateData(chassis);
+    public double calibrate() {
+        updateData();
 
         double height = RobotMap.VISIONTARGETHEIGHT - RobotMap.kLimelightHeight;
         double distance = RobotMap.kLimelightCalibrationDist;
@@ -311,7 +281,7 @@ public class Limelight {
         SmartDashboard.putNumber("Limelight Distance", o.getDistanceToTarget());
         SmartDashboard.putNumber("Limelight Area", o.area);
         SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
-        SmartDashboard.putNumber("Limelight mounting angle", o.calibrate(chassis));
+        SmartDashboard.putNumber("Limelight mounting angle", o.calibrate());
         SmartDashboard.putNumber("Limelight Target Rotation", o.getTargetRotationTan());
     }
 

@@ -1,18 +1,18 @@
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Magazine;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Magazine;
 
-public class Shoot extends CommandBase {
+public class Spinzine extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Shooter m_shooter;
-    private double timeStamp;
+    private final Magazine m_magazine;
+    private final int direction;
 
-    public Shoot(Shooter subsystem) {
-        //mapping to object passed through parameter
-        m_shooter = subsystem;
-        m_requirements.add(subsystem);
+    public Spinzine(Magazine magazine, int direction) {
+        // mapping to object passed through parameter
+        m_magazine = magazine;
+        m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -20,8 +20,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
-        timeStamp  = Timer.getFPGATimestamp();
+        m_magazine.setSpeed(0.6 * direction);
     }
 
     /**
@@ -30,9 +29,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
-        } 
+
     }
 
     /**
@@ -51,12 +48,6 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-<<<<<<< HEAD
-        if (Timer.getFPGATimestamp() - timeStamp == 5000) {
-         timeStamp = 0; 
-        }
-=======
->>>>>>> 4c494998fd829670fe3455df029ae7f5a0bd66fb
         return false;
     }
 
@@ -70,7 +61,6 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        m_magazine.setSpeed(0);
     }
 }

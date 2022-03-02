@@ -1,16 +1,32 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Chassis;
 
+
+
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake_Pnuematic;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
+import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.ExampleSubsystem;
 
-public class deployintake extends CommandBase {
+import java.util.Set;
+
+public class AutonDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Intake_Pnuematic m_intake; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis;
+    private final Timer timer = new Timer();
+    private double timeLimit;
+     
 
-    public deployintake(Intake_Pnuematic subsystem) {
+    public AutonDrive(Chassis subsystem, double time) {
         //mapping to object passed through parameter
-        m_intake = subsystem;
-        m_requirements.add(m_intake);
+        m_chassis = subsystem;
+        m_requirements.add(subsystem);
+        timeLimit = time;
     }
 
     /**
@@ -18,7 +34,9 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_intake.toggleIntake();
+        timer.reset();
+        timer.start();
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -27,7 +45,8 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void execute() {
-
+        double moveSpeed = -0.4; //Currently running on low gear (week 0), but it go ZOOM anyway
+        m_chassis.driveArcade(moveSpeed,0, false);
     }
 
     /**
@@ -46,7 +65,7 @@ public class deployintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -59,6 +78,8 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_chassis.configRampRate(0);
+        m_chassis.driveArcade(0, 0, true);
+        timer.stop();
     }
 }

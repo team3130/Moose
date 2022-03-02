@@ -1,15 +1,21 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends CommandBase {
+import java.util.Set;
+
+public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private double timeStamp;
+    private final double timeLimit = 3;
+    private final Timer timer = new Timer();
 
-    public Shoot(Shooter subsystem) {
+    public AutonShoot(Shooter subsystem) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
@@ -20,8 +26,8 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
-        timeStamp  = Timer.getFPGATimestamp();
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -30,9 +36,15 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
+        double shooterSpeed = 3200; //TODO: find correct speed
+        double indexerSpeed = 0.5;
+        
+        m_shooter.setSpeed(shooterSpeed); 
+
+        if (m_shooter.getRPM() >= shooterSpeed - 50) {
+            m_shooter.setIndexerPercent(indexerSpeed);//POTENTIAL FAILURE POINT: if shooter doesn't work tomorrow it could be this rpm implementation
         } 
+
     }
 
     /**
@@ -51,13 +63,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-<<<<<<< HEAD
-        if (Timer.getFPGATimestamp() - timeStamp == 5000) {
-         timeStamp = 0; 
-        }
-=======
->>>>>>> 4c494998fd829670fe3455df029ae7f5a0bd66fb
-        return false;
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -70,7 +76,9 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
+        m_shooter.setIndexerSpeed(0);
         m_shooter.setSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        timer.stop();
     }
 }
+

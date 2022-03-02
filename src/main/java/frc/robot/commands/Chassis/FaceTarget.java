@@ -1,16 +1,18 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.MotorIntake;
+import frc.robot.RobotMap;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.subsystems.Chassis;
 
-public class spintake extends CommandBase {
+public class FaceTarget extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final MotorIntake m_motorintake; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis;
 
-    public spintake(MotorIntake subsystem) {
+    public FaceTarget(Chassis chassis) {
         //mapping to object passed through parameter
-        m_motorintake = subsystem;
-        m_requirements.add(m_motorintake);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
     }
 
     /**
@@ -18,8 +20,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_motorintake.spinny(-0.8);
-        m_motorintake.Magazine_spinny(0.6);
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -28,6 +29,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public void execute() {
+        m_chassis.driveArcade(0, (Limelight.GetInstance().getTx() / 27) * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -46,8 +48,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return Limelight.GetInstance().getTx() < 2;
     }
 
     /**
@@ -60,6 +61,6 @@ public class spintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_motorintake.spinny(0);
+        m_chassis.configRampRate(0);
     }
 }

@@ -1,18 +1,28 @@
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
-public class Shoot extends CommandBase {
+public class TimedSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Shooter m_shooter;
-    private double timeStamp;
+    private final Intake m_intake;
+    private final Magazine m_magazine;
+    private Timer timer;
 
-    public Shoot(Shooter subsystem) {
+    /**
+     * Meant to be run in a sequential command group with {@link DeployAndSpintake}
+     * @param intake {@link Intake}
+     */
+    public TimedSpintake(Intake intake, Magazine magazine) {
         //mapping to object passed through parameter
-        m_shooter = subsystem;
-        m_requirements.add(subsystem);
+        m_intake = intake;
+        m_magazine = magazine;
+        m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
+        timer = new Timer();
     }
 
     /**
@@ -20,8 +30,12 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
-        timeStamp  = Timer.getFPGATimestamp();
+        m_intake.deployIntake(false);
+
+        m_intake.setSpeed(0.8);
+        m_magazine.setSpeed(0.6);
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -30,9 +44,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
-        } 
+
     }
 
     /**
@@ -51,13 +63,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-<<<<<<< HEAD
-        if (Timer.getFPGATimestamp() - timeStamp == 5000) {
-         timeStamp = 0; 
-        }
-=======
->>>>>>> 4c494998fd829670fe3455df029ae7f5a0bd66fb
-        return false;
+        return timer.get() >= 3;
     }
 
     /**
@@ -70,7 +76,9 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        m_intake.setSpeed(0);
+        m_magazine.setSpeed(0);
+        timer.stop();
+        timer.reset();
     }
 }

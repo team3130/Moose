@@ -11,8 +11,6 @@ public class RobotMap {
     /**
      * Robot related constants
      */
-    public static final String kDefaultAuto = "Default";
-    public static final String kCustomAuto = "My Auto";
 
     /**
      * CAN ID's
@@ -30,11 +28,25 @@ public class RobotMap {
     public static final char CAN_SHOOTER_MOTOR = 7;
     public static final int CAN_INTAKE_MOTOR = 9;
 
+
     /**
-     * Flywheel
+     * Intake
      */
+    public static final double kIntakeRetractTime = 0.4;
+
+
+    /**
+     * Shooter
+     */
+
+    //
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
-    public static final double kFlywheelRPMtoNativeUnitsScalar = RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0);
+    public static final double kFlywheelGearRatio = 1.0;
+    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
+
+    public static final double kIndexerGearRatio = 5.0;
+    public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
+    public static final double kIndexerTicksPerRevolution = 2048; //TODO: Find real value 
 
     /**
      * Limelight
@@ -60,25 +72,31 @@ public class RobotMap {
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = 0.69;
-    public static final double kEncoderResolution = 4096;
-    public static final double kChassisLowGearRatio = 0.1; //TODO: GET REAL VALUES
-    public static final double kChassisHighGearRatio = (double) 58 / 60; //TODO: GET REAL VALUES
-    public static final double kWheelDiameter = Units.inchesToMeters(4); //TODO: Check if changed to six inch wheels
+    public static final double kEncoderResolution = 2048; // checked 2/28/22
+    public static final double kChassisHighGearRatio = 0.0542560554; // checked 2/28/22 (For high gear)
+    public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
+    public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
+    public static final double kWheelDiameter = Units.inchesToMeters(4);
     public static final double kMaxHighGearDriveSpeed = 0.8;
-    public static final double kMaxTurnThrottle = 0.7;
+    public static final double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
+
+    public static double kFlywheelP = .22;
+    public static double kFlywheelI = 0.0;
+    public static double kFlywheelD = 12;
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 
     /**
      * PID for Chassis
      */
-    public static double lowGearkS = 0.615;
-    public static double lowGearkV = 0.0402;
-    public static double lowGearkA = 0.0117;
+    public static double ChassiskP = 2.4272;
+    public static double ChassiskI = 0;
+    public static double ChassiskD = 0;
 
-    public static double highGearkS = 0.819;
-    public static double highGearkV = 0.0343;
-    public static double highGearkA = 0.00437;
+    public static double ChassiskS = 0.6475;
+    public static double ChassiskV = 2.1534;
+    public static double ChassiskA = 0.25695;
 
     /**
      * PNM IDs
@@ -123,9 +141,4 @@ public class RobotMap {
     public static final int LST_AXS_RTRIGGER = 3;
     public static final int LST_AXS_RJOYSTICKX = 4;
     public static final int LST_AXS_RJOYSTICKY = 5;
-
-    public static double kFlywheelP = .22;
-    public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 }

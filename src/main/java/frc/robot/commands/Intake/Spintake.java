@@ -1,19 +1,20 @@
-package frc.robot.commands.Chassis;
+package frc.robot.commands.Intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotMap;
-import frc.robot.sensors.vision.Limelight;
-import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
-public class faceTarget extends CommandBase {
+public class Spintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis; //TODO: rename this to the subsystem this is assigned to
+    private final Intake m_intake;
+    private final int direction;
 
-    public faceTarget(Chassis chassis) {
+    public Spintake(Intake intake, int direction) {
         //mapping to object passed through parameter
-        m_chassis = chassis;
-        m_requirements.add(chassis);
+        m_intake = intake;
+        m_requirements.add(m_intake);
+        this.direction = direction;
     }
 
     /**
@@ -21,7 +22,7 @@ public class faceTarget extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_intake.setSpeed(0.8 * direction);
     }
 
     /**
@@ -30,7 +31,6 @@ public class faceTarget extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.driveArcade(0, (Limelight.GetInstance().getTx() / 27) * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -49,7 +49,7 @@ public class faceTarget extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return Limelight.GetInstance().getTx() < 2;
+        return false;
     }
 
     /**
@@ -62,6 +62,6 @@ public class faceTarget extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0);
+        m_intake.setSpeed(0);
     }
 }

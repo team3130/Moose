@@ -8,7 +8,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ScheduleCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.SupportingClassess.Chooser;
+import frc.robot.commands.Chassis.AutonDrive;
+import frc.robot.commands.Shooter.AutonShoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,12 +22,17 @@ import edu.wpi.first.wpilibj2.command.ScheduleCommand;
  * project.
  */
 public class Robot extends TimedRobot {
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  RobotContainer m_robotContainer;
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
-  CommandScheduler scheduler = CommandScheduler.getInstance();
+  private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
+  private String m_autoSelected;
+
+  private final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
+  private final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
+
+  private RobotContainer m_robotContainer;
+  private Chooser m_chooser;
+
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,10 +40,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", RobotMap.kDefaultAuto);
-    m_chooser.addOption("My Auto", RobotMap.kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // driver options
+    m_chooser_driver.setDefaultOption("Cody", "Cody");
+    m_chooser_driver.addOption("Maddie", "Maddie");
+    SmartDashboard.putData("Driver", m_chooser_driver);
+    // weapon options
+    m_chooser_weapons.setDefaultOption("Ben", "Ben");
+    m_chooser_weapons.addOption("Parker", "Parker");
+    SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
+    m_chooser = new Chooser(m_autonChooser, m_robotContainer);
+    m_chooser.add3Ball();
   }
 
   /**
@@ -60,28 +77,31 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+
+    m_scheduler.schedule(m_chooser.getCommand());
+    // week 0 auton attempt
+    /*
+    m_scheduler.schedule(
+            new SequentialCommandGroup(
+                    new AutonDrive(m_robotContainer.getChassis(), 0.75),
+                    new AutonShoot(m_robotContainer.getShooter()),
+                    new AutonDrive(m_robotContainer.getChassis(), 0.6)
+            )
+    );
+    */
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case RobotMap.kCustomAuto:
-        // Put custom auto code here
-        break;
-      case RobotMap.kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    m_scheduler.run();
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+  }
 
   /** This function is called periodically during operator control. */
   @Override
@@ -99,14 +119,18 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+  }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
 
   /** This function is called once when test mode is enabled */
-  public void simulationInit() {}
+  public void simulationInit() {
+    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+  }
 
   /** This Function is called periodically in simulations such as glass */
   @Override
