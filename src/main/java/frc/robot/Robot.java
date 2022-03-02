@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_scheduler.clearButtons();
+    m_robotContainer.disable();
   }
 
   /** This function is called periodically when disabled. */
