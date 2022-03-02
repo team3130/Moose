@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
     m_chooser_driver.setDefaultOption("Cody", "Cody");
     m_chooser_driver.addOption("Maddie", "Maddie");
@@ -77,7 +78,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
     m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt
     /*

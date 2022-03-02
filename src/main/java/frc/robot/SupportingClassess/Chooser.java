@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 public class Chooser {
     private SendableChooser<String> m_autonChooser;
     private RobotContainer container;
-    private HashMap<String, RamseteCommand> paths;
+    private HashMap<String, CommandBase> paths;
 
     public Chooser(SendableChooser<String> m_autonChooser, RobotContainer container) {
         this.m_autonChooser = m_autonChooser;
@@ -43,6 +43,8 @@ public class Chooser {
         TrajectoryConfig config = new TrajectoryConfig(1.3, 0.5);
 
         config.setKinematics(container.getChassis().getmKinematics());
+
+        paths = new HashMap<>();
     }
 
     public SequentialCommandGroup add3Ball() {
@@ -75,21 +77,33 @@ public class Chooser {
                 chassis
         );
 
-        File dir = new File("home/lvuser/deploy/paths/3Ball");
-
         // needs to be tuned
         double firstBallPickupTime = 2;
 
-        RamseteCommand PathOne = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("Start.wpilib.json")));
-        Command deployIntake = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
-        RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("FirstBall.wpilib.json")));
-        RamseteCommand goToFirstShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("Start.wpilib.json")));
+        RamseteCommand PathOne = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
+        CommandBase deployIntake = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
+        RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall.wpilib.json")));
+        RamseteCommand goToFirstShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
         ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new Shoot(container.getShooter()));
-        RamseteCommand toSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("ToSecondBall.wpilib.json")));
-        // deploy again in parallel
-        RamseteCommand SecondBallAndShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("SecondBallAndShoot.wpilib.json")));
-        // shoot again
-        return new SequentialCommandGroup(PathOne, new ParallelCommandGroup(deployIntake, GoToFirstBall), goToFirstShoot, shoot, toSecondBall, new ParallelCommandGroup(deployIntake, SecondBallAndShoot), shoot);
+        RamseteCommand toSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/ToSecondBall.wpilib.json")));
+        CommandBase deployIntake2 = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
+        RamseteCommand SecondBallAndShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/SecondBallAndShoot.wpilib.json")));
+        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new Shoot(container.getShooter()));
+
+        SequentialCommandGroup commandGroup =
+                new SequentialCommandGroup(
+                        PathOne,
+                        new ParallelCommandGroup(deployIntake, GoToFirstBall),
+                        goToFirstShoot,
+                        shoot,
+                        toSecondBall,
+                        new ParallelCommandGroup(deployIntake2, SecondBallAndShoot),
+                        shoot2
+                );
+        paths.put("3Ball", commandGroup);
+        m_autonChooser.addOption("3Ball", "3Ball");
+        m_autonChooser.setDefaultOption("3Ball", "3Ball");
+        return commandGroup;
     }
 
     /**
@@ -148,7 +162,7 @@ public class Chooser {
         SmartDashboard.putData(m_autonChooser);
     }
 
-    public RamseteCommand getCommand() {
+    public CommandBase getCommand() {
         return paths.get(m_autonChooser.getSelected());
     }
 
