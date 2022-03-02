@@ -10,7 +10,7 @@ public class ExampleSubsystem extends SubsystemBase {
     //Create necessary objects
 
     //Create and define all standard data types needed
-    public ExampleSubsystem() {
+    public Exampl eSubsystem() {
         // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
         //       in the constructor or in the robot coordination class, such as RobotContainer.
     }
