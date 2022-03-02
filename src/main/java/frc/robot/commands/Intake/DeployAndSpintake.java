@@ -31,7 +31,7 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void initialize() {
         m_intake.deployIntake(true);
-        m_intake.setSpeed(0.5 * direction);
+        m_intake.setSpeed(0.8 * direction);
     }
 
     /**
