@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements SubsystemBased {
 
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
@@ -39,5 +39,16 @@ public class Intake extends SubsystemBase {
 
     public void deployIntake(boolean deploy) {
         m_solenoid.set(deploy);
+    }
+
+    @Override
+    public void outputToShuffleboard() {}
+
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void disable() {
+        m_motor.set(0);
     }
 }

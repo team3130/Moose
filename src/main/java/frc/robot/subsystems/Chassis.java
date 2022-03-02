@@ -26,7 +26,7 @@ import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
 
-public class Chassis extends SubsystemBase {
+public class Chassis extends SubsystemBase implements SubsystemBased{
 
     // Any variables/fields used in the constructor must appear before the
     // "INSTANCE" variable
@@ -410,4 +410,11 @@ public class Chassis extends SubsystemBase {
 
     }
 
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void disable() {
+        configRampRate(0);
+    }
 }

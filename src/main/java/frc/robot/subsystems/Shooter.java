@@ -14,17 +14,20 @@ import frc.robot.RobotMap;
 
 import static frc.robot.utils.Utils.configPIDF;
 
-public class Shooter extends SubsystemBase {
+public class Shooter extends SubsystemBase implements SubsystemBased {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonSRX m_indexer;
 
+    private double flywheelSetSpeed = 3200; // default 3200
+    private double indexerSetSpeed = 0.5; // default 50%
+
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
-    private NetworkTableEntry sped = tab.add("Shooter Write RPM", 3200).getEntry();
+    private NetworkTableEntry sped = tab.add("Shooter Write RPM", flywheelSetSpeed).getEntry();
     private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
-    private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", 0.5).getEntry();
+    private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", indexerSetSpeed).getEntry();
     private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", 1000).getEntry();
     // private NetworkTableEntry indexerReadRPM = tab.add("Indexer Write RPM", 0).getEntry();
 //    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
@@ -77,6 +80,16 @@ public class Shooter extends SubsystemBase {
         return indexerPercent.getDouble(0.5);
     }
 
+    public void teleopInit() {
+        flywheelSetSpeed = getSpeedFromShuffleboard();
+    }
+
+    @Override
+    public void disable() {
+        m_flywheel.set(ControlMode.PercentOutput, 0);
+        m_indexer.set(ControlMode.PercentOutput, 0);
+    }
+
 
     /**
      * Spin the turret flywheel at a raw percent VBus value
@@ -104,5 +117,41 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    /**
+     *
+     * @return the current speed flywheel will be set at
+     */
+    public double getFlywheelSetSpeed() {
+        return flywheelSetSpeed;
+    }
 
+    /**
+     * set the flywheelSetSpeed variable
+     * @param speed in rpm
+     */
+    public void setFlywheelSetSpeed(double speed) {
+        flywheelSetSpeed = speed;
+    }
+
+    /**
+     * Runs flywheel at flywheelSetSpeed
+     */
+    public void feedFlywheel() {
+        setSpeed(flywheelSetSpeed);
+    }
+
+    public double getIndexerSetSpeed() {
+        return indexerSetSpeed;
+    }
+
+    public void setIndexerSetSpeed(double indexerSetSpeed) {
+        this.indexerSetSpeed = indexerSetSpeed;
+    }
+
+    /**
+     * Runs indexer at indexerSetSpeed
+     */
+    public void feedIndexer() {
+        setIndexerPercent(indexerSetSpeed);
+    }
 }

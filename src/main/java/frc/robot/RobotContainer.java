@@ -2,9 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Chassis.Shift;
 import frc.robot.commands.Chassis.FaceTarget;
@@ -12,20 +9,20 @@ import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Magazine.Spinzine;
 import frc.robot.commands.Shooter.Shoot;
-import frc.robot.controls.JoystickTrigger;
 import frc.robot.controls.TriggerButton;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Magazine;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.*;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.Spintake;
-import frc.robot.subsystems.Chassis;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
  */
 public class RobotContainer {
+    private ArrayList<SubsystemBased> subsystems;
     // define subsystems here
     Shooter m_shooter = new Shooter();
     Chassis m_chassis = new Chassis();
@@ -50,6 +47,8 @@ public class RobotContainer {
     public Magazine getMagazine() {return m_magazine;}
 
     public RobotContainer() {
+        subsystems = new ArrayList<>();
+        subsystems.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
     }
 
@@ -97,7 +96,14 @@ public class RobotContainer {
     }
 
     public void outputToShuffleBoard() {
-        m_chassis.outputToShuffleboard();
-        m_shooter.outputToShuffleboard();
+        subsystems.forEach(SubsystemBased::outputToShuffleboard);
+    }
+
+    public void teleopInit() {
+        subsystems.forEach(SubsystemBased::teleopInit);
+    }
+
+    public void disable() {
+        subsystems.forEach(SubsystemBased::disable);
     }
 }

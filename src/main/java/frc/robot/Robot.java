@@ -8,12 +8,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SupportingClassess.Chooser;
-import frc.robot.commands.Chassis.AutonDrive;
-import frc.robot.commands.Shooter.AutonShoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -101,6 +96,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+    m_robotContainer.teleopInit();
   }
 
   /** This function is called periodically during operator control. */

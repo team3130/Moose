@@ -7,14 +7,12 @@ import frc.robot.subsystems.Shooter;
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private double timeToRun = 5;
-    private Timer timer;
+    private boolean hitSpeed = false;
 
     public Shoot(Shooter subsystem) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
-        timer = new Timer();
     }
 
     /**
@@ -22,9 +20,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());
-        timer.reset();
-        timer.start();
+        m_shooter.feedFlywheel();
     }
 
     /**
@@ -33,6 +29,9 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
+        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
+            hitSpeed = true;
+        }
         if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
             m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
         } 
@@ -54,7 +53,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return timer.get() >= timeToRun;
+        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
     }
 
     /**
@@ -69,6 +68,5 @@ public class Shoot extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.setSpeed(0);
         m_shooter.setIndexerPercent(0);
-        timer.stop();
     }
 }

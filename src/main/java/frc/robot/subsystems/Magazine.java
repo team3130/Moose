@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-public class Magazine extends SubsystemBase {
+public class Magazine extends SubsystemBase implements SubsystemBased {
 
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
@@ -24,6 +24,17 @@ public class Magazine extends SubsystemBase {
 
     public void setSpeed(double speed) {
         m_magazine.set(speed);
+    }
+
+    @Override
+    public void outputToShuffleboard() {}
+
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void disable() {
+        m_magazine.set(0);
     }
 }
 

@@ -36,15 +36,10 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void execute() {
-        double shooterSpeed = 3200; //TODO: find correct speed
-        double indexerSpeed = 0.5;
-        
-        m_shooter.setSpeed(shooterSpeed); 
-
-        if (m_shooter.getRPM() >= shooterSpeed - 50) {
-            m_shooter.setIndexerPercent(indexerSpeed);//POTENTIAL FAILURE POINT: if shooter doesn't work tomorrow it could be this rpm implementation
-        } 
-
+        m_shooter.feedFlywheel();
+        if (m_shooter.getRPM() >= m_shooter.getFlywheelSetSpeed() - 50) {
+            m_shooter.feedIndexer();
+        }
     }
 
     /**
