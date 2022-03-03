@@ -1,6 +1,5 @@
 package frc.robot.SupportingClassess;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,23 +17,17 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.FaceTarget;
-import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedDeployAndSpintake;
-import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.subsystems.Chassis;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileStore;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class Chooser {
     private SendableChooser<String> m_autonChooser;
@@ -57,7 +50,7 @@ public class Chooser {
                         chassis.getmKinematics(),
                         12);
 
-        config = new TrajectoryConfig(0.33, 0.1);
+        config = new TrajectoryConfig(RobotMap.kMaxVelocityMPS, RobotMap.kMaxAccelerationMPS);
         config.setKinematics(container.getChassis().getmKinematics()).addConstraint(autoVoltageConstraint);
 
         paths = new HashMap<>();
@@ -99,11 +92,11 @@ public class Chooser {
         CommandBase deployIntake = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
         RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall.wpilib.json")));
         RamseteCommand goToFirstShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
-        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new Shoot(container.getShooter()));
+        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new SetFlywheelRPM(container.getShooter()));
         RamseteCommand toSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/ToSecondBall.wpilib.json")));
         CommandBase deployIntake2 = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
         RamseteCommand SecondBallAndShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/SecondBallAndShoot.wpilib.json")));
-        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new Shoot(container.getShooter()));
+        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new SetFlywheelRPM(container.getShooter()));
 
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(

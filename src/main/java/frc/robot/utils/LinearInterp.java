@@ -13,9 +13,9 @@ public class LinearInterp {
         this.dist = dist;
         this.speed = speed;
 
-        if (!isInputSane())
+        if (!isInputSane()) {
             sane = false;
-        return;
+        }
     }
 
     public boolean isSane() {
@@ -32,8 +32,8 @@ public class LinearInterp {
         int distSize = dist.size() - 1;
         int interval_begin = 0;
 //        System.out.println(distSize);
-        for(int i = 0; i < distSize; i++) {
-            if(dist.get(i) <= x && x < dist.get(i + 1)){
+        for (int i = 0; i < distSize; i++) {
+            if (dist.get(i) <= x && x < dist.get(i + 1)){
                 interval_begin = i;
                 break;
             }

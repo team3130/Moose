@@ -28,9 +28,7 @@ public class Shooter extends SubsystemBase implements SubsystemBased {
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
     private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", indexerSetSpeed).getEntry();
-    private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", 1000).getEntry();
-    // private NetworkTableEntry indexerReadRPM = tab.add("Indexer Write RPM", 0).getEntry();
-//    private NetworkTableEntry indexerVoltageOut = tab.add("Indexer Voltage", 0).getEntry();
+    private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", indexerSetSpeed).getEntry();
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -58,11 +56,11 @@ public class Shooter extends SubsystemBase implements SubsystemBased {
     }
 
     public double getSpeedFromShuffleboard() {
-        return sped.getDouble(3200);
+        return sped.getDouble(flywheelSetSpeed);
     }
 
     public double getIndexerSpeedFromShuffleboard(){
-        return indexerRPM.getDouble(1000);
+        return indexerRPM.getDouble(indexerSetSpeed);
     }
 
     public void outputToShuffleboard() {
@@ -77,7 +75,7 @@ public class Shooter extends SubsystemBase implements SubsystemBased {
     }
 
     public double getIndexerPercentFromShuffleboard() {
-        return indexerPercent.getDouble(0.5);
+        return indexerPercent.getDouble(indexerSetSpeed);
     }
 
     public void teleopInit() {
@@ -104,7 +102,7 @@ public class Shooter extends SubsystemBase implements SubsystemBased {
         setOpenLoop(0.0);
     }
 
-    public void setSpeed(double rpm) {
+    public void setFlywheelSpeed(double rpm) {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
@@ -137,7 +135,7 @@ public class Shooter extends SubsystemBase implements SubsystemBased {
      * Runs flywheel at flywheelSetSpeed
      */
     public void feedFlywheel() {
-        setSpeed(flywheelSetSpeed);
+        setFlywheelSpeed(flywheelSetSpeed);
     }
 
     public double getIndexerSetSpeed() {
@@ -153,5 +151,9 @@ public class Shooter extends SubsystemBase implements SubsystemBased {
      */
     public void feedIndexer() {
         setIndexerPercent(indexerSetSpeed);
+    }
+
+    public boolean canShoot() {
+        return getRPM() >= getSpeedFromShuffleboard() - 50; // 50 is the range
     }
 }

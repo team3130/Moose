@@ -1,31 +1,26 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.sensors.vision.Limelight;
-import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends CommandBase {
+public class SetFlywheelRPM extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
     private boolean hitSpeed = false;
-    private Limelight limelight;
-    private WheelSpeedCalculations wheelSpeedCalculations;
 
-    public Shoot(Shooter subsystem, Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
+    public SetFlywheelRPM(Shooter subsystem) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
-
-        this.limelight = limelight;
-        this.wheelSpeedCalculations = wheelSpeedCalculations;
     }
 
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() {}
+    public void initialize() {
+        m_shooter.feedFlywheel();
+    }
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
@@ -33,20 +28,12 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        // Find the flywheel speed
-        if (!limelight.hasTrack()){
-            m_shooter.setFlywheelSpeed(3200.0);
+        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
+            hitSpeed = true;
         }
-        else {
-            double x = limelight.getDistanceToTarget();
-            if (5 <= x) {
-                m_shooter.setFlywheelSpeed(wheelSpeedCalculations.getSpeed(x));
-            }
-            if (m_shooter.canShoot()) {
-                m_shooter.feedIndexer();
-                hitSpeed = true;
-            }
-        }
+        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
+            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
+        } 
     }
 
     /**

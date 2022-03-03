@@ -1,13 +1,8 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
-
-import java.util.Set;
 
 public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
@@ -72,7 +67,7 @@ public class AutonShoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.setIndexerSpeed(0);
-        m_shooter.setSpeed(0);
+        m_shooter.setFlywheelSpeed(0);
         timer.stop();
     }
 }

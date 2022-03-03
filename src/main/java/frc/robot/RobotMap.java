@@ -46,7 +46,12 @@ public class RobotMap {
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
-    public static final double kIndexerTicksPerRevolution = 2048; //TODO: Find real value 
+    public static final double kIndexerTicksPerRevolution = 2048; //TODO: Find real value
+
+    public static double kFlywheelP = .22;
+    public static double kFlywheelI = 0.0;
+    public static double kFlywheelD = 12;
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 
     /**
      * Limelight
@@ -82,10 +87,9 @@ public class RobotMap {
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
 
-    public static double kFlywheelP = .22;
-    public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
+    // max velocity of chassis in meters per second
+    public static final double kMaxVelocityMPS = 0.33;
+    public static final double kMaxAccelerationMPS = 0.1;
 
     /**
      * PID for Chassis

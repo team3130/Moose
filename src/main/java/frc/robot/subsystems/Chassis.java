@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -29,7 +28,7 @@ import frc.robot.sensors.Navx;
 
 import static frc.robot.utils.Utils.configPIDF;
 
-public class Chassis extends SubsystemBase implements SubsystemBased{
+public class Chassis extends SubsystemBase implements SubsystemBased {
 
     // Any variables/fields used in the constructor must appear before the
     // "INSTANCE" variable

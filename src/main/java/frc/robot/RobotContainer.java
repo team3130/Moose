@@ -8,8 +8,9 @@ import frc.robot.commands.Chassis.FaceTarget;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Magazine.Spinzine;
-import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.controls.TriggerButton;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.*;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Intake.DeployIntake;
@@ -22,7 +23,10 @@ import java.util.List;
  * All objects that are going to be used that are instantiated once should be defined and accessible here
  */
 public class RobotContainer {
-    private ArrayList<SubsystemBased> subsystems;
+    private ArrayList<SubsystemBased> m_subsystemBaseds;
+    // Supporting classes
+    WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations();
+
     // define subsystems here
     Shooter m_shooter = new Shooter();
     Chassis m_chassis = new Chassis();
@@ -47,8 +51,8 @@ public class RobotContainer {
     public Magazine getMagazine() {return m_magazine;}
 
     public RobotContainer() {
-        subsystems = new ArrayList<>();
-        subsystems.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine));
+        m_subsystemBaseds = new ArrayList<>();
+        m_subsystemBaseds.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
     }
 
@@ -73,7 +77,7 @@ public class RobotContainer {
         if (m_chooser_weapons.getSelected().equals("Ben")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Shoot(m_shooter));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SetFlywheelRPM(m_shooter));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Spinzine(m_magazine, -1));
@@ -83,7 +87,7 @@ public class RobotContainer {
         else if (m_chooser_weapons.getSelected().equals("Parker")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new Spinzine(m_magazine, 1)); // ltrigger
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine)); //rbumber
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new Shoot(m_shooter));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SetFlywheelRPM(m_shooter));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1)); // y
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenPressed(new DeployIntake(m_intake)); //x
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Spintake(m_intake, -1)); //b
@@ -92,14 +96,14 @@ public class RobotContainer {
     }
 
     public void outputToShuffleBoard() {
-        subsystems.forEach(SubsystemBased::outputToShuffleboard);
+        m_subsystemBaseds.forEach(SubsystemBased::outputToShuffleboard);
     }
 
     public void teleopInit() {
-        subsystems.forEach(SubsystemBased::teleopInit);
+        m_subsystemBaseds.forEach(SubsystemBased::teleopInit);
     }
 
     public void disable() {
-        subsystems.forEach(SubsystemBased::disable);
+        m_subsystemBaseds.forEach(SubsystemBased::disable);
     }
 }
