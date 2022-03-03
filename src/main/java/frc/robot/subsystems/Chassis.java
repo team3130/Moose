@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -25,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
+
+import static frc.robot.utils.Utils.configPIDF;
 
 public class Chassis extends SubsystemBase implements SubsystemBased{
 
@@ -126,6 +129,9 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
 
         m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_Shift);
         m_shifter.set(false);
+
+        m_leftMotorBack.follow(m_leftMotorFront);
+        m_rightMotorBack.follow(m_rightMotorFront);
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -161,7 +167,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
      */
     private double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
 
     /**
@@ -171,7 +177,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
      */
     private double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
 
 
@@ -182,7 +188,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
      */
     public double getSpeedL() {
         return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
+                * (RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
     }
 
     /**
@@ -192,7 +198,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
      */
     public double getSpeedR() {
         return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
+                * (RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
     }
 
     /**
@@ -240,7 +246,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
      * 
      * @param pose the pose to set odometry to
      */
-    private void resetOdometry(Pose2d pose) {
+    public void resetOdometry(Pose2d pose) {
         resetEncoders();
         Navx.resetNavX();
         m_odometry.resetPosition(pose, Navx.getRotation());
@@ -351,7 +357,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
      * @return wheel speeds as a {@link DifferentialDrive} object
      */
     public DifferentialDriveWheelSpeeds getSpeeds() {
-        return new DifferentialDriveWheelSpeeds(getSpeedL() / 10, getSpeedR() / 10);
+        return new DifferentialDriveWheelSpeeds(getSpeedL(), getSpeedR());
     }
 
     /**
@@ -416,5 +422,6 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
     @Override
     public void disable() {
         configRampRate(0);
+        driveTank(0, 0 , false);
     }
 }

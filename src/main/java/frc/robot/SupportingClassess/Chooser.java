@@ -40,7 +40,7 @@ public class Chooser {
         this.m_autonChooser = m_autonChooser;
         this.container = container;
 
-        TrajectoryConfig config = new TrajectoryConfig(1.3, 0.5);
+        TrajectoryConfig config = new TrajectoryConfig(0.33, 0.1);
 
         config.setKinematics(container.getChassis().getmKinematics());
 
@@ -159,11 +159,35 @@ public class Chooser {
             // chooser options
             m_autonChooser.addOption(files.get(i).getName(), files.get(i).getName());
         }
+        m_autonChooser.setDefaultOption("CPath", "CPath.wpilib.json");
         SmartDashboard.putData(m_autonChooser);
     }
 
     public CommandBase getCommand() {
         return paths.get(m_autonChooser.getSelected());
     }
+
+    public RamseteCommand getPath() {
+        Trajectory trajectory = new Trajectory();
+        Chassis chassis = container.getChassis();
+        try {
+            trajectory = TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/CPath.wpilib.json"));
+        } catch (IOException ex) {
+            DriverStation.reportError("Failed to load trajectory", true);
+        }
+        return new RamseteCommand(
+                trajectory,
+                chassis::getPose,
+                new RamseteController(2, 0.7),
+                chassis.getFeedforward(),
+                chassis.getmKinematics(),
+                chassis::getSpeeds,
+                chassis.getleftPIDController(),
+                chassis.getRightPIDController(),
+                chassis::setOutput,
+                chassis
+        );
+    }
+
 
 }

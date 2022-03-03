@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,7 +48,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);
-    m_chooser.add3Ball();
+    // m_chooser.addAllCommands();
   }
 
   /**
@@ -73,7 +75,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_scheduler.schedule(m_chooser.getCommand());
+    m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    m_scheduler.schedule(m_chooser.getPath());
     // week 0 auton attempt
     /*
     m_scheduler.schedule(

@@ -73,7 +73,7 @@ public class RobotMap {
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = 0.69;
     public static final double kEncoderResolution = 2048; // checked 2/28/22
-    public static final double kChassisHighGearRatio = 0.0542560554; // checked 2/28/22 (For high gear)
+    public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
     public static final double kWheelDiameter = Units.inchesToMeters(4);
@@ -90,7 +90,7 @@ public class RobotMap {
     /**
      * PID for Chassis
      */
-    public static double ChassiskP = 2.4272;
+    public static double ChassiskP = 2.4272 / 2;
     public static double ChassiskI = 0;
     public static double ChassiskD = 0;
 

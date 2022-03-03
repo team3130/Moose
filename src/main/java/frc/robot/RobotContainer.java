@@ -9,7 +9,6 @@ import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Magazine.Spinzine;
 import frc.robot.commands.Shooter.Shoot;
-import frc.robot.controls.JoystickTrigger;
 import frc.robot.controls.TriggerButton;
 import frc.robot.subsystems.*;
 import frc.robot.commands.Chassis.DefaultDrive;
