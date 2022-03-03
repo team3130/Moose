@@ -422,6 +422,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased{
     @Override
     public void disable() {
         configRampRate(0);
-        driveTank(0, 0 , false);
+        m_leftMotorFront.set(0);
+        m_rightMotorFront.set(0);
     }
 }

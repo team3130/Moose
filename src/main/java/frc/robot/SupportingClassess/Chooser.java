@@ -1,10 +1,15 @@
 package frc.robot.SupportingClassess;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -35,22 +40,30 @@ public class Chooser {
     private SendableChooser<String> m_autonChooser;
     private RobotContainer container;
     private HashMap<String, CommandBase> paths;
+    private Function<Path, Trajectory> trajectoryFactory;
+    private Function<Trajectory, RamseteCommand> cmdFactory;
+    private TrajectoryConfig config;
+
+    private RamseteCommand testPath;
 
     public Chooser(SendableChooser<String> m_autonChooser, RobotContainer container) {
         this.m_autonChooser = m_autonChooser;
         this.container = container;
 
-        TrajectoryConfig config = new TrajectoryConfig(0.33, 0.1);
+        Chassis chassis = container.getChassis();
 
-        config.setKinematics(container.getChassis().getmKinematics());
+        DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+                        chassis.getFeedforward(),
+                        chassis.getmKinematics(),
+                        12);
+
+        config = new TrajectoryConfig(0.33, 0.1);
+        config.setKinematics(container.getChassis().getmKinematics()).addConstraint(autoVoltageConstraint);
 
         paths = new HashMap<>();
-    }
 
-    public SequentialCommandGroup add3Ball() {
-        Chassis chassis = container.getChassis();
         // lambda to build trajectories
-        Function<Path, Trajectory> trajectoryFactory =
+        trajectoryFactory =
                 (Path path) -> {
                     Trajectory toReturn = new Trajectory();
                     // we have to try catch this everytime because otherwise we would have to tell the compiler that this method
@@ -64,7 +77,7 @@ public class Chooser {
                 };
 
         // lambda to build RamseteCommands
-        Function<Trajectory, RamseteCommand> cmdFactory = (Trajectory trajectory) -> new RamseteCommand(
+        cmdFactory = (Trajectory trajectory) -> new RamseteCommand(
                 trajectory,
                 chassis::getPose,
                 new RamseteController(2, 0.7),
@@ -76,7 +89,9 @@ public class Chooser {
                 chassis::setOutput,
                 chassis
         );
+    }
 
+    public SequentialCommandGroup add3Ball() {
         // needs to be tuned
         double firstBallPickupTime = 2;
 
@@ -121,34 +136,12 @@ public class Chooser {
 
         for (int i = 0; i < files.size(); i++) {
             if (files.get(i).isDirectory()) {
+                // should act as a BFS
                 files.addAll(List.of(files.get(i).listFiles()));
                 continue;
             }
 
-            Trajectory trajectory = new Trajectory();
-
-            try {
-                Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(files.get(i).getName());
-                trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-            }
-
-            catch (IOException ex) {
-                DriverStation.reportError("Unable to open trajectory: " + files.get(i).getName(), ex.getStackTrace());
-            }
-
-            // creating a Ramsete command which is used in AutonInit
-            RamseteCommand command = new RamseteCommand(
-                    trajectory,
-                    chassis::getPose,
-                    new RamseteController(2.0, 0.7),
-                    chassis.getFeedforward(),
-                    chassis.getmKinematics(),
-                    chassis::getSpeeds,
-                    chassis.getleftPIDController(),
-                    chassis.getRightPIDController(),
-                    chassis::setOutput,
-                    chassis
-            );
+            RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve(files.get(i).getName())));
 
             command.addRequirements(chassis);
             command.setName(files.get(i).getName());
@@ -157,37 +150,30 @@ public class Chooser {
             paths.put(files.get(i).getName(), command);
 
             // chooser options
-            m_autonChooser.addOption(files.get(i).getName(), files.get(i).getName());
+            m_autonChooser.addOption(files.get(i).getName().substring(0, files.get(i).getName().indexOf('.')), files.get(i).getName());
         }
         m_autonChooser.setDefaultOption("CPath", "CPath.wpilib.json");
         SmartDashboard.putData(m_autonChooser);
     }
 
+    /**
+     * this should be an S curve
+     */
+    public void generateTestPath() {
+        Chassis chassis = container.getChassis();
+        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
+                chassis.getPose(),
+                new Pose2d(1, 3, new Rotation2d(Units.radiansToDegrees(90)))
+        ), config);
+        testPath = cmdFactory.apply(trajectory);
+    }
+
+    public RamseteCommand getTestPath() {
+        return testPath;
+    }
+
     public CommandBase getCommand() {
         return paths.get(m_autonChooser.getSelected());
     }
-
-    public RamseteCommand getPath() {
-        Trajectory trajectory = new Trajectory();
-        Chassis chassis = container.getChassis();
-        try {
-            trajectory = TrajectoryUtil.fromPathweaverJson(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/CPath.wpilib.json"));
-        } catch (IOException ex) {
-            DriverStation.reportError("Failed to load trajectory", true);
-        }
-        return new RamseteCommand(
-                trajectory,
-                chassis::getPose,
-                new RamseteController(2, 0.7),
-                chassis.getFeedforward(),
-                chassis.getmKinematics(),
-                chassis::getSpeeds,
-                chassis.getleftPIDController(),
-                chassis.getRightPIDController(),
-                chassis::setOutput,
-                chassis
-        );
-    }
-
 
 }
