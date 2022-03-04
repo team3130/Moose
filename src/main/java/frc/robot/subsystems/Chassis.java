@@ -248,7 +248,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
         Navx.resetNavX();
-        m_odometry.resetPosition(pose, new Rotation2d(3 * Math.PI / 2));
+        // sets 0 to be to the right of the bot, because 0 radians on the unit circle is to the right of north (as a bearing)
+        m_odometry.resetPosition(pose, new Rotation2d(-Math.PI / 2));
     }
 
     /**

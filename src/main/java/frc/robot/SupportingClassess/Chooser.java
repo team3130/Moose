@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 
-public class Chooser {
+public class Chooser implements Runnable{
     private SendableChooser<String> m_autonChooser;
     private RobotContainer container;
     private HashMap<String, CommandBase> paths;
@@ -133,8 +133,11 @@ public class Chooser {
                 files.addAll(List.of(files.get(i).listFiles()));
                 continue;
             }
-            if (files.get(i).getName().substring(files.get(i).getName().indexOf('.')).equals("csv")) {
-                continue;
+
+            if (files.get(i).getName().lastIndexOf('.') >= 0) {
+                if (!files.get(i).getName().substring(files.get(i).getName().lastIndexOf('.')).equals("json")) {
+                    continue;
+                }
             }
 
             RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Path.of(files.get(i).getAbsolutePath())));
@@ -172,4 +175,19 @@ public class Chooser {
         return paths.get(m_autonChooser.getSelected());
     }
 
+    /**
+     * When an object implementing interface {@code Runnable} is used
+     * to create a thread, starting the thread causes the object's
+     * {@code run} method to be called in that separately executing
+     * thread.
+     * <p>
+     * The general contract of the method {@code run} is that it may
+     * take any action whatsoever.
+     *
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
+        addAllCommands();
+    }
 }
