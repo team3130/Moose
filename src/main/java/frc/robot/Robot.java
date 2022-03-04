@@ -53,8 +53,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);
-    bruh = new Thread(m_chooser);
-    bruh.start();
+    m_chooser.addAllCommands();
   }
 
   /**
@@ -82,7 +81,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
-    // yes this is an unsafe thread operation. It is not thread safe at all. cry harder.
     m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt
     /*
