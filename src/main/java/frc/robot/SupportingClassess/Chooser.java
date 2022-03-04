@@ -103,17 +103,20 @@ public class Chooser implements Runnable{
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(
                         PathOne,
-                        new ParallelDeadlineGroup(deployIntake, GoToFirstBall),
+                        new ParallelDeadlineGroup(GoToFirstBall, deployIntake),
                         goToFirstShoot,
                         shoot,
                         toSecondBall,
-                        new ParallelDeadlineGroup(deployIntake2, pickupSecondBall),
+                        new ParallelDeadlineGroup(pickupSecondBall, deployIntake2),
                         SecondBallAndShoot,
                         shoot2
                 );
+
         paths.put("3Ball", commandGroup);
+        
         m_autonChooser.addOption("3Ball", "3Ball");
         m_autonChooser.setDefaultOption("3Ball", "3Ball");
+
         return commandGroup;
     }
 
