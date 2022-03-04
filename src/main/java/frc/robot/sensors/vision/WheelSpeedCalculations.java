@@ -48,7 +48,7 @@ public class WheelSpeedCalculations {
     private final String FILEPATH;
 
     public WheelSpeedCalculations() {
-        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "RapidReactMarchFirst.csv";
+        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "RapidReactMarchFirst.csv";
 
         data_MainStorage = new ArrayList<>();
         readFile();

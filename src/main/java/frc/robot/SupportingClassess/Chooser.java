@@ -92,11 +92,11 @@ public class Chooser {
         CommandBase deployIntake = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
         RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall.wpilib.json")));
         RamseteCommand goToFirstShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
-        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new SetFlywheelRPM(container.getShooter()));
+        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
         RamseteCommand toSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/ToSecondBall.wpilib.json")));
         CommandBase deployIntake2 = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
         RamseteCommand SecondBallAndShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/SecondBallAndShoot.wpilib.json")));
-        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis()), new SetFlywheelRPM(container.getShooter()));
+        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
 
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(
@@ -134,7 +134,7 @@ public class Chooser {
                 continue;
             }
 
-            RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve(files.get(i).getName())));
+            RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Path.of(files.get(i).getAbsolutePath())));
 
             command.addRequirements(chassis);
             command.setName(files.get(i).getName());
@@ -156,7 +156,7 @@ public class Chooser {
         Chassis chassis = container.getChassis();
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
                 chassis.getPose(),
-                new Pose2d(1, 3, new Rotation2d(Units.radiansToDegrees(90)))
+                new Pose2d(3, 1, new Rotation2d(0))
         ), config);
         testPath = cmdFactory.apply(trajectory);
     }

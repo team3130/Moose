@@ -1,17 +1,20 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Shooter;
 
 public class SetFlywheelRPM extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
     private boolean hitSpeed = false;
+    private Limelight m_limelight;
 
-    public SetFlywheelRPM(Shooter subsystem) {
+    public SetFlywheelRPM(Shooter subsystem, Limelight m_limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
+        this.m_limelight = m_limelight;
     }
 
     /**
@@ -20,6 +23,7 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.feedFlywheel();
+        m_limelight.setLedState(true);
     }
 
     /**
@@ -67,5 +71,6 @@ public class SetFlywheelRPM extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.setFlywheelSpeed(0);
         m_shooter.setIndexerPercent(0);
+        m_limelight.setLedState(false);
     }
 }

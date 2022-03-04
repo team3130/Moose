@@ -14,7 +14,7 @@ import frc.robot.RobotMap;
 
 import static frc.robot.utils.Utils.configPIDF;
 
-public class Shooter extends SubsystemBase implements SubsystemBased {
+public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonSRX m_indexer;
 

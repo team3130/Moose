@@ -10,17 +10,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.GeneralUtils;
 
-//TODO: Make this not static and pass turret object as a paraneter to be used here
-
-public class Limelight {
-    //Instance Handling
-    private static Limelight m_pInstance;
-
-    public static Limelight GetInstance() {
-        if (m_pInstance == null) m_pInstance = new Limelight();
-        return m_pInstance;
-    }
+public class Limelight implements GeneralUtils {
 
     NetworkTable visionTable;
 
@@ -44,7 +36,7 @@ public class Limelight {
     private Matrix<N3, N1> realVector;
     private Matrix<N3, N1> sideVector;
 
-    protected Limelight() {
+    public Limelight() {
         visionTable = NetworkTableInstance.getDefault().getTable("limelight");
         tv = visionTable.getEntry("tv");
         tx = visionTable.getEntry("tx");
@@ -215,7 +207,7 @@ public class Limelight {
      * @return distance in inches
      */
     public double getDistanceToTarget() {
-        if (Limelight.GetInstance().hasTrack()) {
+        if (hasTrack()) {
             Matrix<N3, N1> projection = realVector.copy();
             projection.set(1, 0, 0.0);
             return projection.normF();
@@ -274,15 +266,18 @@ public class Limelight {
     }
 
 
-    public void outputToShuffleboard(Chassis chassis) {
-        Limelight o = GetInstance();
-        SmartDashboard.putNumber("Limelight X", o.x_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Y", o.y_targetOffsetAngle);
-        SmartDashboard.putNumber("Limelight Distance", o.getDistanceToTarget());
-        SmartDashboard.putNumber("Limelight Area", o.area);
-        SmartDashboard.putBoolean("Limelight Has Target", o.hasTrack());
-        SmartDashboard.putNumber("Limelight mounting angle", o.calibrate());
-        SmartDashboard.putNumber("Limelight Target Rotation", o.getTargetRotationTan());
+    public void outputToShuffleboard() {
+        SmartDashboard.putNumber("Limelight X", x_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Y", y_targetOffsetAngle);
+        SmartDashboard.putNumber("Limelight Distance", getDistanceToTarget());
+        SmartDashboard.putNumber("Limelight Area", area);
+        SmartDashboard.putBoolean("Limelight Has Target", hasTrack());
+        SmartDashboard.putNumber("Limelight mounting angle", calibrate());
+        SmartDashboard.putNumber("Limelight Target Rotation", getTargetRotationTan());
     }
 
+    public void teleopInit() {setLedState(true);}
+    public void autonInit() {setLedState(true);}
+    public void disable() {setLedState(false);
+    }
 }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,16 +40,18 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
-    m_chooser_driver.setDefaultOption("Cody", "Cody");
+    m_chooser_driver.setDefaultOption("Test", "Test");
     m_chooser_driver.addOption("Maddie", "Maddie");
+    m_chooser_driver.addOption("Cody", "Cody");
     SmartDashboard.putData("Driver", m_chooser_driver);
     // weapon options
-    m_chooser_weapons.setDefaultOption("Ben", "Ben");
+    m_chooser_weapons.setDefaultOption("Test", "Test");
     m_chooser_weapons.addOption("Parker", "Parker");
+    m_chooser_weapons.addOption("Ben", "Ben");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);
-    m_chooser.generateTestPath();
+    m_chooser.addAllCommands();
   }
 
   /**
@@ -75,8 +78,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    m_scheduler.schedule(m_chooser.getTestPath());
+    m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
+    m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt
     /*
     m_scheduler.schedule(

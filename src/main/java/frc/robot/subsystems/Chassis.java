@@ -28,7 +28,7 @@ import frc.robot.sensors.Navx;
 
 import static frc.robot.utils.Utils.configPIDF;
 
-public class Chassis extends SubsystemBase implements SubsystemBased {
+public class Chassis extends SubsystemBase implements GeneralUtils {
 
     // Any variables/fields used in the constructor must appear before the
     // "INSTANCE" variable
@@ -207,7 +207,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased {
     @Override
     public void periodic() {
         // update odometry for relevant positional data
-        m_odometry.update(Navx.getRotation(), getDistanceL(), getDistanceR());
+        m_odometry.update(Navx.getRotation(), getDistanceR(), getDistanceL());
     }
 
     /**
@@ -248,7 +248,7 @@ public class Chassis extends SubsystemBase implements SubsystemBased {
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
         Navx.resetNavX();
-        m_odometry.resetPosition(pose, Navx.getRotation());
+        m_odometry.resetPosition(pose, new Rotation2d(3 * Math.PI / 2));
     }
 
     /**
