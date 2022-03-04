@@ -133,6 +133,9 @@ public class Chooser {
                 files.addAll(List.of(files.get(i).listFiles()));
                 continue;
             }
+            if (files.get(i).getName().substring(files.get(i).getName().indexOf('.')).equals("csv")) {
+                continue;
+            }
 
             RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Path.of(files.get(i).getAbsolutePath())));
 
