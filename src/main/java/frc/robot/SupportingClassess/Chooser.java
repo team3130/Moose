@@ -86,9 +86,6 @@ public class Chooser implements Runnable{
     }
 
     public SequentialCommandGroup add3Ball() {
-        // needs to be tuned
-        double firstBallPickupTime = 2;
-
         RamseteCommand PathOne = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall.wpilib.json")));
@@ -113,7 +110,7 @@ public class Chooser implements Runnable{
                 );
 
         paths.put("3Ball", commandGroup);
-        
+
         m_autonChooser.addOption("3Ball", "3Ball");
         m_autonChooser.setDefaultOption("3Ball", "3Ball");
 
