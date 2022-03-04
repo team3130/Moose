@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.FaceTarget;
+import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedDeployAndSpintake;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.subsystems.Chassis;
@@ -89,23 +90,25 @@ public class Chooser implements Runnable{
         double firstBallPickupTime = 2;
 
         RamseteCommand PathOne = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
-        CommandBase deployIntake = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         RamseteCommand GoToFirstBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall.wpilib.json")));
         RamseteCommand goToFirstShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
         ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
         RamseteCommand toSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/ToSecondBall.wpilib.json")));
-        CommandBase deployIntake2 = new TimedDeployAndSpintake(container.getIntake(), container.getMagazine(), firstBallPickupTime);
+        RamseteCommand pickupSecondBall = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/GoThroughSecond.wpilib.json")));
+        CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         RamseteCommand SecondBallAndShoot = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/SecondBallAndShoot.wpilib.json")));
         ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
 
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(
                         PathOne,
-                        new ParallelCommandGroup(deployIntake, GoToFirstBall),
+                        new ParallelDeadlineGroup(deployIntake, GoToFirstBall),
                         goToFirstShoot,
                         shoot,
                         toSecondBall,
-                        new ParallelCommandGroup(deployIntake2, SecondBallAndShoot),
+                        new ParallelDeadlineGroup(deployIntake2, pickupSecondBall),
+                        SecondBallAndShoot,
                         shoot2
                 );
         paths.put("3Ball", commandGroup);
