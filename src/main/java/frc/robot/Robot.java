@@ -80,6 +80,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
     m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
     m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt

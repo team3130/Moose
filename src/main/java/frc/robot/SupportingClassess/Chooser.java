@@ -47,9 +47,9 @@ public class Chooser {
         Chassis chassis = container.getChassis();
 
         DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-                        chassis.getFeedforward(),
-                        chassis.getmKinematics(),
-                        12);
+                chassis.getFeedforward(),
+                chassis.getmKinematics(),
+                12);
 
         config = new TrajectoryConfig(RobotMap.kMaxVelocityMPS, RobotMap.kMaxAccelerationMPS);
         config.setKinematics(container.getChassis().getmKinematics()).addConstraint(autoVoltageConstraint);
@@ -124,16 +124,29 @@ public class Chooser {
      * DO NOT USE FOR PATHS MORE COMPLEX THAN MOTORS GO BRRR
      */
     public void addAllCommands() {
-        File dir = new File("/home/lvuser/deploy/paths/");
+        File dir = Filesystem.getDeployDirectory();
+        assert dir != null;
+        assert dir.listFiles() != null;
+        assert dir.isDirectory();
+        assert dir.canRead();
+
+
+        for (File f: dir.listFiles()) {
+            System.out.println(f.toString());
+
+        }
 
         Chassis chassis = container.getChassis();
 
         ArrayList<File> files = new ArrayList<>(List.of(dir.listFiles()));
 
         for (int i = 0; i < files.size(); i++) {
+
             if (files.get(i).isDirectory()) {
                 // should act as a BFS
+                System.out.println("NULL POINTER NOT AT LIST CREATION GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                 files.addAll(List.of(files.get(i).listFiles()));
+
                 continue;
             }
 
@@ -158,6 +171,7 @@ public class Chooser {
         SmartDashboard.putData(m_autonChooser);
     }
 
+
     /**
      * this should be an S curve
      */
@@ -175,6 +189,7 @@ public class Chooser {
     }
 
     public CommandBase getCommand() {
+        System.out.println("GET COMMAND WORKS!!!!!!!!!!!!!!!!AASDFASDFASDFASDFASDFASDFASDF");
         return paths.get(m_autonChooser.getSelected());
     }
 }
