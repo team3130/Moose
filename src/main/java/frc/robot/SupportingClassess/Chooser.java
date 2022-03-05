@@ -124,48 +124,40 @@ public class Chooser {
      * DO NOT USE FOR PATHS MORE COMPLEX THAN MOTORS GO BRRR
      */
     public void addAllCommands() {
-        File dir = Filesystem.getDeployDirectory();
-        assert dir != null;
-        assert dir.listFiles() != null;
-        assert dir.isDirectory();
-        assert dir.canRead();
-
-
-        for (File f: dir.listFiles()) {
-            System.out.println(f.toString());
-
-        }
+        File dir = Filesystem.getDeployDirectory();;
 
         Chassis chassis = container.getChassis();
 
         ArrayList<File> files = new ArrayList<>(List.of(dir.listFiles()));
 
         for (int i = 0; i < files.size(); i++) {
+            File currentFile = files.get(i);
+            String currentFileName = currentFile.getName();
 
-            if (files.get(i).isDirectory()) {
+            if (currentFile.isDirectory()) {
                 // should act as a BFS
-                System.out.println("NULL POINTER NOT AT LIST CREATION GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-                files.addAll(List.of(files.get(i).listFiles()));
+
+                files.addAll(List.of(currentFile.listFiles()));
 
                 continue;
             }
 
-            if (files.get(i).getName().lastIndexOf('.') >= 0) {
-                if (!files.get(i).getName().substring(files.get(i).getName().lastIndexOf('.')).equals("json")) {
+            if (currentFileName.lastIndexOf('.') >= 0) {
+                if (!currentFileName.substring(currentFileName.lastIndexOf('.')).equals(".json")) {
                     continue;
                 }
             }
 
-            RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Path.of(files.get(i).getAbsolutePath())));
+            RamseteCommand command = cmdFactory.apply(trajectoryFactory.apply(Path.of(currentFile.getAbsolutePath())));
 
             command.addRequirements(chassis);
-            command.setName(files.get(i).getName());
+            command.setName(currentFile.getName());
 
             // add the name to the map
-            paths.put(files.get(i).getName(), command);
+            paths.put(currentFileName, command);
 
             // chooser options
-            m_autonChooser.addOption(files.get(i).getName().substring(0, files.get(i).getName().indexOf('.')), files.get(i).getName());
+            m_autonChooser.addOption(currentFileName.substring(0, currentFileName.indexOf('.')), currentFileName);
         }
         m_autonChooser.setDefaultOption("CPath", "CPath.wpilib.json");
         SmartDashboard.putData(m_autonChooser);
@@ -189,7 +181,6 @@ public class Chooser {
     }
 
     public CommandBase getCommand() {
-        System.out.println("GET COMMAND WORKS!!!!!!!!!!!!!!!!AASDFASDFASDFASDFASDFASDFASDF");
         return paths.get(m_autonChooser.getSelected());
     }
 }
