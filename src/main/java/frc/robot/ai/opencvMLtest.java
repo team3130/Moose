@@ -7,7 +7,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.TermCriteria;
 import org.opencv.highgui.HighGui;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.ml.Ml;
 import org.opencv.ml.ANN_MLP;
@@ -32,17 +31,22 @@ public class opencvMLtest {
 
         labelsMat.put(0, 0, labels);
 
-        ANN_MLP mlp = ANN_MLP.create();
-        Mat layers = new Mat(4,1, CvType.CV_32SC1);
-        int[] layer_dim = {2,4,4,1};
+        ANN_MLP model = ANN_MLP.create();
+        int[] layer_dim = {2,4,1};
+        Mat layers = new Mat(layer_dim.length, 1, CvType.CV_32SC1);
         layers.put(0,0, layer_dim);
-        mlp.setLayerSizes(layers);
-//        mlp.setActivationFunction(ANN_MLP.SIGMOID_SYM);
-        TermCriteria criteria = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 500, 0.001);
-        mlp.setTermCriteria(criteria);
-        mlp.setTrainMethod(ANN_MLP.BACKPROP);
+        model.setLayerSizes(layers);
+        model.setActivationFunction(ANN_MLP.SIGMOID_SYM);
+        TermCriteria criteria = new TermCriteria(TermCriteria.MAX_ITER+TermCriteria.EPS, 50, 0.0001);
+        model.setTermCriteria(criteria);
+        model.setTrainMethod(ANN_MLP.BACKPROP, 0.0001);
 
-        mlp.train(trainingDataMat, Ml.ROW_SAMPLE, labelsMat);
+        model.train(trainingDataMat, Ml.ROW_SAMPLE, labelsMat);
+
+        for(int i = 0; i < layer_dim.length; i++) {
+            System.out.println(model.getWeights(i).dump());
+        }
+        
 
         // Data for visual representation
         int width = 512, height = 512;
@@ -53,21 +57,26 @@ public class opencvMLtest {
         int lineType = 1; //Core.lineLINE_8;
         Imgproc.circle(image, new Point(501, 10), 5, new Scalar(255, 0, 0), thickness, lineType, 0);
         Imgproc.circle(image, new Point(10, 10), 5, new Scalar(255, 0, 0), thickness, lineType, 0);
-        for( int i = 0; i < width; i += 5) {
+        for( int i = 0; i < width; i += 50) {
             float x = i;
             float x2 = x*x;
             Mat samples = new Mat(1, 2, CvType.CV_32FC1);
             samples.put(0, 0, x);
             samples.put(0, 1, x2);
-            int y = (int) (mlp.predict(samples)/10.0);
+            System.out.print(samples.dump());
+            Mat result = new Mat();
+            double p = model.predict(samples, result);
+            System.out.print(result.dump());
+            p = result.get(0,0)[0];
+            int y = (int) (p/10.0);
             Imgproc.circle(image, new Point(i, 501-y), 5, new Scalar(0, 255, 0), thickness, lineType, 0);
-            System.out.println("Point: " + x + ", " + y);
+            System.out.println(" Point: " + x + ", " + y + "; p = " + p);
         }
         for( int i = 0; i < labels.length; i++) {
             int x = (int) trainingData[i];
             int y = (int) (labels[i]/10.0);
             Imgproc.circle(image, new Point(x, 501-y), 5, new Scalar(0, 0, 255), thickness, lineType, 0);
-            System.out.println("Point: " + x + ", " + y);
+            //System.out.println("Point: " + x + ", " + y);
         }
         // Show support vectors
         // thickness = 2;
