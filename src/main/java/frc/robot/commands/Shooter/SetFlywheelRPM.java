@@ -1,18 +1,20 @@
-package frc.robot.commands.Chassis;
+package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Chassis;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.subsystems.Shooter;
 
-public class DefaultDrive extends CommandBase {
+public class SetFlywheelRPM extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis;
+    private final Shooter m_shooter;
+    private boolean hitSpeed = false;
+    private Limelight m_limelight;
 
-    public DefaultDrive(Chassis chassis) {
+    public SetFlywheelRPM(Shooter subsystem, Limelight m_limelight) {
         //mapping to object passed through parameter
-        m_chassis = chassis;
-        m_requirements.add(chassis);
+        m_shooter = subsystem;
+        m_requirements.add(subsystem);
+        this.m_limelight = m_limelight;
     }
 
     /**
@@ -20,7 +22,8 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_shooter.feedFlywheel();
+        m_limelight.setLedState(true);
     }
 
     /**
@@ -29,13 +32,12 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if (m_chassis.isShifted()) {
-            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
+        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
+            hitSpeed = true;
         }
-        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
-
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
+        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
+            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
+        } 
     }
 
     /**
@@ -54,7 +56,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
     }
 
     /**
@@ -67,6 +69,8 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0);
+        m_shooter.setFlywheelSpeed(0);
+        m_shooter.setIndexerPercent(0);
+        m_limelight.setLedState(false);
     }
 }

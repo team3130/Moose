@@ -1,17 +1,22 @@
 package frc.robot.commands.Chassis;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.RobotMap;
+import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.ExampleSubsystem;
 
-public class Shift extends CommandBase {
+public class resetOdometery extends InstantCommand {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_subsystem;
+    private final Chassis m_chassis;
 
-    public Shift(Chassis subsystem) {
+    public resetOdometery(Chassis chassis) {
         //mapping to object passed through parameter
-        m_subsystem = subsystem;
-        m_requirements.add(subsystem);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
     }
 
     /**
@@ -19,7 +24,8 @@ public class Shift extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_subsystem.shift();
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_chassis.resetOdometry(new Pose2d(0, 0, new Rotation2d()));
     }
 
     /**
@@ -27,28 +33,7 @@ public class Shift extends CommandBase {
      * (That is, it is called repeatedly until {@link #isFinished()}) returns true.)
      */
     @Override
-    public void execute() {
-
-    }
-
-    /**
-     * <p>
-     * Returns whether this command has finished. Once a command finishes -- indicated by
-     * this method returning true -- the scheduler will call its {@link #end(boolean)} method.
-     * </p><p>
-     * Returning false will result in the command never ending automatically. It may still be
-     * cancelled manually or interrupted by another command. Hard coding this command to always
-     * return true will result in the command executing once and finishing immediately. It is
-     * recommended to use * {@link edu.wpi.first.wpilibj2.command.InstantCommand InstantCommand}
-     * for such an operation.
-     * </p>
-     *
-     * @return whether this command has finished.
-     */
-    @Override
-    public boolean isFinished() {
-        return true;
-    }
+    public void execute() {}
 
     /**
      * The action to take when the command ends. Called when either the command

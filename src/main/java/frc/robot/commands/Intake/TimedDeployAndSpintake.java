@@ -1,18 +1,33 @@
-package frc.robot.commands.Chassis;
+package frc.robot.commands.Intake;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
-import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
-public class DefaultDrive extends CommandBase {
+public class TimedDeployAndSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis;
+    private final Intake m_intake;
+    private final Magazine m_magazine;
+    private final int direction;
+    private final double time;
+    private final Timer timer;
 
-    public DefaultDrive(Chassis chassis) {
+    /**
+     * Meant to be run in a sequential command group with {@link TimedSpintake}
+     * @param intake {@link Intake}
+     */
+    public TimedDeployAndSpintake(Intake intake, Magazine magazine, double time) {
         //mapping to object passed through parameter
-        m_chassis = chassis;
-        m_requirements.add(chassis);
+        m_intake = intake;
+        m_magazine = magazine;
+        m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
+        this.time = time;
+        timer = new Timer();
+
+        direction = 1;
     }
 
     /**
@@ -20,7 +35,10 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_intake.deployIntake(true);
+        m_intake.setSpeed(0.8 * direction);
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -29,13 +47,9 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if (m_chassis.isShifted()) {
-            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
+        if (timer.hasElapsed(time - RobotMap.kIntakeRetractTime)) {
+            m_intake.deployIntake(false);
         }
-        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
-
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -53,9 +67,7 @@ public class DefaultDrive extends CommandBase {
      * @return whether this command has finished.
      */
     @Override
-    public boolean isFinished() {
-        return false;
-    }
+    public boolean isFinished() {return timer.get() >= time;}
 
     /**
      * The action to take when the command ends. Called when either the command
@@ -67,6 +79,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0);
+        m_intake.deployIntake(false);
+        m_intake.setSpeed(0);
     }
 }

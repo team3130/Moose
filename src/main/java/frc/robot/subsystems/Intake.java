@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 
-public class intakesubsystem extends SubsystemBase {
+public class Intake extends SubsystemBase implements GeneralUtils {
 
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
@@ -17,9 +17,15 @@ public class intakesubsystem extends SubsystemBase {
 
     //Create and define all standard data types needed
 
-    public intakesubsystem() {
+    public Intake() {
         m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
+
+        m_motor.setInverted(true);
+    }
+
+    public void setSpeed(double speed) {
+        m_motor.set(speed);
     }
 
     public boolean toggleIntake() {
@@ -31,9 +37,18 @@ public class intakesubsystem extends SubsystemBase {
         return m_solenoid.get();
     }
 
-    public void spinny(double speed) {
-        m_motor.set(speed);
+    public void deployIntake(boolean deploy) {
+        m_solenoid.set(deploy);
     }
 
-}
+    @Override
+    public void outputToShuffleboard() {}
 
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void disable() {
+        m_motor.set(0);
+    }
+}

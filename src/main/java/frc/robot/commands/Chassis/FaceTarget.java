@@ -1,17 +1,20 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.intakesubsystem;
+import frc.robot.RobotMap;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.subsystems.Chassis;
 
-public class deployintake extends CommandBase {
+public class FaceTarget extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final intakesubsystem m_intakesubsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Chassis m_chassis;
+    private final Limelight m_limelight;
 
-    public deployintake(intakesubsystem subsystem) {
+    public FaceTarget(Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
-        m_intakesubsystem = subsystem;
-        m_requirements.add(m_intakesubsystem);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
+        m_limelight = limelight;
     }
 
     /**
@@ -19,7 +22,7 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_intakesubsystem.toggleIntake();
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -28,7 +31,7 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void execute() {
-
+        m_chassis.driveArcade(0, (m_limelight.getTx() / 27) * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -47,7 +50,7 @@ public class deployintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return true;
+        return m_limelight.getTx() < 2;
     }
 
     /**
@@ -60,6 +63,6 @@ public class deployintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_chassis.configRampRate(0);
     }
 }

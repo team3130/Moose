@@ -26,7 +26,9 @@ import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
 
-public class Chassis extends SubsystemBase {
+import static frc.robot.utils.Utils.configPIDF;
+
+public class Chassis extends SubsystemBase implements GeneralUtils {
 
     // Any variables/fields used in the constructor must appear before the
     // "INSTANCE" variable
@@ -40,7 +42,7 @@ public class Chassis extends SubsystemBase {
     private WPI_TalonFX m_leftMotorFront;
     private WPI_TalonFX m_leftMotorBack;
 
-    private Solenoid m_shifter;
+    private Solenoid m_shifter; // true is low gear, false is high gear
 
     private MotorControllerGroup m_motorsRight;
     private MotorControllerGroup m_motorsLeft;
@@ -62,22 +64,22 @@ public class Chassis extends SubsystemBase {
     private NetworkTableEntry D = tab.add("Chassis D", 0).getEntry();
 
     private NetworkTableEntry sliderMove = tab
-            .add("Move Speed Sensitivity", 7.5)
+            .add("Move Speed Sensitivity", 10)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
     private NetworkTableEntry sliderTurn = tab
-            .add("Turn Speed Sensitivity", 7.5)
+            .add("Turn Speed Sensitivity", 10)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
 
     public double getMoveSpeedSensitivityFromShuffleboard() {
-        return sliderMove.getDouble(7.5);
+        return sliderMove.getDouble(10);
     }
 
     public double getTurnSpeedSensitivityFromShuffleboard() {
-        return sliderTurn.getDouble(7.5);
+        return sliderTurn.getDouble(10);
     }
 
     // Create and define all standard data types needed
@@ -116,9 +118,9 @@ public class Chassis extends SubsystemBase {
         m_drive.setDeadband(RobotMap.kDriveDeadband);
         m_drive.setSafetyEnabled(false);
 
-        m_feedforward = new SimpleMotorFeedforward(RobotMap.lowGearkS, RobotMap.lowGearkV, RobotMap.lowGearkA);
-        m_leftPIDController = new PIDController(2.05, 0, 0);
-        m_rightPIDConttroller = new PIDController(2.05, 0, 0);
+        m_feedforward = new SimpleMotorFeedforward(RobotMap.ChassiskS, RobotMap.ChassiskV, RobotMap.ChassiskA);
+        m_leftPIDController = new PIDController(RobotMap.ChassiskP, RobotMap.ChassiskI, RobotMap.ChassiskD);
+        m_rightPIDConttroller = new PIDController(RobotMap.ChassiskP, RobotMap.ChassiskI, RobotMap.ChassiskD);
 
         // kinematics and odometry
         m_kinematics = new DifferentialDriveKinematics(RobotMap.trackDistance);
@@ -126,6 +128,9 @@ public class Chassis extends SubsystemBase {
 
         m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_Shift);
         m_shifter.set(false);
+
+        m_leftMotorBack.follow(m_leftMotorFront);
+        m_rightMotorBack.follow(m_rightMotorFront);
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -155,33 +160,13 @@ public class Chassis extends SubsystemBase {
     }
 
     /**
-     * Gets absolute distance traveled by the right side of the robot in low gear
-     *
-     * @return The absolute distance of the right side in meters
-     */
-    private double getDistanceLowGearR() {
-        return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisLowGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
-    }
-
-    /**
-     * Gets absolute distance traveled by the left side of the robot in low gear
-     *
-     * @return The absolute distance of the left side in meters
-     */
-    private double getDistanceLowGearL() {
-        return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisLowGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
-    }
-
-    /**
      * Gets absolute distance traveled by the left side of the robot in high gear
      *
      * @return The absolute distance of the left side in meters
      */
-    private double getDistanceHighGearL() {
+    private double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisHighGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
 
     /**
@@ -189,39 +174,20 @@ public class Chassis extends SubsystemBase {
      *
      * @return The absolute distance of the right side in meters
      */
-    private double getDistanceHighGearR() {
+    private double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisHighGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
 
-    /**
-     * Returns the current speed of the front left motor in low gear
-     *
-     * @return Current speed of the front left motor (meters per second)
-     */
-    public double getSpeedLowGearL() {
-        return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
-    }
-
-    /**
-     * Returns the current speed of the front right motor in low gear
-     *
-     * @return Current speed of the front right motor (meters per second)
-     */
-    public double getSpeedLowGearR() {
-        return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisLowGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
-    }
 
     /**
      * Returns the current speed of the front left motor in high gear
      *
      * @return Current speed of the front left motor (meters per second)
      */
-    public double getSpeedHighGearL() {
+    public double getSpeedL() {
         return (m_leftMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisHighGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
+                * (RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
     }
 
     /**
@@ -229,9 +195,9 @@ public class Chassis extends SubsystemBase {
      *
      * @return Current speed of the front right motor (meters per second)
      */
-    public double getSpeedHighGearR() {
+    public double getSpeedR() {
         return (m_rightMotorFront.getSelectedSensorVelocity() / RobotMap.kEncoderResolution
-                * (1 / RobotMap.kChassisHighGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
+                * (RobotMap.kChassisGearRatio) * (Math.PI * RobotMap.kWheelDiameter)) * 10;
     }
 
     /**
@@ -241,11 +207,7 @@ public class Chassis extends SubsystemBase {
     @Override
     public void periodic() {
         // update odometry for relevant positional data
-        if (!m_shifter.get()) {
-            m_odometry.update(Navx.getRotation(), getDistanceLowGearL(), getDistanceLowGearR());
-        } else {
-            m_odometry.update(Navx.getRotation(), getDistanceHighGearL(), getDistanceHighGearR());
-        }
+        m_odometry.update(Navx.getRotation(), getDistanceR(), getDistanceL());
     }
 
     /**
@@ -283,10 +245,11 @@ public class Chassis extends SubsystemBase {
      * 
      * @param pose the pose to set odometry to
      */
-    private void resetOdometry(Pose2d pose) {
+    public void resetOdometry(Pose2d pose) {
         resetEncoders();
         Navx.resetNavX();
-        m_odometry.resetPosition(pose, Navx.getRotation());
+        // sets 0 to be to the right of the bot, because 0 radians on the unit circle is to the right of north (as a bearing)
+        m_odometry.resetPosition(pose, new Rotation2d(-Math.PI / 2));
     }
 
     /**
@@ -296,11 +259,7 @@ public class Chassis extends SubsystemBase {
      * @return Current speed of the robot
      */
     public double getSpeed() {
-        if (m_shifter.get()) {
-            return 0.5 * (getSpeedHighGearL() + getSpeedHighGearR());
-        } else {
-            return 0.5 * (getSpeedLowGearL() + getSpeedLowGearR());
-        }
+        return 0.5 * (getSpeedL() + getSpeedR());
     }
 
     /**
@@ -398,11 +357,7 @@ public class Chassis extends SubsystemBase {
      * @return wheel speeds as a {@link DifferentialDrive} object
      */
     public DifferentialDriveWheelSpeeds getSpeeds() {
-        if (m_shifter.get()) {
-            return new DifferentialDriveWheelSpeeds(getSpeedHighGearL() / 10, getSpeedHighGearR() / 10);
-        } else {
-            return new DifferentialDriveWheelSpeeds(getSpeedLowGearL() / 10, getSpeedLowGearR() / 10);
-        }
+        return new DifferentialDriveWheelSpeeds(getSpeedL(), getSpeedR());
     }
 
     /**
@@ -431,8 +386,8 @@ public class Chassis extends SubsystemBase {
      * @param rightVolts voltage on the right side
      */
     public void setOutput(double leftVolts, double rightVolts) {
-        m_leftMotorFront.setVoltage(leftVolts);
-        m_rightMotorFront.setVoltage(rightVolts);
+        m_motorsLeft.setVoltage(leftVolts);
+        m_motorsRight.setVoltage(rightVolts);
         m_drive.feed();
     }
 
@@ -441,18 +396,16 @@ public class Chassis extends SubsystemBase {
      */
     public void outputToShuffleboard() {
         // current velocity
-        SmartDashboard.putNumber("Chassis Right Velocity", (isShifted()) ? getSpeedHighGearR() : getSpeedLowGearR());
-        SmartDashboard.putNumber("Chassis Left Velocity", (isShifted()) ? getSpeedHighGearL() : getSpeedLowGearL());
+        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
+        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
 
         // percent output of motors
         SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
         SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
-        // distances
-        // TODO: switch to an encoder outside the gears cause distance is cringe with
         // shifting
-        SmartDashboard.putNumber("Chassis Distance R", (isShifted()) ? getDistanceHighGearR() : getDistanceLowGearR());
-        SmartDashboard.putNumber("Chassis Distance L", (isShifted()) ? getDistanceHighGearL() : getDistanceLowGearL());
+        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         // bot position
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
@@ -463,4 +416,13 @@ public class Chassis extends SubsystemBase {
 
     }
 
+    @Override
+    public void teleopInit() {}
+
+    @Override
+    public void disable() {
+        configRampRate(0);
+        m_leftMotorFront.set(0);
+        m_rightMotorFront.set(0);
+    }
 }

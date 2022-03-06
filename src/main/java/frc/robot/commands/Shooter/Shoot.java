@@ -1,26 +1,31 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.intakesubsystem;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Shooter;
 
-public class spintake extends CommandBase {
+public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final intakesubsystem m_intakesubsystem; //TODO: rename this to the subsystem this is assigned to
+    private final Shooter m_shooter;
+    private boolean hitSpeed = false;
+    private Limelight limelight;
+    private WheelSpeedCalculations wheelSpeedCalculations;
 
-    public spintake(intakesubsystem subsystem) {
+    public Shoot(Shooter subsystem, Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
         //mapping to object passed through parameter
-        m_intakesubsystem = subsystem;
-        m_requirements.add(m_intakesubsystem);
+        m_shooter = subsystem;
+        m_requirements.add(subsystem);
+
+        this.limelight = limelight;
+        this.wheelSpeedCalculations = wheelSpeedCalculations;
     }
 
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() {
-    m_intakesubsystem.spinny(-0.8);
-    }
+    public void initialize() {}
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
@@ -28,11 +33,19 @@ public class spintake extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_intakesubsystem.toggled()) {
-            m_intakesubsystem.spinny(0.8);
+        // Find the flywheel speed
+        if (!limelight.hasTrack()){
+            m_shooter.setFlywheelSpeed(3200.0);
         }
         else {
-            m_intakesubsystem.spinny(0);
+            double x = limelight.getDistanceToTarget();
+            if (5 <= x) {
+                m_shooter.setFlywheelSpeed(wheelSpeedCalculations.getSpeed(x));
+            }
+            if (m_shooter.canShoot()) {
+                m_shooter.feedIndexer();
+                hitSpeed = true;
+            }
         }
     }
 
@@ -52,8 +65,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
     }
 
     /**
@@ -66,6 +78,7 @@ public class spintake extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_intakesubsystem.spinny(0);
+        m_shooter.setFlywheelSpeed(0);
+        m_shooter.setIndexerPercent(0);
     }
 }

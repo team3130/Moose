@@ -1,18 +1,18 @@
-package frc.robot.commands.Chassis;
+package frc.robot.commands.Magazine;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Magazine;
 
-public class DefaultDrive extends CommandBase {
+public class Spinzine extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis;
+    private final Magazine m_magazine;
+    private final int direction;
 
-    public DefaultDrive(Chassis chassis) {
-        //mapping to object passed through parameter
-        m_chassis = chassis;
-        m_requirements.add(chassis);
+    public Spinzine(Magazine magazine, int direction) {
+        // mapping to object passed through parameter
+        m_magazine = magazine;
+        m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -20,7 +20,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_magazine.setSpeed(0.6 * direction);
     }
 
     /**
@@ -29,13 +29,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if (m_chassis.isShifted()) {
-            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
-        }
-        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
 
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -67,6 +61,6 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0);
+        m_magazine.setSpeed(0);
     }
 }

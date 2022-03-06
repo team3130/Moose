@@ -10,6 +10,8 @@
 *.o
 *.obj
 
+*.yml
+
 # Precompiled Headers
 *.gch
 *.pch

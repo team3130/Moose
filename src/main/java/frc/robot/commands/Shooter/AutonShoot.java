@@ -1,18 +1,19 @@
-package frc.robot.commands.Chassis;
+package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
-import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Shooter;
 
-public class DefaultDrive extends CommandBase {
+public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis;
+    private final Shooter m_shooter;
+    private final double timeLimit = 3;
+    private final Timer timer = new Timer();
 
-    public DefaultDrive(Chassis chassis) {
+    public AutonShoot(Shooter subsystem) {
         //mapping to object passed through parameter
-        m_chassis = chassis;
-        m_requirements.add(chassis);
+        m_shooter = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
@@ -20,7 +21,8 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -29,13 +31,10 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
-        if (m_chassis.isShifted()) {
-            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);
+        m_shooter.feedFlywheel();
+        if (m_shooter.getRPM() >= m_shooter.getFlywheelSetSpeed() - 50) {
+            m_shooter.feedIndexer();
         }
-        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);
-
-        m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);
     }
 
     /**
@@ -54,7 +53,7 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -67,6 +66,9 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_chassis.configRampRate(0);
+        m_shooter.setIndexerSpeed(0);
+        m_shooter.setFlywheelSpeed(0);
+        timer.stop();
     }
 }
+
