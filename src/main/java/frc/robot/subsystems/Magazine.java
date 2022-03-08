@@ -12,15 +12,21 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
 
     //Create necessary objects
     private WPI_TalonSRX m_magazine;
+    private WPI_TalonSRX m_magazine2;
 
     //Create and define all standard data types needed
     public Magazine() {
         m_magazine = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR);
+        m_magazine2 = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR2);
         m_magazine.setInverted(true);
     }
 
     public void setSpeed(double speed) {
         m_magazine.set(speed);
+    }
+
+    public void setSpeed2(double speed) {
+        m_magazine2.set(speed);
     }
 
     @Override
