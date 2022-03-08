@@ -33,6 +33,7 @@ public class RobotContainer {
 
     // define subsystems here
     Shooter m_shooter = new Shooter();
+    Hood m_hood = new Hood();
     Chassis m_chassis = new Chassis();
     Intake m_intake = new Intake();
     Magazine m_magazine = new Magazine();
@@ -52,6 +53,8 @@ public class RobotContainer {
         return m_shooter;
     }
 
+    public Hood getHood(){return m_hood;}
+
     public Limelight getLimelight() {
         return m_limelight;
     }
@@ -60,7 +63,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         m_generalUtils = new ArrayList<>();
-        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight));
+        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_hood, m_intake, m_magazine, m_limelight));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
     }
 
@@ -91,7 +94,7 @@ public class RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new Spinzine(m_magazine, -1));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(new resetOdometery(m_chassis));
-            new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new Shoot(m_shooter, m_limelight, m_wheelSpeedCalculations));
+            new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new Shoot(m_shooter, m_limelight, m_wheelSpeedCalculations, m_hood));
         }
 
         // weapons controls

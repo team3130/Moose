@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -10,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.utils.Utils;
 
-public class Hood extends SubsystemBase {
+public class Hood extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_hood;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Hood");
@@ -23,17 +25,17 @@ public class Hood extends SubsystemBase {
 
     //Create and define all standard data types needed
     public Hood() {
-        // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
-        //       in the constructor or in the robot coordination class, such as RobotContainer.
+
+
         m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
         m_hood.configFactoryDefault();
 
         m_hood.setInverted(false); //TODO: find real
         m_hood.setSensorPhase(true);
 
-        m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        m_hood.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-        m_hood.configForwardSoftLimitThreshold(45.0 * RobotMap.kHoodTicksPerDegree);
+        m_hood.configForwardSoftLimitThreshold(RobotMap.kHoodMaxAngle * RobotMap.kHoodTicksPerDegree); //forward decreases the angle in this context, might change later (would also have to change setAngle)
         m_hood.configReverseSoftLimitThreshold(0);
 
         m_hood.configForwardSoftLimitEnable(true);
@@ -49,11 +51,15 @@ public class Hood extends SubsystemBase {
                 RobotMap.kHoodD,
                 RobotMap.kHoodF);
 
-        Utils.configMotionMagic(m_hood, 1, 1); //TODO: determine whether velocity/accel param are arbitrary
+        Utils.configMotionMagic(m_hood, 1024, 1024); //TODO: determine whether velocity/accel param are arbitrary
+
+        m_hood.setNeutralMode(NeutralMode.Brake);
     }
 
     public synchronized void setAngle(double angleDeg){
-        m_hood.set(ControlMode.MotionMagic, angleDeg * RobotMap.kHoodTicksPerDegree);
+        //angle starts at 45 deg (from horizontal) and largest change should go to 0 deg
+        setBrakeMode(angleDeg != 0);
+        m_hood.set(ControlMode.MotionMagic, (RobotMap.kHoodMaxAngle - angleDeg) * RobotMap.kHoodTicksPerDegree);
     }
 
     /**
@@ -61,11 +67,11 @@ public class Hood extends SubsystemBase {
      * @return the current target angle in degrees
      */
     public double getAngleSetpoint(){
-        return m_hood.getClosedLoopTarget() / RobotMap.kHoodTicksPerDegree;
+        return RobotMap.kHoodMaxAngle - (m_hood.getClosedLoopTarget() / RobotMap.kHoodTicksPerDegree);
     }
 
     public double getRelativeHoodAngle(){
-        return m_hood.getSelectedSensorPosition() / RobotMap.kHoodTicksPerDegree;
+        return RobotMap.kHoodMaxAngle - (m_hood.getSelectedSensorPosition() / RobotMap.kHoodTicksPerDegree);
     }
 
     public boolean canShoot(){
@@ -73,14 +79,32 @@ public class Hood extends SubsystemBase {
         //2 degrees of lenience
     }
 
+    public void setBrakeMode(boolean state){
+        if(state)
+            {m_hood.setNeutralMode(NeutralMode.Brake);}
+        else
+            {m_hood.setNeutralMode(NeutralMode.Coast);}
+
+    }
+
     public double getShuffleboardInput(){
         return writeHoodAngle.getDouble(0);
     }
 
     @Override
-    public void outputToShuffleBoard(){
+    public void outputToShuffleboard(){
         readHoodAngle.setNumber(getRelativeHoodAngle());
 
+    }
+
+    @Override
+    public void teleopInit(){
+        setBrakeMode(true);
+    }
+
+    @Override
+    public void disable() {
+        setBrakeMode(true);
     }
 }
 

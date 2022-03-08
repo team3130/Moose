@@ -17,10 +17,12 @@ public class WheelSpeedCalculations {
     private static class DataPoint {
         double distance;
         double speed;
+        double angle;
 
-        public DataPoint(double dist, double speed) {
+        public DataPoint(double dist, double speed, double angle) {
             distance = dist;
             this.speed = speed;
+            this.angle = angle;
         }
 
         public DataPoint(String point) {
@@ -28,12 +30,13 @@ public class WheelSpeedCalculations {
                 String[] parts = point.split(",");
                 distance = Double.parseDouble(parts[0]);
                 speed = Double.parseDouble(parts[1]);
+                angle = Double.parseDouble(parts[2]);
             }
         }
 
         @Override
         public String toString() {
-            return "(" + distance + "," + speed + ")";
+            return "(" + distance + "," + speed + "," + angle + ")";
         }
 
         @SuppressWarnings("unused")
@@ -45,6 +48,7 @@ public class WheelSpeedCalculations {
 
     private ArrayList<DataPoint> data_MainStorage;
     private LinearInterp speedCurve;
+    private LinearInterp angleCurve;
     private final String FILEPATH;
 
     public WheelSpeedCalculations() {
@@ -53,20 +57,24 @@ public class WheelSpeedCalculations {
         data_MainStorage = new ArrayList<>();
         readFile();
         speedCurve = null;
+        angleCurve = null;
         loadCurve();
     }
 
     public void loadCurve() {
         ArrayList<Double> data_Dist = new ArrayList<>();
         ArrayList<Double> data_Speed = new ArrayList<>();
+        ArrayList<Double> data_Angle = new ArrayList<>();
 
         for (int iii = 0; iii < data_MainStorage.size(); iii++) {
             DataPoint pt = data_MainStorage.get(iii);
             data_Dist.add(pt.distance);
             data_Speed.add(pt.speed);
+            data_Angle.add(pt.angle);
         }
 
         speedCurve = new LinearInterp(data_Dist, data_Speed);
+        angleCurve = new LinearInterp(data_Dist, data_Angle);
     }
 
     public void readFile() {
@@ -88,6 +96,7 @@ public class WheelSpeedCalculations {
     public double getSpeed(Double dist) {
         return speedCurve.getY(dist);
     }
+    public double getAngle(Double dist){return angleCurve.getY(dist);}
 
 }
 

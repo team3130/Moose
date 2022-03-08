@@ -61,6 +61,7 @@ public class RobotMap {
     //
     public static final double kHoodTicksPerRevolution = 4096; //TODO: find real values for everything in Hood section
     public static final double kHoodTicksPerDegree = kHoodTicksPerRevolution;
+    public static final double kHoodMaxAngle = 45.0;
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;
     public static double kHoodD = 0;

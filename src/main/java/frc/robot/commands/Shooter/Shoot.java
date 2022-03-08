@@ -3,19 +3,24 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
+    private final Hood m_hood;
     private boolean hitSpeed = false;
     private Limelight limelight;
     private WheelSpeedCalculations wheelSpeedCalculations;
 
-    public Shoot(Shooter subsystem, Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
+    public Shoot(Shooter subsystem, Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations, Hood hood) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
+        m_hood = hood;
         m_requirements.add(subsystem);
+        m_requirements.add(hood);
+
 
         this.limelight = limelight;
         this.wheelSpeedCalculations = wheelSpeedCalculations;
@@ -36,13 +41,15 @@ public class Shoot extends CommandBase {
         // Find the flywheel speed
         if (!limelight.hasTrack()){
             m_shooter.setFlywheelSpeed(3200.0);
+            m_hood.setAngle(30.0);
         }
         else {
             double x = limelight.getDistanceToTarget();
             if (5 <= x) {
                 m_shooter.setFlywheelSpeed(wheelSpeedCalculations.getSpeed(x));
+                m_hood.setAngle(wheelSpeedCalculations.getAngle(x));
             }
-            if (m_shooter.canShoot()) {
+            if (m_shooter.canShoot() && m_hood.canShoot()) {
                 m_shooter.feedIndexer();
                 hitSpeed = true;
             }
