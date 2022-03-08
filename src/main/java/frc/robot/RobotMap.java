@@ -17,7 +17,8 @@ public class RobotMap {
      */
     public static final int CAN_INDEXER = 2;
     public static final int CAN_MAGAZINE_MOTOR = 10;
-    public static final int CAN_MAGAZINE_MOTOR2 = ?; // needs can id
+    public static final int CAN_HOPPER_L_MOTOR = 1;
+    public static final int CAN_HOPPER_R_MOTOR = 2;
 
     public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
