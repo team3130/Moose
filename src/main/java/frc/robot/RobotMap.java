@@ -27,6 +27,7 @@ public class RobotMap {
 
     public static final char CAN_SHOOTER_MOTOR = 7;
     public static final int CAN_INTAKE_MOTOR = 9;
+    public static final int CAN_HOOD = 12;
 
 
     /**
@@ -52,6 +53,19 @@ public class RobotMap {
     public static double kFlywheelI = 0.0;
     public static double kFlywheelD = 12;
     public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
+
+    /**
+     * Hood
+     */
+
+    //
+    public static final double kHoodTicksPerRevolution = 4096; //TODO: find real values for everything in Hood section
+    public static final double kHoodTicksPerDegree = kHoodTicksPerRevolution;
+    public static double kHoodP = 0.125;
+    public static double kHoodI = 0.0;
+    public static double kHoodD = 0;
+    public static double kHoodF = 0;
+
 
     /**
      * Limelight
