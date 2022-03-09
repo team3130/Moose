@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.Chassis.Shift;
 import frc.robot.commands.Chassis.FaceTarget;
 import frc.robot.commands.Chassis.resetOdometery;
+import frc.robot.commands.Hood.GoToAngle;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Magazine.Spinzine;
@@ -95,6 +96,7 @@ public class RobotContainer {
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(new resetOdometery(m_chassis));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new Shoot(m_shooter, m_limelight, m_wheelSpeedCalculations, m_hood));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenPressed(new GoToAngle(m_hood));
         }
 
         // weapons controls
