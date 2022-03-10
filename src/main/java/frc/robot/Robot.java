@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
     m_scheduler.schedule(m_chooser.getCommand());
-    m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt
     /*
     m_scheduler.schedule(
@@ -106,6 +105,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    
     m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
     m_robotContainer.teleopInit();
   }
