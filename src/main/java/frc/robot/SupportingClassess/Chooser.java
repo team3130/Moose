@@ -171,9 +171,12 @@ public class Chooser {
         Chassis chassis = container.getChassis();
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
                 chassis.getPose(),
-                new Pose2d(3, 1, new Rotation2d(0))
+                    new Pose2d(1, 0, new Rotation2d(0))
+                // new Pose2d(3, 0, new Rotation2d(0))
         ), config);
         testPath = cmdFactory.apply(trajectory);
+        paths.put("Test Path", testPath);
+        m_autonChooser.addOption("Test Path", "Test Path");
     }
 
     public RamseteCommand getTestPath() {

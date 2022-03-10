@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);
     m_chooser.addAllCommands();
+    m_chooser.generateTestPath();
   }
 
   /**
@@ -82,6 +83,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
+    m_scheduler.schedule(m_chooser.getCommand());
     m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt
     /*
