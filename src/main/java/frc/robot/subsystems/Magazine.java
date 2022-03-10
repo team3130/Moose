@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.Util;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,25 +13,26 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-    private WPI_TalonSRX m_magazine;
+    private WPI_TalonSRX m_center;
     private WPI_TalonSRX m_hopperL;
     private WPI_TalonSRX m_hopperR;
 
     //Create and define all standard data types needed
     public Magazine() {
-        m_magazine = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR);
+        m_center = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR);
         m_hopperL = new WPI_TalonSRX(RobotMap.CAN_HOPPER_L_MOTOR);
         m_hopperR = new WPI_TalonSRX(RobotMap.CAN_HOPPER_R_MOTOR);
-        m_magazine.setInverted(true);
+        m_center.setInverted(true);
         m_hopperR.setInverted(true);
+        m_hopperL.setInverted(false);
     }
 
-    public void setSpeed(double speed) {
-        m_magazine.set(speed);
+    public void setCenterSpeed(double speed) {
+        m_center.set(speed);
     }
 
     public void setHopperSpeed(double speed) {
-        m_hopperL.set(speed);
+        m_hopperL.set(-1 * speed);
         m_hopperR.set(speed);
     }
 
@@ -41,7 +44,9 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
-        m_magazine.set(0);
+        m_center.set(0);
+        m_hopperL.set(0);
+        m_hopperR.set(0);
     }
 }
 

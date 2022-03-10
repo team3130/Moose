@@ -56,6 +56,11 @@ public class RobotMap {
     public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
 
     /**
+     * Magazine/Hopper
+     */
+
+
+    /**
      * Limelight
      */
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
