@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);
     m_chooser.addAllCommands();
     m_chooser.generateTestPath();
+    m_chooser.addTestRoutine();
   }
 
   /**

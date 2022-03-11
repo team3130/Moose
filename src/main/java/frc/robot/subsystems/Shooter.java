@@ -18,7 +18,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonSRX m_indexer;
 
-    private double flywheelSetSpeed = 3200; // default 3200
+    private double flywheelSetSpeed = 3500; // default 3200 (3500 temp for Ben/Cody)
     private double indexerSetSpeed = 0.5; // default 50%
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
