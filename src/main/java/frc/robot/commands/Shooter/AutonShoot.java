@@ -32,7 +32,7 @@ public class AutonShoot extends CommandBase {
     @Override
     public void execute() {
         m_shooter.feedFlywheel();
-        if (m_shooter.getRPM() >= m_shooter.getFlywheelSetSpeed() - 50) {
+        if (m_shooter.getFlywheelRPM() >= m_shooter.getFlywheelSetSpeed() - 50) {
             m_shooter.feedIndexer();
         }
     }

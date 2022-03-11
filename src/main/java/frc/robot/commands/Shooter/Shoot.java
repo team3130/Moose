@@ -72,7 +72,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        return hitSpeed && m_shooter.getFlywheelRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
     }
 
     /**

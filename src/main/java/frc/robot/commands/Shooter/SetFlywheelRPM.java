@@ -22,7 +22,8 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.feedFlywheel();
+        m_shooter.setFlywheelSpeed(m_shooter.getFlywheelSpeedFromShuffleboard());
+        m_shooter.setHoodWheelSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
         m_limelight.setLedState(true);
     }
 
@@ -32,10 +33,10 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
+        if (m_shooter.getFlywheelRPM() >= m_shooter.getFlywheelSetSpeed() - 50 && m_shooter.getHoodRPM() >= m_shooter.getHoodWheelSetSpeed() - 50) {
             hitSpeed = true;
         }
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
+        if (hitSpeed) {
             m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
         } 
     }
@@ -56,7 +57,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        return hitSpeed && m_shooter.getFlywheelRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
     }
 
     /**
@@ -70,6 +71,7 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.setFlywheelSpeed(0);
+        m_shooter.setHoodWheelSpeed(0);
         m_shooter.setIndexerPercent(0);
         m_limelight.setLedState(false);
     }

@@ -67,6 +67,10 @@ public class RobotMap {
     public static double kHoodD = 0;
     public static double kHoodF = 0;
 
+    public static final double kHoodWheelTicksPerRevolution = 2048;
+    public static final double kHoodWheelGearRatio = 24.0/36.0;
+    public static final double kHoodWheelRPMtoNativeUnitsScalar = kHoodWheelTicksPerRevolution / (10.0 * 60.0) /kHoodWheelGearRatio;
+
 
     /**
      * Limelight

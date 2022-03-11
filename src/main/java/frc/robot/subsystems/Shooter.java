@@ -16,9 +16,11 @@ import static frc.robot.utils.Utils.configPIDF;
 
 public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
+    private WPI_TalonFX m_hoodWheel;
     private WPI_TalonSRX m_indexer;
 
     private double flywheelSetSpeed = 3200; // default 3200
+    private double hoodWheelSetSpeed = 3000;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -29,6 +31,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", indexerSetSpeed).getEntry();
     private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", indexerSetSpeed).getEntry();
+
+    private NetworkTableEntry hoodInSpeed = tab.add("Hood Wheel write RPM", hoodWheelSetSpeed).getEntry();
+    private NetworkTableEntry hoodOutSpeed = tab.add("Current Hood RPM", 0).getEntry();
+
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -51,11 +57,15 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return m_flywheel.getSelectedSensorVelocity();
     }
 
-    public double getRPM(){
+    public double getFlywheelRPM(){
         return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
-    public double getSpeedFromShuffleboard() {
+    public double getHoodRPM(){
+        return Util.scaleNativeUnitsToRpm(RobotMap.kHoodWheelRPMtoNativeUnitsScalar, (long) m_hoodWheel.getSelectedSensorVelocity());
+    }
+
+    public double getFlywheelSpeedFromShuffleboard() {
         return sped.getDouble(flywheelSetSpeed);
     }
 
@@ -63,9 +73,12 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return indexerRPM.getDouble(indexerSetSpeed);
     }
 
+    public double getHoodWheelSpeedFromShuffleboard(){return hoodInSpeed.getDouble(hoodWheelSetSpeed);}
+
     public void outputToShuffleboard() {
-        RPM.setNumber(getRPM());
+        RPM.setNumber(getFlywheelRPM());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
+        hoodOutSpeed.setNumber(getHoodRPM());
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
     }
 
@@ -79,7 +92,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void teleopInit() {
-        flywheelSetSpeed = getSpeedFromShuffleboard();
+        flywheelSetSpeed = getFlywheelSpeedFromShuffleboard();
     }
 
     @Override
@@ -105,6 +118,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void setFlywheelSpeed(double rpm) {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        flywheelSetSpeed = rpm;
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.getSelectedSensorPosition();
     }
@@ -115,12 +129,20 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     }
 
+    public void setHoodWheelSpeed(double rpm){
+        hoodWheelSetSpeed = rpm;
+        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kHoodWheelRPMtoNativeUnitsScalar, rpm));
+
+    }
     /**
      *
      * @return the current speed flywheel will be set at
      */
     public double getFlywheelSetSpeed() {
         return flywheelSetSpeed;
+    }
+    public double getHoodWheelSetSpeed(){
+        return hoodWheelSetSpeed;
     }
 
     /**
@@ -154,6 +176,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return getRPM() >= getSpeedFromShuffleboard() - 50; // 50 is the range
+        return (getFlywheelRPM() >= getFlywheelSpeedFromShuffleboard() - 50) && (getHoodRPM() >= getHoodWheelSpeedFromShuffleboard() - 50); // 50 is the range
     }
 }
