@@ -96,11 +96,11 @@ public class RobotMap {
      * PID for Chassis
      */
     //TODO: figure out why auton moves with a constant offset of 20cm
-    public static double LChassiskP = 3.3073; //Practice bot 3/10/22
+    public static double LChassiskP = 2; //Practice bot 3/10/22
     public static double LChassiskI = 0;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2.8909;
+    public static double RChassiskP = 2;
     public static double RChassiskI = 0;
     public static double RChassiskD = 0;
 

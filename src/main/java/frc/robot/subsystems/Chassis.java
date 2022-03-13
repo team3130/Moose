@@ -85,8 +85,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorBack.configFactoryDefault();
 
 
-
-
         configureBreakMode(true);
 
         m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
