@@ -37,31 +37,27 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     // Create necessary objects
     private Navx m_navx = Navx.GetInstance();
 
-    private WPI_TalonFX m_rightMotorFront;
-    private WPI_TalonFX m_rightMotorBack;
-    private WPI_TalonFX m_leftMotorFront;
-    private WPI_TalonFX m_leftMotorBack;
+    private final WPI_TalonFX m_rightMotorFront;
+    private final WPI_TalonFX m_rightMotorBack;
+    private final WPI_TalonFX m_leftMotorFront;
+    private final WPI_TalonFX m_leftMotorBack;
 
-    private Solenoid m_shifter; // true is low gear, false is high gear
+    private final Solenoid m_shifter; // true is low gear, false is high gear
 
-    private MotorControllerGroup m_motorsRight;
-    private MotorControllerGroup m_motorsLeft;
+    private final MotorControllerGroup m_motorsRight;
+    private final MotorControllerGroup m_motorsLeft;
 
-    private DifferentialDriveOdometry m_odometry;
-    private DifferentialDriveKinematics m_kinematics;
+    private final DifferentialDriveOdometry m_odometry;
+    private final DifferentialDriveKinematics m_kinematics;
 
-    private DifferentialDrive m_drive;
+    private final DifferentialDrive m_drive;
 
-    private SimpleMotorFeedforward m_feedforward;
-    private PIDController m_leftPIDController;
-    private PIDController m_rightPIDConttroller;
+    private final SimpleMotorFeedforward m_feedforward;
+    private final PIDController m_leftPIDController;
+    private final PIDController m_rightPIDConttroller;
 
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
-
-    private NetworkTableEntry P = tab.add("Chassis P", .5).getEntry();
-    private NetworkTableEntry I = tab.add("Chassis I", 0).getEntry();
-    private NetworkTableEntry D = tab.add("Chassis D", 0).getEntry();
 
     private NetworkTableEntry sliderMove = tab
             .add("Move Speed Sensitivity", 10)
@@ -73,14 +69,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
-
-    public double getMoveSpeedSensitivityFromShuffleboard() {
-        return sliderMove.getDouble(10);
-    }
-
-    public double getTurnSpeedSensitivityFromShuffleboard() {
-        return sliderTurn.getDouble(10);
-    }
 
     // Create and define all standard data types needed
     public Chassis() {
@@ -427,5 +415,13 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         configRampRate(0);
         m_leftMotorFront.set(0);
         m_rightMotorFront.set(0);
+    }
+
+    public double getMoveSpeedSensitivityFromShuffleboard() {
+        return sliderMove.getDouble(10);
+    }
+
+    public double getTurnSpeedSensitivityFromShuffleboard() {
+        return sliderTurn.getDouble(10);
     }
 }

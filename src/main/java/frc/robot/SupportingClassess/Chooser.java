@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Chooser {
-    private SendableChooser<String> m_autonChooser;
-    private RobotContainer container;
-    private HashMap<String, CommandBase> paths;
-    private Function<Path, Trajectory> trajectoryFactory;
-    private Function<Trajectory, RamseteCommand> cmdFactory;
-    private TrajectoryConfig config;
+    private final SendableChooser<String> m_autonChooser;
+    private final RobotContainer container;
+    private final HashMap<String, CommandBase> paths;
+    private final Function<Path, Trajectory> trajectoryFactory;
+    private final Function<Trajectory, RamseteCommand> cmdFactory;
+    private final TrajectoryConfig config;
 
     private RamseteCommand testPath;
 

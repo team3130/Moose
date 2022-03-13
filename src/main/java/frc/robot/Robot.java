@@ -55,7 +55,6 @@ public class Robot extends TimedRobot {
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);
     m_chooser.addAllCommands();
     m_chooser.generateTestPath();
-    m_chooser.addTestRoutine();
   }
 
   /**
@@ -82,7 +81,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
     m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
     m_scheduler.schedule(m_chooser.getCommand());
     // week 0 auton attempt
@@ -106,7 +104,6 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    
     m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
     m_robotContainer.teleopInit();
   }
