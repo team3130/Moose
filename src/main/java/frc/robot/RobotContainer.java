@@ -61,7 +61,6 @@ public class RobotContainer {
     public RobotContainer() {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight));
-        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
     }
 
     // Joysticks
@@ -121,6 +120,7 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
+        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
         m_generalUtils.forEach(GeneralUtils::teleopInit);
     }
 

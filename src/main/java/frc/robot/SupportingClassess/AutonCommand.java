@@ -6,16 +6,32 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonCommand {
 
-    protected Pose2d position;
-    protected CommandBase cmd;
+    protected Pose2d startPosition;
 
-    public AutonCommand(CommandBase cmd, Pose2d position) {
-        this.cmd = cmd;
-        this.position = position;
+    public Pose2d getEndPosition() {
+        return endPosition;
     }
 
-    public void setPosition(Pose2d newPosition) {
-        position = newPosition;
+    public void setEndPosition(Pose2d endPosition) {
+        this.endPosition = endPosition;
+    }
+
+    protected Pose2d endPosition;
+    protected CommandBase cmd;
+
+    public AutonCommand(CommandBase cmd, Pose2d startPosition) {
+        this.cmd = cmd;
+        this.startPosition = startPosition;
+    }
+
+    public AutonCommand(CommandBase cmd, Pose2d startPosition, Pose2d endPosition) {
+        this.cmd = cmd;
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+    }
+
+    public void setStartPosition(Pose2d newPosition) {
+        startPosition = newPosition;
     }
 
     public void setPosition(double x, double y) {
@@ -27,11 +43,11 @@ public class AutonCommand {
     }
 
     public void setPosition(double x, double y, Rotation2d rotation) {
-        position = new Pose2d(x, y, rotation);
+        startPosition = new Pose2d(x, y, rotation);
     }
 
-    public Pose2d getPosition() {
-        return position;
+    public Pose2d getStartPosition() {
+        return startPosition;
     }
 
     public CommandBase getCmd() {

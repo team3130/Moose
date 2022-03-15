@@ -95,18 +95,18 @@ public class RobotMap {
     /**
      * PID for Chassis
      */
-    //TODO: figure out why auton moves with a constant offset of 20cm
-    public static double LChassiskP = 2; //Practice bot 3/10/22
-    public static double LChassiskI = 0;
+            // solution found, cry harder
+    public static double LChassiskP = 3.186; //Practice bot 3/10/22
+    public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2;
-    public static double RChassiskI = 0;
+    public static double RChassiskP = 2.6838;
+    public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.68159;
-    public static double ChassiskV = 2.2418;
-    public static double ChassiskA = 0.4963;
+    public static double ChassiskS = 0.66218;
+    public static double ChassiskV = 2.3117;
+    public static double ChassiskA = 0.33604;
 
     /**
      * PNM IDs

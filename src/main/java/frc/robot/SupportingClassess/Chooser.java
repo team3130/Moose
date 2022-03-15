@@ -80,18 +80,16 @@ public class Chooser {
 
         // lambda to build Auton commands
         autonCmdFactory = (Trajectory trajectory) -> {
-            Pose2d pos;
+            Pose2d posStart, posEnd;
             try {
-                pos = trajectory.getInitialPose();
+                posStart = trajectory.getInitialPose();
+                posEnd = trajectory.getStates().get(trajectory.getStates().size() - 1).poseMeters;
             }
             catch (IndexOutOfBoundsException ex) {
-                pos = new Pose2d(0, 0, new Rotation2d(0));
-                DriverStation.reportError("index out of bounds", false);
+                posStart = new Pose2d(0, 0, new Rotation2d(0));
+                posEnd = posStart;
             }
-            return new AutonCommand(
-                    ramseteCommandFactory.apply(trajectory),
-                    pos
-            );
+            return new AutonCommand(ramseteCommandFactory.apply(trajectory), posStart, posEnd);
         };
 
     }
@@ -99,8 +97,8 @@ public class Chooser {
     public SequentialCommandGroup add3Ball() {
         AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
-        RamseteCommand GoToFirstBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall.wpilib.json")));
-        RamseteCommand goToFirstShoot = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
+        RamseteCommand GoToFirstBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall3Ball.wpilib.json")));
+        RamseteCommand goToFirstShoot = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstShoot.wpilib.json")));
         ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
         RamseteCommand toSecondBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/ToSecondBall.wpilib.json")));
         RamseteCommand pickupSecondBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/GoThroughSecond.wpilib.json")));
@@ -120,9 +118,38 @@ public class Chooser {
                         shoot2
                 );
 
-        m_autonChooser.setDefaultOption("3Ball", new AutonCommand(commandGroup, PathOne.getPosition()));
+        m_autonChooser.addOption("3Ball", new AutonCommand(commandGroup, PathOne.getStartPosition()));
 
         return commandGroup;
+    }
+
+    public void AddThreeBallPoseTwo() {
+        AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToFirstBall.wpilib.json")));
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+        AutonCommand DriveToShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/DriveToShoot.wpilib.json")));
+        RamseteCommand spin = ramseteCommandFactory.apply(TrajectoryGenerator.generateTrajectory(List.of(PathOne.getEndPosition(), DriveToShoot.getStartPosition()), config));
+        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
+
+        SequentialCommandGroup commandGroup =
+                new SequentialCommandGroup(
+                        new ParallelDeadlineGroup(PathOne.getCmd(),deployIntake),
+                        spin,
+                        DriveToShoot.getCmd(),
+                        shoot
+                );
+        m_autonChooser.addOption("3Ball2", new AutonCommand(commandGroup, PathOne.getStartPosition()));
+    }
+
+    public void Add1Ball(){
+        AutonCommand Move = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/Move/MoveOut.wpilib.json")));
+        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
+
+        SequentialCommandGroup commandGroup =
+                new SequentialCommandGroup(
+                        Move.getCmd(),
+                        shoot
+                );
+        m_autonChooser.addOption("1Ball", new AutonCommand(commandGroup, Move.getStartPosition()));
     }
 /*
     public SequentialCommandGroup addTestRoutine(){
@@ -154,19 +181,24 @@ public class Chooser {
             File currentFile = files.get(i);
             String currentFileName = currentFile.getName();
 
+            // BFS check
             if (currentFile.isDirectory()) {
-                // should act as a BFS
-
+                // Should act as a BFS
                 files.addAll(List.of(currentFile.listFiles()));
-
                 continue;
             }
 
-            if ((currentFileName.lastIndexOf('.') >= 0 && !currentFileName.substring(currentFileName.lastIndexOf('.')).equals(".json"))) {
+            // continue if it is not a path weaver file
+            if (!(currentFileName.contains("wpilib"))) {
                 continue;
             }
 
             AutonCommand command = autonCmdFactory.apply(trajectoryFactory.apply(Path.of(currentFile.getAbsolutePath())));
+
+            // set the default to speedTrain.wpilib.json
+            if (currentFileName.contains("speedTrain")) {
+                m_autonChooser.setDefaultOption(currentFileName.substring(0, currentFileName.indexOf('.')), command);
+            }
 
             // chooser options
             m_autonChooser.addOption(currentFileName.substring(0, currentFileName.indexOf('.')), command);
