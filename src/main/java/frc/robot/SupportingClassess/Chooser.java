@@ -140,7 +140,7 @@ public class Chooser {
         m_autonChooser.addOption("3Ball2", new AutonCommand(commandGroup, PathOne.getStartPosition()));
     }
 
-    public void Add1Ball(){
+    public void Add1Ball() {
         AutonCommand Move = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/Move/MoveOut.wpilib.json")));
         ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
 
@@ -150,6 +150,35 @@ public class Chooser {
                         shoot
                 );
         m_autonChooser.addOption("1Ball", new AutonCommand(commandGroup, Move.getStartPosition()));
+    }
+
+    public void add5Ball() {
+        AutonCommand ToFirstBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/ToFirstBall5Ball.wpilib.json")));
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
+        CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+        AutonCommand ToSecondBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/ToSecondBall5Ball.wpilib.json")));
+        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
+        AutonCommand ToThirdBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/ToThridBall5Ball.wpilib.json")));
+        CommandBase deployIntake3 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+        AutonCommand PickUpThirdBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/PickUpThirdBal5Ball..wpilib.json")));
+        AutonCommand ReverseToShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/reverseToShoot5Ball.wpilib.json")));
+        AutonCommand ToShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/ToShoot5Ball.wpilib.json")));
+        ParallelCommandGroup shoot3 = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getLimelight()));
+
+        SequentialCommandGroup commandGroup =
+                new SequentialCommandGroup(
+                        new ParallelDeadlineGroup(ToFirstBall.getCmd(),deployIntake),
+                        shoot,
+                        new ParallelDeadlineGroup(ToSecondBall.getCmd(),deployIntake2),
+                        shoot2,
+                        ToThirdBall.getCmd(),
+                        new ParallelDeadlineGroup(PickUpThirdBall.getCmd(),deployIntake3),
+                        ReverseToShoot.getCmd(),
+                        ToShoot.getCmd(),
+                        shoot3
+                );
+        m_autonChooser.addOption("5Ball", new AutonCommand(commandGroup, ToFirstBall.getStartPosition()));
     }
 /*
     public SequentialCommandGroup addTestRoutine(){

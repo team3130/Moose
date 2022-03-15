@@ -23,6 +23,7 @@ public class FaceTarget extends CommandBase {
     @Override
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
+
     }
 
     /**
