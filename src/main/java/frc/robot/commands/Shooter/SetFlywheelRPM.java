@@ -1,5 +1,6 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -9,6 +10,8 @@ public class SetFlywheelRPM extends CommandBase {
     private final Shooter m_shooter;
     private boolean hitSpeed = false;
     private Limelight m_limelight;
+    private final double timeLimit = 3;
+    private final Timer timer = new Timer();
 
     public SetFlywheelRPM(Shooter subsystem, Limelight m_limelight) {
         //mapping to object passed through parameter
@@ -24,6 +27,8 @@ public class SetFlywheelRPM extends CommandBase {
     public void initialize() {
         m_shooter.feedFlywheel();
         m_limelight.setLedState(true);
+        timer.reset();
+        timer.start();
     }
 
     /**
@@ -56,7 +61,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -72,5 +77,6 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.setFlywheelSpeed(0);
         m_shooter.setIndexerPercent(0);
         m_limelight.setLedState(false);
+        timer.stop();
     }
 }
