@@ -2,7 +2,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.SupportingClassess.AutonCommand;
+import frc.robot.SupportingClassess.Chooser;
 import frc.robot.commands.Chassis.Shift;
 import frc.robot.commands.Chassis.FaceTarget;
 import frc.robot.commands.Chassis.resetOdometery;
@@ -37,6 +40,8 @@ public class RobotContainer {
     Intake m_intake = new Intake();
     Magazine m_magazine = new Magazine();
 
+    Chooser m_chooser;
+
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -58,9 +63,14 @@ public class RobotContainer {
 
     public Magazine getMagazine() {return m_magazine;}
 
-    public RobotContainer() {
+    public RobotContainer(SendableChooser<AutonCommand> m_autonChooser) {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight));
+        m_chooser = new Chooser(m_autonChooser, this);
+    }
+
+    public Chooser getChooser() {
+        return m_chooser;
     }
 
     // Joysticks
@@ -70,17 +80,17 @@ public class RobotContainer {
     public void defineButtonBindings(SendableChooser<String> m_chooser_driver, SendableChooser<String> m_chooser_weapons) {
         // driver controls
         if (m_chooser_driver.getSelected().equals("Cody")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis, m_limelight, m_chooser));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
         }
         else if (m_chooser_driver.getSelected().equals("Maddie")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new FaceTarget(m_chassis, m_limelight, m_chooser));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
         }
         else if (m_chooser_driver.getSelected().equals("Test")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(new SequentialCommandGroup(new FaceTarget(m_chassis, m_limelight, m_chooser)));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));

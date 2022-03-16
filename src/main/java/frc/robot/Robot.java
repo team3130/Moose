@@ -54,8 +54,8 @@ public class Robot extends TimedRobot {
     m_chooser_weapons.setDefaultOption("Ben", "Ben");
     m_chooser_weapons.addOption("Parker", "Parker");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
-    m_robotContainer = new RobotContainer();
-    m_chooser = new Chooser(m_autonChooser, m_robotContainer);
+    m_robotContainer = new RobotContainer(m_autonChooser);
+    m_chooser = m_robotContainer.getChooser();
     m_chooser.addAllCommands();
   }
 

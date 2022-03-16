@@ -66,6 +66,7 @@ public class RobotMap {
     public static final double kLimelightLength = 9.5;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
     public static final double kLimelightCalibrationDist = 120.0; // Exact horizontal distance between target and lens TODO: FIND FOR 2022
+    public static final double ShootingSweetSpot = 4; //TODO: Find sweet spot
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
@@ -89,8 +90,8 @@ public class RobotMap {
     public static final double kChassisEncoderError = 1.0934926; //calculated 3/10/22 retains 3-6 cm error
 
     // max velocity of chassis in meters per second
-    public static final double kMaxVelocityMPS = 0.33;
-    public static final double kMaxAccelerationMPS = 0.1;
+    public static final double kMaxVelocityMPS = 2.25;
+    public static final double kMaxAccelerationMPS = 1.5;
 
     /**
      * PID for Chassis

@@ -413,6 +413,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         configRampRate(0);
         m_leftMotorFront.set(0);
         m_rightMotorFront.set(0);
+        m_drive.stopMotor();
     }
 
     public double getMoveSpeedSensitivityFromShuffleboard() {
@@ -422,4 +423,5 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public double getTurnSpeedSensitivityFromShuffleboard() {
         return sliderTurn.getDouble(10);
     }
+
 }
