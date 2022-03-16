@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
+    public static boolean debug = true; // whether we should print stack traces
     /**
      * Navx related variables
      */

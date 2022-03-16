@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -55,6 +56,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     private final SimpleMotorFeedforward m_feedforward;
     private final PIDController m_leftPIDController;
     private final PIDController m_rightPIDConttroller;
+
+    private final Field2d m_fieldPos;
 
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
@@ -120,6 +123,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         m_leftMotorBack.follow(m_leftMotorFront);
         m_rightMotorBack.follow(m_rightMotorFront);
+        m_fieldPos = new Field2d();
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -402,6 +406,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putNumber("Robot rotation", m_odometry.getPoseMeters().getRotation().getDegrees());
 
         SmartDashboard.putBoolean("Shifted", m_shifter.get());
+
+        m_fieldPos.setRobotPose(this.getPose());
+        SmartDashboard.putData("Field position", m_fieldPos);
 
     }
 

@@ -31,10 +31,6 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Chooser m_chooser;
 
-  private Thread bruh;
-
-  Field2d initPos = new Field2d();
-
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,8 +39,6 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     SmartDashboard.putData("Auton", m_autonChooser);
-    initPos.setRobotPose(0, 0, new Rotation2d(0));
-    SmartDashboard.putData("Initial Pose during auton", initPos);
     // driver options
     m_chooser_driver.setDefaultOption("Test", "Test");
     m_chooser_driver.addOption("Maddie", "Maddie");
@@ -84,9 +78,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     AutonCommand cmd = m_autonChooser.getSelected();
-
-    initPos.setRobotPose(cmd.getStartPosition());
-    SmartDashboard.putData("Initial Pose during auton", initPos);
 
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());

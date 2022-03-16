@@ -8,12 +8,13 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.Chooser;
+import frc.robot.SupportingClassess.KugelCommandGroup;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 
 import java.util.List;
 
-public class FaceTarget extends SequentialCommandGroup {
+public class FaceTarget extends KugelCommandGroup {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis;
     private final Limelight m_limelight;
@@ -33,11 +34,14 @@ public class FaceTarget extends SequentialCommandGroup {
     @Override
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        System.out.println(super.toString() + "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+        super.clear();
+        m_chassis.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 List.of(
                         m_chassis.getPose(),
-                        new Pose2d(m_chassis.getPose().getX() + 1, m_chassis.getPose().getY(), new Rotation2d(m_limelight.getHeading().getRadians() + Math.toRadians(m_chassis.getAngle())))
-                ),
+                        new Pose2d(m_chassis.getPose().getX(), m_chassis.getPose().getY(), new Rotation2d(Math.toRadians(m_chassis.getAngle()) + m_limelight.getHeading().getRadians())
+                        )),
                 m_chooser.getConfig());
         // the object lives but gets re-scheduled and because of this,
         // this will add another command to the sequential command for
