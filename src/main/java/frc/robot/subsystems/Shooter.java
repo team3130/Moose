@@ -18,6 +18,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonSRX m_indexer;
 
+    // my shitty attempt at asynchronous rpm control -Caleb
     private double flywheelSetSpeed = 3500; // default 3200 (3500 temp for Ben/Cody)
     private double indexerSetSpeed = 0.5; // default 50%
 
@@ -44,7 +45,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_indexer.setNeutralMode(NeutralMode.Coast);
         
     }
-
 
 
     public double getRawSpeed() {
@@ -108,7 +108,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
-    public void setIndexerSpeed(double rpm){
+    public void setIndexerSpeed(double rpm) {
         m_indexer.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kIndexerRPMtoNativeUnitsScalar, rpm));
         m_indexer.getSelectedSensorVelocity();
     }

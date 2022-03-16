@@ -171,7 +171,7 @@ public class Limelight implements GeneralUtils {
     public Rotation2d getHeading() {
         double magnitude = Math.sqrt(Math.pow(realVector.get(0, 0), 2) + Math.pow(realVector.get(2, 0), 2));
         Matrix<N3, N1> trip = realVector.times(magnitude - RobotMap.ShootingSweetSpot / magnitude);
-        return new Rotation2d(Math.atan2(trip.get(0, 0), trip.get(2, 0)));
+        return (hasTrack()) ? new Rotation2d(Math.atan2(trip.get(0, 0), trip.get(2, 0))) : new Rotation2d();
     }
 
     public Matrix<N3,N1> getInnerTarget() {
