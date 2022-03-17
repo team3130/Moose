@@ -34,14 +34,13 @@ public class FaceTarget extends KugelCommandGroup {
     @Override
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
-        System.out.println(super.toString() + "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         super.clear();
         m_chassis.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 List.of(
                         m_chassis.getPose(),
-                        new Pose2d(m_chassis.getPose().getX(), m_chassis.getPose().getY(), new Rotation2d(Math.toRadians(m_chassis.getAngle()) + m_limelight.getHeading().getRadians())
-                        )),
+                        new Pose2d(m_chassis.getPose().getX(), m_chassis.getPose().getY(), new Rotation2d(Math.toRadians(m_chassis.getAngle()) - m_limelight.getHeading().getRadians()))
+                ),
                 m_chooser.getConfig());
         // the object lives but gets re-scheduled and because of this,
         // this will add another command to the sequential command for

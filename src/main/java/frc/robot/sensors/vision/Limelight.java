@@ -169,9 +169,7 @@ public class Limelight implements GeneralUtils {
     }
 
     public Rotation2d getHeading() {
-        double magnitude = Math.sqrt(Math.pow(realVector.get(0, 0), 2) + Math.pow(realVector.get(2, 0), 2));
-        Matrix<N3, N1> trip = realVector.times(magnitude - RobotMap.ShootingSweetSpot / magnitude);
-        return (hasTrack()) ? new Rotation2d(Math.atan2(trip.get(0, 0), trip.get(2, 0))) : new Rotation2d();
+        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d();
     }
 
     public Matrix<N3,N1> getInnerTarget() {
@@ -283,6 +281,7 @@ public class Limelight implements GeneralUtils {
         SmartDashboard.putBoolean("Limelight Has Target", hasTrack());
         SmartDashboard.putNumber("Limelight mounting angle", calibrate());
         SmartDashboard.putNumber("Limelight Target Rotation", getTargetRotationTan());
+        SmartDashboard.putNumber("Heading To Target", getHeading().getDegrees());
     }
 
     public void teleopInit() {setLedState(true);}
