@@ -39,7 +39,7 @@ public class FaceTarget extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return m_chassis.getAtSetpoint();
+        return Math.abs(angle - m_chassis.getAngle()) <= 2 || m_limelight.hasTrack();
     }
 
     @Override

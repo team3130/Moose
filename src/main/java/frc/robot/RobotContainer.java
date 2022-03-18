@@ -85,12 +85,12 @@ public class RobotContainer {
     public void defineButtonBindings(SendableChooser<String> m_chooser_driver, SendableChooser<String> m_chooser_weapons) {
         // driver controls
         if (m_chooser_driver.getSelected().equals("Cody")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
         }
         else if (m_chooser_driver.getSelected().equals("Maddie")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
         }
