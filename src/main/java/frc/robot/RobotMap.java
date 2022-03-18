@@ -91,6 +91,10 @@ public class RobotMap {
     public static final double kMaxRampRate = 0.7;
     public static final double kChassisEncoderError = 1.0934926; //calculated 3/10/22 retains 3-6 cm error
 
+    public static double ChassisSpinKP = 0.0125;
+    public static double ChassisSpinKI = 0;
+    public static double ChassisSpinKD = 0;
+
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 2.25;
     public static final double kMaxAccelerationMPS = 1.5;

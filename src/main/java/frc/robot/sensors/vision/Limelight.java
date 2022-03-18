@@ -169,7 +169,7 @@ public class Limelight implements GeneralUtils {
     }
 
     public Rotation2d getHeading() {
-        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d();
+        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d(Math.PI);
     }
 
     public Matrix<N3,N1> getInnerTarget() {

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
@@ -60,6 +61,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     private final Field2d m_fieldPos;
 
+    private final PIDController m_spinnyPID;
+
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
 
@@ -73,6 +76,11 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
+
+
+    private NetworkTableEntry P = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
+    private NetworkTableEntry I = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
+    private NetworkTableEntry D = tab.add("Chassis D", RobotMap.ChassisSpinKD).getEntry();
 
     // Create and define all standard data types needed
     public Chassis() {
@@ -125,6 +133,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorBack.follow(m_leftMotorFront);
         m_rightMotorBack.follow(m_rightMotorFront);
         m_fieldPos = new Field2d();
+
+        m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -431,5 +441,23 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public double getTurnSpeedSensitivityFromShuffleboard() {
         return sliderTurn.getDouble(10);
     }
+
+    public void spinToAngle(double angle) {
+        System.out.println(m_spinnyPID.calculate(angle));
+        driveArcade(0, -m_spinnyPID.calculate(angle), false);
+    }
+
+    public boolean getAtSetpoint() {
+        return m_spinnyPID.atSetpoint();
+    }
+
+    public void setSpinnySetPoint(double setpoint) {
+        m_spinnyPID.setSetpoint(setpoint);
+    }
+
+    public void updatePIDValues() {
+        m_spinnyPID.setPID(P.getDouble(RobotMap.ChassisSpinKP), I.getDouble(RobotMap.ChassisSpinKI), D.getDouble(RobotMap.ChassisSpinKD));
+    }
+
 
 }
