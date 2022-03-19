@@ -27,13 +27,16 @@ public class RobotMap {
 
     public static final char CAN_SHOOTER_MOTOR = 7;
     public static final int CAN_INTAKE_MOTOR = 9;
+    public static final int CAN_CLIMBER_MOTOR_FOLLOWER; //needs value
+    public static final int CAN_CLIMBER_MOTOR; //needs value
+    public static final int PNM_CLIMBER_ACTUATOR_LEFT; //needs value
+    public static final int PNM_CLIMBER_ACTUATOR_RIGHT; //needs value
 
 
     /**
      * Intake
      */
     public static final double kIntakeRetractTime = 0.4;
-
 
     /**
      * Shooter
