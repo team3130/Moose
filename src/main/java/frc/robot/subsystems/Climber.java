@@ -19,8 +19,8 @@ public class Climber extends SubsystemBase {
 
     //Create and define all standard data types needed
     public Climber() {
-        m_climber_motor = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_MOTOR);
-        m_climber_motor_follower = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_MOTOR_FOLLOWER);
+        m_climber_motor = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_LEFT);
+        m_climber_motor_follower = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_RIGHT);
         m_climber_motor_follower.follow(m_climber_motor);
 
         m_solenoid_left = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR_LEFT);

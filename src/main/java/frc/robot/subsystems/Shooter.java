@@ -16,6 +16,7 @@ import static frc.robot.utils.Utils.configPIDF;
 
 public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
+    private WPI_TalonFX m_hoodWheel;
     private WPI_TalonSRX m_indexer;
 
     private double flywheelSetSpeed = 3500; // default 3200 (3500 temp for Ben/Cody)
@@ -33,7 +34,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     //Create and define all standard data types needed
     public Shooter() {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
-        m_flywheel.setInverted(true);
+        m_flywheel.setInverted(false);
+
+        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_TOP_SHOOTER);
 
         configPIDF(m_flywheel,
                 RobotMap.kFlywheelP,
@@ -42,7 +45,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
                 RobotMap.kFlywheelF);
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Coast);
-        
+        m_indexer.setInverted(true);
     }
 
 

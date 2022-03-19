@@ -24,7 +24,7 @@ public class ClimberMotors extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_climber.setSpeed(speed * direction); //needs "encoder thing" for speed
+        m_climber.setSpeed(0.5 * direction); //needs "encoder thing" for speed
     }
 
     /**

@@ -3,6 +3,13 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
+    public static final int PNM_CLIMBER_ACTUATOR_LEFT = 1;
+    public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 2;
+    public static final int DIO_FEEDERBEAM = 1;
+    public static final int CAN_TOP_SHOOTER = 13;
+    // If you start running out of RAM change everything in here to a final char
+
+    public static boolean debug = true; // whether we should print stack traces
     /**
      * Navx related variables
      */
@@ -15,22 +22,34 @@ public class RobotMap {
     /**
      * CAN ID's
      */
+    // indexer
     public static final int CAN_INDEXER = 2;
-    public static final int CAN_MAGAZINE_MOTOR = 10;
 
+    // magazine/hopper
+    public static final int CAN_MAGAZINE_CENTER_MOTOR = 9;
+    public static final int CAN_MAGAZINE_LEFT_MOTOR = 15;
+    public static final int CAN_MAGAZINE_RIGHT_MOTOR = 12;
+
+    // drivetrain
     public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
     public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
     public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
 
+    // PNM
     public static final int CAN_PNMMODULE = 8;
 
+    // Shooter
     public static final char CAN_SHOOTER_MOTOR = 7;
-    public static final int CAN_INTAKE_MOTOR = 9;
-    public static final int CAN_CLIMBER_MOTOR_FOLLOWER; //needs value
-    public static final int CAN_CLIMBER_MOTOR; //needs value
-    public static final int PNM_CLIMBER_ACTUATOR_LEFT; //needs value
-    public static final int PNM_CLIMBER_ACTUATOR_RIGHT; //needs value
+    public static final int CAN_SHOOTER_UPPER_MOTOR = 13;
+    public static final int CAN_HOOD_MOTOR = 14;
+
+    // Intake
+    public static final int CAN_INTAKE_MOTOR = 10;
+
+    // Climber
+    public static final int CAN_CLIMBER_LEFT = 16;
+    public static final int CAN_CLIMBER_RIGHT = 11;
 
 
     /**
