@@ -66,5 +66,6 @@ public class SpinHood extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_hood.setSpeed(0);
+        m_hood.zero();
     }
 }
