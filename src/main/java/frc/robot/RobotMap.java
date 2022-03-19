@@ -15,6 +15,12 @@ public class RobotMap {
      */
 
     /**
+     * Digital I/O ports
+     */
+
+    public static final int DIO_FEEDERBEAM = 0;
+
+    /**
      * CAN ID's
      */
     public static final int CAN_INDEXER = 2;
