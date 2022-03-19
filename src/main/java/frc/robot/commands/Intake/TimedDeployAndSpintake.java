@@ -37,6 +37,8 @@ public class TimedDeployAndSpintake extends CommandBase {
     public void initialize() {
         m_intake.deployIntake(true);
         m_intake.setSpeed(0.8 * direction);
+        m_magazine.setCenterSpeed(0.6);
+        m_magazine.setSideSpeeds(0.4);
         timer.reset();
         timer.start();
     }
@@ -81,5 +83,7 @@ public class TimedDeployAndSpintake extends CommandBase {
     public void end(boolean interrupted) {
         m_intake.deployIntake(false);
         m_intake.setSpeed(0);
+        m_magazine.setCenterSpeed(0);
+        m_magazine.setSideSpeeds(0);
     }
 }

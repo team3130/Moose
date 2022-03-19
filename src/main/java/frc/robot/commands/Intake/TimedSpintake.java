@@ -33,6 +33,7 @@ public class TimedSpintake extends CommandBase {
 
         m_intake.setSpeed(0.8);
         m_magazine.setCenterSpeed(0.6);
+        m_magazine.setSideSpeeds(0.4);
         timer.reset();
         timer.start();
     }
@@ -77,6 +78,7 @@ public class TimedSpintake extends CommandBase {
     public void end(boolean interrupted) {
         m_intake.setSpeed(0);
         m_magazine.setCenterSpeed(0);
+        m_magazine.setSideSpeeds(0);
         timer.stop();
         timer.reset();
     }

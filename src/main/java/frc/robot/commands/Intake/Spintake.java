@@ -4,16 +4,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
-
 public class Spintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_intake;
     private final int direction;
+    private final Magazine m_magazine;
 
     public Spintake(Intake intake, int direction) {
         //mapping to object passed through parameter
         m_intake = intake;
+        m_magazine = new Magazine();
         m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
         this.direction = direction;
     }
 
@@ -23,6 +25,8 @@ public class Spintake extends CommandBase {
     @Override
     public void initialize() {
         m_intake.setSpeed(0.8 * direction);
+        m_magazine.setCenterSpeed(0.6);
+        m_magazine.setSideSpeeds(0.4);
     }
 
     /**
@@ -63,5 +67,7 @@ public class Spintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.setSpeed(0);
+        m_magazine.setCenterSpeed(0);
+        m_magazine.setSideSpeeds(0);
     }
 }
