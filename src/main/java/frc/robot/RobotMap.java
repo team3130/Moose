@@ -6,7 +6,6 @@ public class RobotMap {
     public static final int PNM_CLIMBER_ACTUATOR_LEFT = 1;
     public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 2;
     public static final int DIO_FEEDERBEAM = 1;
-    public static final int CAN_TOP_SHOOTER = 13;
     // If you start running out of RAM change everything in here to a final char
 
     public static boolean debug = true; // whether we should print stack traces
@@ -63,7 +62,9 @@ public class RobotMap {
     //
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
+    public static final double kTopShooterGearRatio = 2;
     public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
+    public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
@@ -72,7 +73,7 @@ public class RobotMap {
     public static double kFlywheelP = .22;
     public static double kFlywheelI = 0.0;
     public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
 
     /**
      * Limelight

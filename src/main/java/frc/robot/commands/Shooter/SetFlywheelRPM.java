@@ -70,6 +70,7 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.setFlywheelSpeed(0);
+        m_shooter.setShooterTopSpeed(0);
         m_shooter.setIndexerPercent(0);
         m_limelight.setLedState(false);
     }

@@ -20,6 +20,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_indexer;
 
     private double flywheelSetSpeed = 3500; // default 3200 (3500 temp for Ben/Cody)
+    private double TopShooterSetSpeed = 2500;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -27,6 +28,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private NetworkTableEntry sped = tab.add("Shooter Write RPM", flywheelSetSpeed).getEntry();
     private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
+
+    private NetworkTableEntry spedTOP = tab.add("Shooter Top Write RPM", flywheelSetSpeed).getEntry();
+    private NetworkTableEntry RPMTOP = tab.add("Shooter Top Read RPM", 0).getEntry();
 
     private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", indexerSetSpeed).getEntry();
     private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", indexerSetSpeed).getEntry();
@@ -36,19 +40,19 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
 
-        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_TOP_SHOOTER);
+        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
+        m_hoodWheel.setInverted(false);
 
         configPIDF(m_flywheel,
                 RobotMap.kFlywheelP,
                 RobotMap.kFlywheelI,
                 RobotMap.kFlywheelD,
                 RobotMap.kFlywheelF);
+
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Coast);
         m_indexer.setInverted(true);
     }
-
-
 
     public double getRawSpeed() {
         return m_flywheel.getSelectedSensorVelocity();
@@ -58,8 +62,16 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
+    public double getRPMTop() {
+        return Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) getRawSpeed());
+    }
+
     public double getSpeedFromShuffleboard() {
         return sped.getDouble(flywheelSetSpeed);
+    }
+
+    public double getTopSpeedFromShuffleboard() {
+        return spedTOP.getDouble(TopShooterSetSpeed);
     }
 
     public double getIndexerSpeedFromShuffleboard(){
@@ -68,10 +80,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
+        RPMTOP.setNumber(getRPMTop());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
     }
-
 
     public void setIndexerPercent(double percent){
         m_indexer.set(ControlMode.PercentOutput, percent);
@@ -88,6 +100,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     @Override
     public void disable() {
         m_flywheel.set(ControlMode.PercentOutput, 0);
+        m_hoodWheel.set(ControlMode.PercentOutput, 0);
         m_indexer.set(ControlMode.PercentOutput, 0);
     }
 
@@ -109,13 +122,14 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
-        m_flywheel.getSelectedSensorPosition();
     }
 
     public void setIndexerSpeed(double rpm){
         m_indexer.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kIndexerRPMtoNativeUnitsScalar, rpm));
-        m_indexer.getSelectedSensorVelocity(); 
+    }
 
+    public void setShooterTopSpeed(double rpm) {
+        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
     }
 
     /**
