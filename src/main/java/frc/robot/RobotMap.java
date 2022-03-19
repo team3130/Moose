@@ -51,10 +51,6 @@ public class RobotMap {
     public static final int CAN_CLIMBER_LEFT = 16;
     public static final int CAN_CLIMBER_RIGHT = 11;
 
-    // Hood
-    public static final int CAN_HOOD; //needs value
-
-
     /**
      * Intake
      */

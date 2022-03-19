@@ -14,7 +14,7 @@ public class Hood extends SubsystemBase {
     private WPI_TalonSRX m_hood;
     //Create and define all standard data types needed
     public Hood() {
-        m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD);
+        m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD_MOTOR);
         m_hood.setInverted(false);
     }
 
