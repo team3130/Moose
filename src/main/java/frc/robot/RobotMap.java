@@ -3,8 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
-    public static final int PNM_CLIMBER_ACTUATOR_LEFT = 1;
-    public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 2;
     public static final int DIO_FEEDERBEAM = 1;
     // If you start running out of RAM change everything in here to a final char
 
@@ -140,6 +138,9 @@ public class RobotMap {
      */
     public static final int PNM_Shift = 0;
     public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
+
+    public static final int PNM_CLIMBER_ACTUATOR_LEFT = 2; //TODO FIND THESE
+    public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 3; //TODO FIND THESE
 
     /**
      * Gamepad Button List

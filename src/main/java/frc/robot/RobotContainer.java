@@ -3,17 +3,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.Shift;
 import frc.robot.commands.Chassis.FaceTarget;
 import frc.robot.commands.Chassis.resetOdometery;
-import frc.robot.commands.Climber.ClimberMotors;
-import frc.robot.commands.Climber.ClimberPneumatics;
+import frc.robot.commands.Climber.spinClimberWinches;
+import frc.robot.commands.Climber.ToggleClimber;
 import frc.robot.commands.Hood.SpinHood;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Magazine.Spinzine;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
-import frc.robot.commands.Shooter.Shoot;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
@@ -73,7 +73,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         m_generalUtils = new ArrayList<>();
-        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight));
+        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
     }
 
@@ -99,9 +99,9 @@ public class RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SpinHood(m_hood, -1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new ClimberMotors(m_climber, 1));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new ClimberPneumatics(m_climber));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ClimberMotors(m_climber, -1));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new spinClimberWinches(m_climber, 1));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new ToggleClimber(m_climber));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new spinClimberWinches(m_climber, -1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(new resetOdometery(m_chassis));
@@ -112,12 +112,13 @@ public class RobotContainer {
         if (m_chooser_weapons.getSelected().equals("Ben")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SetFlywheelRPM(m_shooter, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Spinzine(m_magazine, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spintake(m_intake, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spintake(m_intake, 1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_limelight));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spinzine(m_magazine, 1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spinzine(m_magazine, -1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new spinClimberWinches(m_climber, -1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new spinClimberWinches(m_climber, 1));
         }
         else if (m_chooser_weapons.getSelected().equals("Parker")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new Spinzine(m_magazine, 1)); // ltrigger

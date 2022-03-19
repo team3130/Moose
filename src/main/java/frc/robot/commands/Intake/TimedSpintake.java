@@ -2,6 +2,8 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 
@@ -63,7 +65,7 @@ public class TimedSpintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return timer.get() >= 3;
+        return timer.get() >= RobotMap.kIntakeRetractTime;
     }
 
     /**

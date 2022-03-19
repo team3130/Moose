@@ -31,8 +31,6 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Chooser m_chooser;
 
-  private Thread bruh;
-
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,14 +40,14 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
-    m_chooser_driver.setDefaultOption("Test", "Test");
+    m_chooser_driver.setDefaultOption("Cody", "Cody");
     m_chooser_driver.addOption("Maddie", "Maddie");
-    m_chooser_driver.addOption("Cody", "Cody");
+    m_chooser_driver.addOption("Test", "Test");
     SmartDashboard.putData("Driver", m_chooser_driver);
     // weapon options
-    m_chooser_weapons.setDefaultOption("Test", "Test");
+    m_chooser_weapons.setDefaultOption("Ben", "Ben");
     m_chooser_weapons.addOption("Parker", "Parker");
-    m_chooser_weapons.addOption("Ben", "Ben");
+    m_chooser_weapons.addOption("Test", "Test");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer();
     m_chooser = new Chooser(m_autonChooser, m_robotContainer);

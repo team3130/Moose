@@ -1,18 +1,15 @@
 package frc.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.Climber;
-import java.util.Set;
 
-public class ClimberMotors extends CommandBase {
+public class spinClimberWinches extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Climber m_climber;
     private final int direction;
 
 
-    public ClimberMotors(Climber subsystem, int direction) {
+    public spinClimberWinches(Climber subsystem, int direction) {
         //mapping to object passed through parameter
         m_climber = subsystem;
         m_requirements.add(subsystem);
@@ -24,7 +21,7 @@ public class ClimberMotors extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_climber.setSpeed(0.5 * direction); //needs "encoder thing" for speed
+        m_climber.setSpeed(0.5 * direction);
     }
 
     /**
@@ -52,7 +49,6 @@ public class ClimberMotors extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 

@@ -1,16 +1,14 @@
 package frc.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Climber;
-import java.util.Set;
 
-public class ClimberPneumatics extends CommandBase {
+public class ToggleClimber extends InstantCommand {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Climber m_climber;
 
-    public ClimberPneumatics(Climber subsystem) {
+    public ToggleClimber(Climber subsystem) {
         //mapping to object passed through parameter
         m_climber = subsystem;
         m_requirements.add(subsystem);
@@ -31,26 +29,6 @@ public class ClimberPneumatics extends CommandBase {
     @Override
     public void execute() {
 
-    }
-
-    /**
-     * <p>
-     * Returns whether this command has finished. Once a command finishes -- indicated by
-     * this method returning true -- the scheduler will call its {@link #end(boolean)} method.
-     * </p><p>
-     * Returning false will result in the command never ending automatically. It may still be
-     * cancelled manually or interrupted by another command. Hard coding this command to always
-     * return true will result in the command executing once and finishing immediately. It is
-     * recommended to use * {@link edu.wpi.first.wpilibj2.command.InstantCommand InstantCommand}
-     * for such an operation.
-     * </p>
-     *
-     * @return whether this command has finished.
-     */
-    @Override
-    public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
     }
 
     /**
