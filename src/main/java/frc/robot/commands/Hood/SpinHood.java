@@ -23,7 +23,7 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_hood.setSpeed(0.1 * direction);
+        m_hood.setSpeed(0.4 * direction);
     }
 
     /**

@@ -35,9 +35,9 @@ public class Climber extends SubsystemBase {
         return m_solenoid_left.get();
     }
 
-    public void deployClimber(boolean deploy) {
-        m_solenoid_left.set(deploy);
-        m_solenoid_right.set(deploy);
+    public void deployClimber() {
+        m_solenoid_left.toggle();
+        m_solenoid_right.toggle();
     }
 }
 

@@ -9,13 +9,11 @@ import java.util.Set;
 public class ClimberPneumatics extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Climber m_climber;
-    private final boolean deploy;
 
-    public ClimberPneumatics(Climber subsystem, boolean deploy) {
+    public ClimberPneumatics(Climber subsystem) {
         //mapping to object passed through parameter
         m_climber = subsystem;
         m_requirements.add(subsystem);
-        this.deploy = deploy;
     }
 
     /**
@@ -23,7 +21,7 @@ public class ClimberPneumatics extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_climber.deployClimber(deploy);
+        m_climber.deployClimber();
     }
 
     /**

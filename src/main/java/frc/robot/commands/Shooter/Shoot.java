@@ -35,7 +35,7 @@ public class Shoot extends CommandBase {
     public void execute() {
         // Find the flywheel speed
         if (!limelight.hasTrack()){
-            m_shooter.setFlywheelSpeed(3200.0);
+            m_shooter.setFlywheelSpeed(m_shooter.getRPM());
         }
         else {
             double x = limelight.getDistanceToTarget();

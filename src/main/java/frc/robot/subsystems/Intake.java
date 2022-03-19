@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase implements GeneralUtils {
         m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
 
-        m_motor.setInverted(true);
+        m_motor.setInverted(false);
     }
 
     public void setSpeed(double speed) {

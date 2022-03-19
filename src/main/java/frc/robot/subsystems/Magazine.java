@@ -16,8 +16,6 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_magazineRight;
     private WPI_TalonSRX m_magazineLeft;
 
-    private DigitalInput m_beam;
-
     //Create and define all standard data types needed
     public Magazine() {
         m_magazineCenter = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_CENTER_MOTOR);
@@ -28,15 +26,8 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
         m_magazineCenter.setInverted(false);
         m_magazineLeft.setInverted(true);
         m_magazineRight.setInverted(false);
-
-        m_beam = new DigitalInput(RobotMap.DIO_FEEDERBEAM);
     }
 
-    public boolean isEmpty() {
-        // if the beam returns true, the beam is intact and there is therefore no ball breaking the beam
-        //TODO: Sanity check
-        return m_beam.get();
-    }
 
     public void setCenterSpeed(double speed) {
         m_magazineCenter.set(speed);

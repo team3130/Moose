@@ -19,8 +19,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_hoodWheel;
     private WPI_TalonSRX m_indexer;
 
-    private double flywheelSetSpeed = 3500; // default 3200 (3500 temp for Ben/Cody)
-    private double TopShooterSetSpeed = 2500;
+    private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
+    private double TopShooterSetSpeed = 1000;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
-    private NetworkTableEntry spedTOP = tab.add("Shooter Top Write RPM", flywheelSetSpeed).getEntry();
+    private NetworkTableEntry spedTOP = tab.add("Shooter Top Write RPM", TopShooterSetSpeed).getEntry();
     private NetworkTableEntry RPMTOP = tab.add("Shooter Top Read RPM", 0).getEntry();
 
     private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", indexerSetSpeed).getEntry();

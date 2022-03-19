@@ -75,6 +75,11 @@ public class RobotMap {
     public static double kFlywheelD = 12;
     public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
 
+    public static double kHoodP = 0.125;
+    public static double kHoodI = 0.0;
+    public static double kHoodD = 0;
+    public static double kHoodF = 0;
+
     /**
      * Limelight
      */
