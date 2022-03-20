@@ -1,11 +1,16 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.Shift;
-import frc.robot.commands.Chassis.FaceTarget;
 import frc.robot.commands.Chassis.resetOdometery;
 import frc.robot.commands.Climber.spinClimberWinches;
 import frc.robot.commands.Climber.ToggleClimber;
@@ -31,8 +36,8 @@ import java.util.List;
 public class RobotContainer {
     private ArrayList<GeneralUtils> m_generalUtils;
     // Supporting classes
-    WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations();
-    Limelight m_limelight = new Limelight();
+    protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations();
+    protected Limelight m_limelight = new Limelight();
 
     // define subsystems here
     Shooter m_shooter = new Shooter();
@@ -41,6 +46,8 @@ public class RobotContainer {
     Magazine m_magazine = new Magazine();
     Hood m_hood = new Hood();
     Climber m_climber = new Climber();
+
+    protected Chooser m_chooser;
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -77,6 +84,10 @@ public class RobotContainer {
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
     }
 
+    public Chooser getChooser() {
+        return m_chooser;
+    }
+
     // Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
@@ -84,12 +95,12 @@ public class RobotContainer {
     public void defineButtonBindings(SendableChooser<String> m_chooser_driver, SendableChooser<String> m_chooser_weapons) {
         // driver controls
         if (m_chooser_driver.getSelected().equals("Cody")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
         }
         else if (m_chooser_driver.getSelected().equals("Maddie")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenPressed(new FaceTarget(m_chassis, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
         }
@@ -123,7 +134,7 @@ public class RobotContainer {
         else if (m_chooser_weapons.getSelected().equals("Parker")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new Spinzine(m_magazine, 1)); // ltrigger
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine)); //rbumber
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SetFlywheelRPM(m_shooter, m_limelight));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1)); // y
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenPressed(new DeployIntake(m_intake)); //x
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Spintake(m_intake, -1)); //b
@@ -136,6 +147,7 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
+        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
         m_generalUtils.forEach(GeneralUtils::teleopInit);
     }
 

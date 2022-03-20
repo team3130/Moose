@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
@@ -15,6 +17,8 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_magazineCenter;
     private WPI_TalonSRX m_magazineRight;
     private WPI_TalonSRX m_magazineLeft;
+
+    private DigitalInput m_beam;
 
     //Create and define all standard data types needed
     public Magazine() {
@@ -39,7 +43,9 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     }
 
     @Override
-    public void outputToShuffleboard() {}
+    public void outputToShuffleboard() {
+        SmartDashboard.putBoolean("Beam", m_beam.get());
+    }
 
     @Override
     public void teleopInit() {}

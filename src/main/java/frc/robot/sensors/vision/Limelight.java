@@ -1,6 +1,9 @@
 package frc.robot.sensors.vision;
 
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -123,7 +126,7 @@ public class Limelight implements GeneralUtils {
         double ux = Math.tan(Math.toRadians(ax));
         double uy = Math.tan(Math.toRadians(ay));
         // Do two rotations: for LimeLight mount and for robot tilt
-        return rotation.times(Algebra.buildVector(ux, uy, 1));
+        return rotation.times(Algebra.buildVector(ux, uy, 1)); //TODO: make negative
     }
 
     /**
@@ -162,6 +165,10 @@ public class Limelight implements GeneralUtils {
     public double getTargetRotationTan() {
         Matrix<N3,N1> edge = sideVector.minus(realVector);
         return -edge.get(2, 0) / edge.get(0, 0);
+    }
+
+    public Rotation2d getHeading() {
+        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d(Math.PI);
     }
 
     public Matrix<N3,N1> getInnerTarget() {
@@ -273,6 +280,7 @@ public class Limelight implements GeneralUtils {
         SmartDashboard.putBoolean("Limelight Has Target", hasTrack());
         SmartDashboard.putNumber("Limelight mounting angle", calibrate());
         SmartDashboard.putNumber("Limelight Target Rotation", getTargetRotationTan());
+        SmartDashboard.putNumber("Heading To Target", getHeading().getDegrees());
     }
 
     public void teleopInit() {setLedState(true);}

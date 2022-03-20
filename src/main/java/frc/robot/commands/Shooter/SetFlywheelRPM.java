@@ -1,19 +1,25 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
+import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class SetFlywheelRPM extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private boolean hitSpeed = false;
+    private final Magazine m_magazine;
     private Limelight m_limelight;
+    private final double timeLimit = 2;
+    private final Timer timer = new Timer();
 
-    public SetFlywheelRPM(Shooter subsystem, Limelight m_limelight) {
+    public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
+        m_magazine = magazine;
         m_requirements.add(subsystem);
+        m_requirements.add(magazine);
         this.m_limelight = m_limelight;
     }
 
@@ -26,7 +32,8 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.setFlywheelSetSpeed(m_shooter.getSpeedFromShuffleboard());
         m_shooter.feedFlywheel();
         m_shooter.feedHoodWheel();
-        /*m_limelight.setLedState(true);*/
+        m_limelight.setLedState(true);
+        timer.reset();
     }
 
     /**
@@ -35,9 +42,6 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
-            hitSpeed = true;
-        }
         if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
             m_shooter.setIndexerPercent(0.3);
         } 
@@ -59,7 +63,11 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        if (m_magazine.isEmpty()) {
+            timer.start();
+        }
+        // we do it again for the second ball
+        return timer.get() >= timeLimit && m_magazine.isEmpty();
     }
 
     /**
@@ -76,5 +84,6 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.setHoodWheelTopSpeed(0);
         m_shooter.setIndexerPercent(0);
         m_limelight.setLedState(false);
+        timer.stop();
     }
 }

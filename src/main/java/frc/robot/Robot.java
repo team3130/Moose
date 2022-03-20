@@ -4,13 +4,13 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
 
 /**
@@ -22,7 +22,7 @@ import frc.robot.SupportingClassess.Chooser;
 public class Robot extends TimedRobot {
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
-  private final SendableChooser<String> m_autonChooser = new SendableChooser<>();
+  private final SendableChooser<AutonCommand> m_autonChooser = new SendableChooser<>();
   private String m_autoSelected;
 
   private final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
@@ -49,11 +49,9 @@ public class Robot extends TimedRobot {
     m_chooser_weapons.addOption("Parker", "Parker");
     m_chooser_weapons.addOption("Test", "Test");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
-    m_robotContainer = new RobotContainer();
-    m_chooser = new Chooser(m_autonChooser, m_robotContainer);
+    m_robotContainer = new RobotContainer(m_autonChooser);
+    m_chooser = m_robotContainer.getChooser();
     m_chooser.addAllCommands();
-    m_chooser.generateTestPath();
-    m_chooser.addTestRoutine();
   }
 
   /**
@@ -80,9 +78,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    AutonCommand cmd = m_autonChooser.getSelected();
 
-    m_robotContainer.getChassis().resetOdometry(new Pose2d(0, 0, new Rotation2d()));
-    m_scheduler.schedule(m_chooser.getCommand());
+    m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
+    m_scheduler.schedule(cmd.getCmd());
     // week 0 auton attempt
     /*
     m_scheduler.schedule(
@@ -104,9 +103,9 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    
     m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
     m_robotContainer.teleopInit();
+    m_scheduler.cancelAll();
   }
 
   /** This function is called periodically during operator control. */
@@ -120,6 +119,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_scheduler.clearButtons();
     m_robotContainer.disable();
+    m_scheduler.cancelAll();
   }
 
   /** This function is called periodically when disabled. */

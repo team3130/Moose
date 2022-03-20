@@ -49,7 +49,7 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return m_magazine.isEmpty();
     }
 
     /**

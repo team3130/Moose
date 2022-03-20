@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.utils.Utils;
 
 public class RobotMap {
     public static final int DIO_FEEDERBEAM = 1;
@@ -15,6 +16,12 @@ public class RobotMap {
     /**
      * Robot related constants
      */
+
+    /**
+     * Digital I/O ports
+     */
+
+    public static final int DIO_FEEDERBEAM = 0;
 
     /**
      * CAN ID's
@@ -88,9 +95,10 @@ public class RobotMap {
     public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO: FIND FOR 2022
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static final double kLimelightHeight = 0.84;     // Height of camera aperture from the ground
-    public static final double kLimelightLength = 9.5;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
+    public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
-    public static final double kLimelightCalibrationDist = 120.0; // Exact horizontal distance between target and lens TODO: FIND FOR 2022
+    public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens TODO: FIND FOR 2022
+    public static final double ShootingSweetSpot = 4; //TODO: Find sweet spot
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
@@ -113,25 +121,29 @@ public class RobotMap {
     public static final double kMaxRampRate = 0.7;
     public static final double kChassisEncoderError = 1; //TODO: Still needs to be determined for comp bot
 
+    public static double ChassisSpinKP = 0.0125;
+    public static double ChassisSpinKI = 0;
+    public static double ChassisSpinKD = 0;
+
     // max velocity of chassis in meters per second
-    public static final double kMaxVelocityMPS = 0.33;
-    public static final double kMaxAccelerationMPS = 0.1;
+    public static final double kMaxVelocityMPS = 2.25;
+    public static final double kMaxAccelerationMPS = 1.5;
 
     /**
      * PID for Chassis
      */
-    //TODO: figure out why auton moves with a constant offset of 20cm
-    public static double LChassiskP = 3.3073; //Practice bot 3/10/22
-    public static double LChassiskI = 0;
+            // solution found, cry harder
+    public static double LChassiskP = 3.186; //Practice bot 3/10/22
+    public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2.8909;
-    public static double RChassiskI = 0;
+    public static double RChassiskP = 2.6838;
+    public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.68159;
-    public static double ChassiskV = 2.2418;
-    public static double ChassiskA = 0.4963;
+    public static double ChassiskS = 0.66218;
+    public static double ChassiskV = 2.3117;
+    public static double ChassiskA = 0.33604;
 
     /**
      * PNM IDs

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -20,8 +21,10 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.DefaultDrive;
@@ -38,31 +41,31 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     // Create necessary objects
     private Navx m_navx = Navx.GetInstance();
 
-    private WPI_TalonFX m_rightMotorFront;
-    private WPI_TalonFX m_rightMotorBack;
-    private WPI_TalonFX m_leftMotorFront;
-    private WPI_TalonFX m_leftMotorBack;
+    private final WPI_TalonFX m_rightMotorFront;
+    private final WPI_TalonFX m_rightMotorBack;
+    private final WPI_TalonFX m_leftMotorFront;
+    private final WPI_TalonFX m_leftMotorBack;
 
-    private Solenoid m_shifter; // true is low gear, false is high gear
+    private final Solenoid m_shifter; // true is low gear, false is high gear
 
-    private MotorControllerGroup m_motorsRight;
-    private MotorControllerGroup m_motorsLeft;
+    private final MotorControllerGroup m_motorsRight;
+    private final MotorControllerGroup m_motorsLeft;
 
-    private DifferentialDriveOdometry m_odometry;
-    private DifferentialDriveKinematics m_kinematics;
+    private final DifferentialDriveOdometry m_odometry;
+    private final DifferentialDriveKinematics m_kinematics;
 
-    private DifferentialDrive m_drive;
+    private final DifferentialDrive m_drive;
 
-    private SimpleMotorFeedforward m_feedforward;
-    private PIDController m_leftPIDController;
-    private PIDController m_rightPIDConttroller;
+    private final SimpleMotorFeedforward m_feedforward;
+    private final PIDController m_leftPIDController;
+    private final PIDController m_rightPIDConttroller;
+
+    private final Field2d m_fieldPos;
+
+    private final PIDController m_spinnyPID;
 
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
-
-    private NetworkTableEntry P = tab.add("Chassis P", .5).getEntry();
-    private NetworkTableEntry I = tab.add("Chassis I", 0).getEntry();
-    private NetworkTableEntry D = tab.add("Chassis D", 0).getEntry();
 
     private NetworkTableEntry sliderMove = tab
             .add("Move Speed Sensitivity", 10)
@@ -75,13 +78,10 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
 
-    public double getMoveSpeedSensitivityFromShuffleboard() {
-        return sliderMove.getDouble(10);
-    }
 
-    public double getTurnSpeedSensitivityFromShuffleboard() {
-        return sliderTurn.getDouble(10);
-    }
+    private NetworkTableEntry P = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
+    private NetworkTableEntry I = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
+    private NetworkTableEntry D = tab.add("Chassis D", RobotMap.ChassisSpinKD).getEntry();
 
     // Create and define all standard data types needed
     public Chassis() {
@@ -96,8 +96,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorFront.configFactoryDefault();
         m_rightMotorBack.configFactoryDefault();
         m_leftMotorBack.configFactoryDefault();
-
-
 
 
         configureBreakMode(true);
@@ -135,6 +133,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         m_leftMotorBack.follow(m_leftMotorFront);
         m_rightMotorBack.follow(m_rightMotorFront);
+        m_fieldPos = new Field2d();
+
+        m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -418,6 +419,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         SmartDashboard.putBoolean("Shifted", m_shifter.get());
 
+        m_fieldPos.setRobotPose(this.getPose());
+        SmartDashboard.putData("Field position", m_fieldPos);
+
     }
 
     @Override
@@ -428,5 +432,33 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         configRampRate(0);
         m_leftMotorFront.set(0);
         m_rightMotorFront.set(0);
+        m_drive.stopMotor();
     }
+
+    public double getMoveSpeedSensitivityFromShuffleboard() {
+        return sliderMove.getDouble(10);
+    }
+
+    public double getTurnSpeedSensitivityFromShuffleboard() {
+        return sliderTurn.getDouble(10);
+    }
+
+    public void spinToAngle(double angle) {
+        System.out.println(m_spinnyPID.calculate(angle));
+        driveArcade(0, -m_spinnyPID.calculate(angle), false);
+    }
+
+    public boolean getAtSetpoint() {
+        return m_spinnyPID.atSetpoint();
+    }
+
+    public void setSpinnySetPoint(double setpoint) {
+        m_spinnyPID.setSetpoint(setpoint);
+    }
+
+    public void updatePIDValues() {
+        m_spinnyPID.setPID(P.getDouble(RobotMap.ChassisSpinKP), I.getDouble(RobotMap.ChassisSpinKI), D.getDouble(RobotMap.ChassisSpinKD));
+    }
+
+
 }
