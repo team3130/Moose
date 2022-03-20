@@ -1,31 +1,30 @@
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Hood;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.sensors.vision.Limelight;
-import frc.robot.sensors.vision.WheelSpeedCalculations;
-import frc.robot.subsystems.Shooter;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.Hood;
+import java.util.Set;
 
-public class Shoot extends CommandBase {
+public class SpinHood extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Shooter m_shooter;
-    private boolean hitSpeed = false;
-    private Limelight limelight;
-    private WheelSpeedCalculations wheelSpeedCalculations;
+    private final Hood m_hood;
+    private final int direction;
 
-    public Shoot(Shooter subsystem, Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
+    public SpinHood(Hood subsystem, int direction) {
         //mapping to object passed through parameter
-        m_shooter = subsystem;
+        m_hood = subsystem;
         m_requirements.add(subsystem);
-
-        this.limelight = limelight;
-        this.wheelSpeedCalculations = wheelSpeedCalculations;
+        this.direction = direction;
     }
 
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() {}
+    public void initialize() {
+        m_hood.setSpeed(0.4 * direction);
+    }
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
@@ -33,20 +32,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        // Find the flywheel speed
-        if (!limelight.hasTrack()){
-            m_shooter.setFlywheelSpeed(m_shooter.getRPM());
-        }
-        else {
-            double x = limelight.getDistanceToTarget();
-            if (5 <= x) {
-                m_shooter.setFlywheelSpeed(wheelSpeedCalculations.getSpeed(x));
-            }
-            if (m_shooter.canShoot()) {
-                m_shooter.feedIndexer();
-                hitSpeed = true;
-            }
-        }
+
     }
 
     /**
@@ -65,7 +51,8 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        // TODO: Make this return true when this Command no longer needs to run execute()
+        return false;
     }
 
     /**
@@ -78,7 +65,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setFlywheelSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        m_hood.setSpeed(0);
+        m_hood.zero();
     }
 }

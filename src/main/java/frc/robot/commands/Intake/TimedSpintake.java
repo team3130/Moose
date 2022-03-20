@@ -2,7 +2,8 @@ package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 
@@ -33,7 +34,8 @@ public class TimedSpintake extends CommandBase {
         m_intake.deployIntake(false);
 
         m_intake.setSpeed(0.8);
-        m_magazine.setSpeed(0.6);
+        m_magazine.setCenterSpeed(0.6);
+        m_magazine.setSideSpeeds(0.4);
         timer.reset();
         timer.start();
     }
@@ -63,7 +65,7 @@ public class TimedSpintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return timer.get() >= 3;
+        return timer.get() >= RobotMap.kIntakeRetractTime;
     }
 
     /**
@@ -77,7 +79,8 @@ public class TimedSpintake extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.setSpeed(0);
-        m_magazine.setSpeed(0);
+        m_magazine.setCenterSpeed(0);
+        m_magazine.setSideSpeeds(0);
         timer.stop();
         timer.reset();
     }

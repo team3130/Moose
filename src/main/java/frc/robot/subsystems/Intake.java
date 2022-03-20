@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.GeneralUtils;
 
 public class Intake extends SubsystemBase implements GeneralUtils {
 
@@ -21,7 +22,7 @@ public class Intake extends SubsystemBase implements GeneralUtils {
         m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
 
-        m_motor.setInverted(true);
+        m_motor.setInverted(false);
     }
 
     public void setSpeed(double speed) {

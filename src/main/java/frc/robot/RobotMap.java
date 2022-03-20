@@ -3,6 +3,10 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
+    public static final int DIO_FEEDERBEAM = 1;
+    // If you start running out of RAM change everything in here to a final char
+
+    public static boolean debug = true; // whether we should print stack traces
     /**
      * Navx related variables
      */
@@ -15,25 +19,39 @@ public class RobotMap {
     /**
      * CAN ID's
      */
+    // indexer
     public static final int CAN_INDEXER = 2;
-    public static final int CAN_MAGAZINE_MOTOR = 10;
 
+    // magazine/hopper
+    public static final int CAN_MAGAZINE_CENTER_MOTOR = 9;
+    public static final int CAN_MAGAZINE_LEFT_MOTOR = 15;
+    public static final int CAN_MAGAZINE_RIGHT_MOTOR = 12;
+
+    // drivetrain
     public static final int CAN_CHASSIS_MOTOR_BACKR = 3;
     public static final int CAN_CHASSIS_MOTOR_FRONTR = 4;
     public static final int CAN_CHASSIS_MOTOR_BACKL = 5;
     public static final int CAN_CHASSIS_MOTOR_FRONTL = 6;
 
+    // PNM
     public static final int CAN_PNMMODULE = 8;
 
+    // Shooter
     public static final char CAN_SHOOTER_MOTOR = 7;
-    public static final int CAN_INTAKE_MOTOR = 9;
+    public static final int CAN_SHOOTER_UPPER_MOTOR = 13;
+    public static final int CAN_HOOD_MOTOR = 14;
 
+    // Intake
+    public static final int CAN_INTAKE_MOTOR = 10;
+
+    // Climber
+    public static final int CAN_CLIMBER_LEFT = 16;
+    public static final int CAN_CLIMBER_RIGHT = 11;
 
     /**
      * Intake
      */
     public static final double kIntakeRetractTime = 0.4;
-
 
     /**
      * Shooter
@@ -42,7 +60,9 @@ public class RobotMap {
     //
     public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
+    public static final double kTopShooterGearRatio = 2;
     public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
+    public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
@@ -51,7 +71,12 @@ public class RobotMap {
     public static double kFlywheelP = .22;
     public static double kFlywheelI = 0.0;
     public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11, Optimal speed at 51% power
+    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
+
+    public static double kHoodP = 0.125;
+    public static double kHoodI = 0.0;
+    public static double kHoodD = 0;
+    public static double kHoodF = 0;
 
     /**
      * Limelight
@@ -76,16 +101,17 @@ public class RobotMap {
      */
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
-    public static final double trackDistance = 0.69;
+    public static final double trackDistance = Units.inchesToMeters(25.49125); //taken 3/9/22 PRACTICE
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = Units.inchesToMeters(4);
+    public static final double kWheelDiameter = Units.inchesToMeters(3.93425);//taken 3/9/22 PRACTICE
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
+    public static final double kChassisEncoderError = 1.0934926; //calculated 3/10/22 retains 3-6 cm error
 
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 0.33;
@@ -94,19 +120,27 @@ public class RobotMap {
     /**
      * PID for Chassis
      */
-    public static double ChassiskP = 2.4272 / 2;
-    public static double ChassiskI = 0;
-    public static double ChassiskD = 0;
+    //TODO: figure out why auton moves with a constant offset of 20cm
+    public static double LChassiskP = 3.3073; //Practice bot 3/10/22
+    public static double LChassiskI = 0;
+    public static double LChassiskD = 0;
 
-    public static double ChassiskS = 0.6475;
-    public static double ChassiskV = 2.1534;
-    public static double ChassiskA = 0.25695;
+    public static double RChassiskP = 2.8909;
+    public static double RChassiskI = 0;
+    public static double RChassiskD = 0;
+
+    public static double ChassiskS = 0.68159;
+    public static double ChassiskV = 2.2418;
+    public static double ChassiskA = 0.4963;
 
     /**
      * PNM IDs
      */
     public static final int PNM_Shift = 0;
     public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
+
+    public static final int PNM_CLIMBER_ACTUATOR_LEFT = 2; //TODO FIND THESE
+    public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 3; //TODO FIND THESE
 
     /**
      * Gamepad Button List

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
 
@@ -96,6 +97,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_rightMotorBack.configFactoryDefault();
         m_leftMotorBack.configFactoryDefault();
 
+
+
+
         configureBreakMode(true);
 
         m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
@@ -119,8 +123,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_drive.setSafetyEnabled(false);
 
         m_feedforward = new SimpleMotorFeedforward(RobotMap.ChassiskS, RobotMap.ChassiskV, RobotMap.ChassiskA);
-        m_leftPIDController = new PIDController(RobotMap.ChassiskP, RobotMap.ChassiskI, RobotMap.ChassiskD);
-        m_rightPIDConttroller = new PIDController(RobotMap.ChassiskP, RobotMap.ChassiskI, RobotMap.ChassiskD);
+        m_leftPIDController = new PIDController(RobotMap.LChassiskP, RobotMap.LChassiskI, RobotMap.LChassiskD);
+        m_rightPIDConttroller = new PIDController(RobotMap.RChassiskP, RobotMap.RChassiskI, RobotMap.RChassiskD);
 
         // kinematics and odometry
         m_kinematics = new DifferentialDriveKinematics(RobotMap.trackDistance);
@@ -166,7 +170,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     private double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * RobotMap.kChassisEncoderError;
     }
 
     /**
@@ -176,7 +180,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     private double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * RobotMap.kChassisEncoderError;
     }
 
 
@@ -249,7 +253,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         resetEncoders();
         Navx.resetNavX();
         // sets 0 to be to the right of the bot, because 0 radians on the unit circle is to the right of north (as a bearing)
-        m_odometry.resetPosition(pose, new Rotation2d(-Math.PI / 2));
+        m_odometry.resetPosition(pose, new Rotation2d(0));
     }
 
     /**

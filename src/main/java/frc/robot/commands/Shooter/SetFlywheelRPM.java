@@ -23,7 +23,8 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.feedFlywheel();
-        m_limelight.setLedState(true);
+        m_shooter.setShooterTopSpeed(m_shooter.getTopSpeedFromShuffleboard());
+        /*m_limelight.setLedState(true);*/
     }
 
     /**
@@ -70,6 +71,7 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.setFlywheelSpeed(0);
+        m_shooter.setShooterTopSpeed(0);
         m_shooter.setIndexerPercent(0);
         m_limelight.setLedState(false);
     }

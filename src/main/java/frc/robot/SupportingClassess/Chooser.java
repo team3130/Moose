@@ -117,6 +117,23 @@ public class Chooser {
         return commandGroup;
     }
 
+    public SequentialCommandGroup addTestRoutine(){
+        RamseteCommand PathOne = cmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/Forward1M.wpilib.json")));
+        RamseteCommand PathTwo = testPath;
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+
+            SequentialCommandGroup group = new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(PathOne, deployIntake),
+                    PathTwo
+
+            );
+
+            paths.put("Routine Test", group);
+
+            m_autonChooser.addOption("Routine Test", "Routine Test");
+            return group;
+    }
+
     /**
      * Add all the commands to auton chooser
      * Load all the trajectories on init
@@ -171,9 +188,12 @@ public class Chooser {
         Chassis chassis = container.getChassis();
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
                 chassis.getPose(),
-                new Pose2d(3, 1, new Rotation2d(0))
+                    new Pose2d(0.8, 0, new Rotation2d(0))
+                // new Pose2d(3, 0, new Rotation2d(0))
         ), config);
         testPath = cmdFactory.apply(trajectory);
+        paths.put("Test Path", testPath);
+        m_autonChooser.addOption("Test Path", "Test Path");
     }
 
     public RamseteCommand getTestPath() {
