@@ -14,8 +14,7 @@ public class Climber extends SubsystemBase {
     //Create necessary objects
     private WPI_TalonSRX m_climber_motor;
     private WPI_TalonSRX m_climber_motor_follower;
-    private Solenoid m_solenoid_left;
-    private Solenoid m_solenoid_right;
+    private Solenoid m_solenoid;
 
     //Create and define all standard data types needed
     public Climber() {
@@ -23,8 +22,7 @@ public class Climber extends SubsystemBase {
         m_climber_motor_follower = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_RIGHT);
         m_climber_motor_follower.follow(m_climber_motor);
 
-        m_solenoid_left = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR_LEFT);
-        m_solenoid_right = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR_RIGHT);
+        m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);
     }
 
     public void setSpeed(double speed) {
@@ -32,12 +30,11 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean isDeployed() {
-        return m_solenoid_left.get();
+        return m_solenoid.get();
     }
 
     public void deployClimber() {
-        m_solenoid_left.toggle();
-        m_solenoid_right.toggle();
+        m_solenoid.toggle();
     }
 }
 

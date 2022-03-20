@@ -58,11 +58,11 @@ public class RobotMap {
      */
 
     //
-    public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
+    public static final double kFalconTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
     public static final double kTopShooterGearRatio = 2;
-    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
-    public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
+    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
+    public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
@@ -101,17 +101,17 @@ public class RobotMap {
      */
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
-    public static final double trackDistance = Units.inchesToMeters(25.49125); //taken 3/9/22 PRACTICE
+    public static final double trackDistance = Units.inchesToMeters(26.35); //taken 3/9/22 PRACTICE
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = Units.inchesToMeters(3.93425);//taken 3/9/22 PRACTICE
+    public static final double kWheelDiameter = Units.inchesToMeters(3.975);//taken 3/9/22 PRACTICE
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
-    public static final double kChassisEncoderError = 1.0934926; //calculated 3/10/22 retains 3-6 cm error
+    public static final double kChassisEncoderError = 1; //TODO: Still needs to be determined for comp bot
 
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 0.33;
@@ -138,9 +138,7 @@ public class RobotMap {
      */
     public static final int PNM_Shift = 0;
     public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
-
-    public static final int PNM_CLIMBER_ACTUATOR_LEFT = 2; //TODO FIND THESE
-    public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 3; //TODO FIND THESE
+    public static final int PNM_CLIMBER_ACTUATOR = 2;
 
     /**
      * Gamepad Button List

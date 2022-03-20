@@ -1,20 +1,22 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.sensors.vision.Limelight;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Shooter;
 
-public class SetFlywheelRPM extends CommandBase {
+public class SpindexTimed extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private boolean hitSpeed = false;
-    private Limelight m_limelight;
+    private final double time;
+    private Timer timer;
 
-    public SetFlywheelRPM(Shooter subsystem, Limelight m_limelight) {
+    public SpindexTimed(Shooter shooter, double time) {
         //mapping to object passed through parameter
-        m_shooter = subsystem;
-        m_requirements.add(subsystem);
-        this.m_limelight = m_limelight;
+        m_shooter = shooter;
+        m_requirements.add(shooter);
+        this.time = time;
+        timer = new Timer();
     }
 
     /**
@@ -22,11 +24,9 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
-        m_shooter.setFlywheelSetSpeed(m_shooter.getSpeedFromShuffleboard());
-        m_shooter.feedFlywheel();
-        m_shooter.feedHoodWheel();
-        /*m_limelight.setLedState(true);*/
+        timer.reset();
+        timer.start();
+        m_shooter.setIndexerPercent(0.1);
     }
 
     /**
@@ -35,12 +35,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
-            hitSpeed = true;
-        }
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(0.3);
-        } 
+
     }
 
     /**
@@ -59,7 +54,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        return (timer.hasElapsed(time));
     }
 
     /**
@@ -72,9 +67,6 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setFlywheelSpeed(0);
-        m_shooter.setHoodWheelTopSpeed(0);
         m_shooter.setIndexerPercent(0);
-        m_limelight.setLedState(false);
     }
 }

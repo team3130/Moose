@@ -21,20 +21,17 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_indexer;
 
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
-    private double TopShooterSetSpeed = 1000;
+    private double hoodWheelSetSpeed = 1000;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
-    private NetworkTableEntry sped = tab.add("Shooter Write RPM", flywheelSetSpeed).getEntry();
-    private NetworkTableEntry RPM = tab.add("Shooter Read RPM", 0).getEntry();
+    private NetworkTableEntry sped = tab.add("Shooter Set RPM", flywheelSetSpeed).getEntry();
+    private NetworkTableEntry RPM = tab.add("Shooter Current RPM", 0).getEntry();
     private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
 
-    private NetworkTableEntry spedTOP = tab.add("Shooter Top Write RPM", TopShooterSetSpeed).getEntry();
-    private NetworkTableEntry RPMTOP = tab.add("Shooter Top Read RPM", 0).getEntry();
-
-    private NetworkTableEntry indexerPercent = tab.add("IndexerWrite%", indexerSetSpeed).getEntry();
-    private NetworkTableEntry indexerRPM = tab.add("Indexer Write RPM", indexerSetSpeed).getEntry();
+    private NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
+    private NetworkTableEntry RPMHoodWheel = tab.add("Shooter Top Current RPM", 0).getEntry();
 
     //Create and define all standard data types needed
     public Shooter() {
@@ -63,7 +60,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
-    public double getRPMTop() {
+    public double getRPMHoodWheel() {
         return Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) getRawSpeed());
     }
 
@@ -71,27 +68,19 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return sped.getDouble(flywheelSetSpeed);
     }
 
-    public double getTopSpeedFromShuffleboard() {
-        return spedTOP.getDouble(TopShooterSetSpeed);
-    }
-
-    public double getIndexerSpeedFromShuffleboard(){
-        return indexerRPM.getDouble(indexerSetSpeed);
+    public double getHoodWheelSpeedFromShuffleboard() {
+        return spedHoodWheel.getDouble(hoodWheelSetSpeed);
     }
 
     public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
-        RPMTOP.setNumber(getRPMTop());
+        RPMHoodWheel.setNumber(getRPMHoodWheel());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
     }
 
     public void setIndexerPercent(double percent){
         m_indexer.set(ControlMode.PercentOutput, percent);
-    }
-
-    public double getIndexerPercentFromShuffleboard() {
-        return indexerPercent.getDouble(indexerSetSpeed);
     }
 
     public void teleopInit() {
@@ -125,12 +114,12 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
-    public void setIndexerSpeed(double rpm){
-        m_indexer.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kIndexerRPMtoNativeUnitsScalar, rpm));
+    public void setHoodWheelTopSpeed(double rpm) {
+        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
     }
 
-    public void setShooterTopSpeed(double rpm) {
-        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
+    public void spinHoodWheel() {
+        m_hoodWheel.set(ControlMode.PercentOutput, 0.3);
     }
 
     /**
@@ -173,5 +162,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public boolean canShoot() {
         return getRPM() >= getSpeedFromShuffleboard() - 50; // 50 is the range
+    }
+
+    public void feedHoodWheel() {
+        setHoodWheelTopSpeed(hoodWheelSetSpeed);
     }
 }
