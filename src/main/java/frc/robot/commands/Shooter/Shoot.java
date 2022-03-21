@@ -12,13 +12,13 @@ public class Shoot extends CommandBase {
     private Limelight limelight;
     private WheelSpeedCalculations wheelSpeedCalculations;
 
-    public Shoot(Shooter subsystem, Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
+    public Shoot(Shooter subsystem, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
 
         this.limelight = limelight;
-        this.wheelSpeedCalculations = wheelSpeedCalculations;
+        this.wheelSpeedCalculations = m_shooter.getShooterCurve();
     }
 
     /**
