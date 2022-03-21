@@ -26,7 +26,7 @@ public class SpindexTimed extends CommandBase {
     public void initialize() {
         timer.reset();
         timer.start();
-        m_shooter.setIndexerPercent(0.1);
+        m_shooter.feedIndexer();
     }
 
     /**
@@ -68,5 +68,6 @@ public class SpindexTimed extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.setIndexerPercent(0);
+        timer.stop();
     }
 }

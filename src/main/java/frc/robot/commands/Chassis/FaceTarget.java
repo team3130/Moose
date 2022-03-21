@@ -26,10 +26,10 @@ public class FaceTarget extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_chassis.updatePIDValues();
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         angle = m_chassis.getAngle() - m_limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);
-        m_chassis.updatePIDValues();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class FaceTarget extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(angle - m_chassis.getAngle()) <= 2 || !m_limelight.hasTrack();
+        return false;
     }
 
     @Override

@@ -42,8 +42,8 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(0.3);
+        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 25 && m_shooter.getRPMHoodWheel() >= m_shooter.getHoodWheelSpeedFromShuffleboard() - 25) {
+            m_shooter.setIndexerPercent(0.5);
         } 
     }
 
@@ -63,11 +63,8 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        if (m_magazine.isEmpty()) {
-            timer.start();
-        }
         // we do it again for the second ball
-        return timer.get() >= timeLimit && m_magazine.isEmpty();
+        return timer.get() >= timeLimit;
     }
 
     /**

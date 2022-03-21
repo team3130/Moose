@@ -18,12 +18,6 @@ public class RobotMap {
      */
 
     /**
-     * Digital I/O ports
-     */
-
-    public static final int DIO_FEEDERBEAM = 0;
-
-    /**
      * CAN ID's
      */
     // indexer
@@ -78,7 +72,12 @@ public class RobotMap {
     public static double kFlywheelP = .22;
     public static double kFlywheelI = 0.0;
     public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
+    public static double kFlywheelF = (.53*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
+
+    public static double kFlywheelHoodP = .22;
+    public static double kFlywheelHoodI = 0.0;
+    public static double kFlywheelHoodD = 12;
+    public static double kFlywheelHoodF = (.75*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
 
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;
@@ -91,10 +90,10 @@ public class RobotMap {
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static final double kLimelightPitch =  -45;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightPitch =  -38.5;   // Facing up is negative, in degrees Checked: 2/17
     public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO: FIND FOR 2022
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
-    public static final double kLimelightHeight = 0.84;     // Height of camera aperture from the ground
+    public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
     public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
     public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens TODO: FIND FOR 2022
@@ -109,12 +108,12 @@ public class RobotMap {
      */
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
-    public static final double trackDistance = Units.inchesToMeters(26.35); //taken 3/9/22 PRACTICE
+    public static final double trackDistance = Units.inchesToMeters(27.089); //taken 3/20/22 COMP
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = Units.inchesToMeters(3.975);//taken 3/9/22 PRACTICE
+    public static final double kWheelDiameter = 0.100305;//taken 3/20/22 COMP
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;

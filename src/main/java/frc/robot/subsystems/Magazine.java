@@ -43,9 +43,7 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     }
 
     @Override
-    public void outputToShuffleboard() {
-        SmartDashboard.putBoolean("Beam", m_beam.get());
-    }
+    public void outputToShuffleboard() {}
 
     @Override
     public void teleopInit() {}

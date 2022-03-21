@@ -285,6 +285,6 @@ public class Limelight implements GeneralUtils {
 
     public void teleopInit() {setLedState(true);}
     public void autonInit() {setLedState(true);}
-    public void disable() {setLedState(false);
-    }
+    public void disable() {setLedState(false);}
+
 }

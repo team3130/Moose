@@ -51,7 +51,6 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -66,6 +65,5 @@ public class SpinHood extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_hood.setSpeed(0);
-        m_hood.zero();
     }
 }
