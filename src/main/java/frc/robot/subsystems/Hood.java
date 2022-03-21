@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -42,9 +43,17 @@ public class Hood extends SubsystemBase implements GeneralUtils {
         m_hood.set(ControlMode.MotionMagic, 0);
     }
 
+    public void toPos(double pos) {
+        m_hood.set(ControlMode.MotionMagic, Util.scaleRotationsToNativeUnits(RobotMap.HoodScalarToRotations, pos));
+    }
+
+    public double getDistance() {
+        return Util.scaleNativeUnitsToRotations(RobotMap.HoodScalarToRotations, (long) m_hood.getSelectedSensorPosition());
+    }
+
     @Override
     public void outputToShuffleboard() {
-        SmartDashboard.putNumber("Angle", m_hood.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Angle", getDistance());
     }
 
     @Override

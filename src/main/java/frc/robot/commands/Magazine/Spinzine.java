@@ -20,8 +20,9 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_magazine.setCenterSpeed(0.6 * direction);
-        m_magazine.setSideSpeeds(0.4 * direction);
+        m_magazine.updateCenterSpeed(0.6 * direction);
+        m_magazine.updateSideSpeed(0.4 * direction);
+        m_magazine.feedAll();
     }
 
     /**

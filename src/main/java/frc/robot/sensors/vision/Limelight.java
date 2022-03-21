@@ -196,7 +196,6 @@ public class Limelight implements GeneralUtils {
 
 //        System.out.println("Inner Goal offset: " + Math.toDegrees(Math.atan2(inner.get(0, 0), inner.get(2, 0))));
 
-        // TODO: Explain why is this negative
         // If rotation of the target is greater than this many inches along the edge
         // of the outer goal (approx) forget about the inner goal
         if (Math.abs(inner.get(0, 0)) > 5) return -1.0 * alpha + yawAdj;

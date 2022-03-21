@@ -18,7 +18,8 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_magazineRight;
     private WPI_TalonSRX m_magazineLeft;
 
-    private DigitalInput m_beam;
+    private double centerSpeed = 0.6;
+    private double sideSpeed = 0.4;
 
     //Create and define all standard data types needed
     public Magazine() {
@@ -51,6 +52,34 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     @Override
     public void disable() {
         m_magazineCenter.set(0);
+    }
+
+    public void feedCenter() {
+        m_magazineCenter.set(centerSpeed);
+    }
+
+    public void updateSpeeds(double center, double side) {
+        centerSpeed = center;
+        sideSpeed = side;
+    }
+
+    public void updateSideSpeed(double sideSpeed) {
+        this.sideSpeed = sideSpeed;
+    }
+
+    public void updateCenterSpeed(double centerSpeed) {
+        this.centerSpeed = centerSpeed;
+    }
+
+    public void feedAll() {
+        feedCenter();
+        feedSides();
+    }
+
+
+    public void feedSides() {
+        m_magazineLeft.set(sideSpeed);
+        m_magazineRight.set(sideSpeed);
     }
 }
 

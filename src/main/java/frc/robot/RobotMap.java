@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.utils.Utils;
 
 public class RobotMap {
     public static final int DIO_FEEDERBEAM = 1;
@@ -67,7 +66,10 @@ public class RobotMap {
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
-    public static final double kIndexerTicksPerRevolution = 2048; //TODO: Find real value
+    public static final double kIndexerTicksPerRevolution = 2048;
+
+    // this might not be actual rotations, but it doesn't matter
+    public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
     public static double kFlywheelP = .22;
     public static double kFlywheelI = 0.0;
@@ -96,8 +98,7 @@ public class RobotMap {
     public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
     public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
-    public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens TODO: FIND FOR 2022
-    public static final double ShootingSweetSpot = 4; //TODO: Find sweet spot
+    public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
@@ -111,7 +112,6 @@ public class RobotMap {
     public static final double trackDistance = Units.inchesToMeters(27.089); //taken 3/20/22 COMP
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
-    public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
     public static final double kWheelDiameter = 0.100305;//taken 3/20/22 COMP
     public static final double kMaxHighGearDriveSpeed = 0.8;

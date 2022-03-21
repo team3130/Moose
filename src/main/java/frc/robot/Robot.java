@@ -23,7 +23,6 @@ public class Robot extends TimedRobot {
   CommandScheduler m_scheduler = CommandScheduler.getInstance();
 
   private final SendableChooser<AutonCommand> m_autonChooser = new SendableChooser<>();
-  private String m_autoSelected;
 
   private final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
   private final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
@@ -49,9 +48,9 @@ public class Robot extends TimedRobot {
     m_chooser_weapons.addOption("Parker", "Parker");
     m_chooser_weapons.addOption("Test", "Test");
     SmartDashboard.putData("Weapons", m_chooser_weapons);
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer(m_autonChooser);
     m_chooser = m_robotContainer.getChooser();
-//    m_chooser.addAllCommands();
+    m_chooser.addAllCommands();
   }
 
   /**

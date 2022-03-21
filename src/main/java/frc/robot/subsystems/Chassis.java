@@ -419,6 +419,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         SmartDashboard.putBoolean("Shifted", m_shifter.get());
 
+        SmartDashboard.putNumber("Chassis Position Error", m_spinnyPID.getPositionError());
+        SmartDashboard.putNumber("Chassis Velocity Error", m_spinnyPID.getVelocityError());
+
         m_fieldPos.setRobotPose(this.getPose());
         SmartDashboard.putData("Field position", m_fieldPos);
 
@@ -460,5 +463,13 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_spinnyPID.setPID(P.getDouble(RobotMap.ChassisSpinKP), I.getDouble(RobotMap.ChassisSpinKI), D.getDouble(RobotMap.ChassisSpinKD));
     }
 
+    public void tuneTolerance() {
+        //TODO: get real values
+        m_spinnyPID.setTolerance(2, 3);
+    }
+
+    public void resetPIDLoop() {
+        m_spinnyPID.reset();
+    }
 
 }

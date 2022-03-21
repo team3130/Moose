@@ -44,6 +44,7 @@ public class SetFlywheelRPM extends CommandBase {
     public void execute() {
         if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 25 && m_shooter.getRPMHoodWheel() >= m_shooter.getHoodWheelSpeedFromShuffleboard() - 25) {
             m_shooter.setIndexerPercent(0.5);
+            m_magazine.feedAll();
         } 
     }
 

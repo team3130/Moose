@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
 import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.FaceTarget;
@@ -83,10 +84,11 @@ public class RobotContainer {
         return m_hood;
     }
 
-    public RobotContainer() {
+    public RobotContainer(SendableChooser<AutonCommand> autonChooser) {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
+        m_chooser = new Chooser(autonChooser, this);
     }
 
     public Chooser getChooser() {
