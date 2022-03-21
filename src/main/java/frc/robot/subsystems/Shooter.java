@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
 
-import static frc.robot.utils.Utils.configPIDF;
-
 public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonFX m_hoodWheel;
@@ -25,7 +23,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private double hoodWheelSetSpeed = 1000;
     private double indexerSetSpeed = 0.5; // default 50%
 
-    private PIDController pidFlywheel;
+    private PIDController pidFlywheel, pidTopShooter;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
@@ -50,9 +48,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_hoodWheel.setInverted(false);
 
         pidFlywheel = new PIDController(RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD);
-
-        configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.kFlywheelF);
-        configPIDF(m_hoodWheel, RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD, RobotMap.kFlywheelHoodF);
+        pidTopShooter = new PIDController(RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD);
 
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Coast);
@@ -119,11 +115,19 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void setFlywheelSpeed(double rpm) {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
-        m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        pidFlywheel.setSetpoint(rpm); //TODO may need to scale with Util
+    }
+
+    public void setFlyWheelPIDLoop() {
+        m_flywheel.set(ControlMode.PercentOutput, pidFlywheel.calculate(m_flywheel.getSelectedSensorVelocity()));
     }
 
     public void setHoodWheelTopSpeed(double rpm) {
-        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
+        pidTopShooter.setSetpoint(rpm);
+    }
+
+    public void setHoodWheelPidLoop() {
+        m_hoodWheel.set(ControlMode.PercentOutput, pidTopShooter.calculate(m_hoodWheel.getSelectedSensorVelocity()));
     }
 
     public void spinHoodWheel() {
@@ -148,6 +152,11 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void setHoodWheelSetSpeed(double speed) {
         hoodWheelSetSpeed = speed;
+    }
+
+    public void resetPID() {
+        pidTopShooter.reset();
+        pidFlywheel.reset();
     }
 
     /**
@@ -179,4 +188,5 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void feedHoodWheel() {
         setHoodWheelTopSpeed(hoodWheelSetSpeed);
     }
+
 }

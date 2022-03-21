@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
@@ -76,10 +77,11 @@ public class RobotMap {
     public static double kFlywheelD = 12;
     public static double kFlywheelF = (.53*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
 
-    public static double kFlywheelHoodP = .22;
+    public static double kFlywheelHoodP = 0.00010408;
     public static double kFlywheelHoodI = 0.0;
-    public static double kFlywheelHoodD = 12;
-    public static double kFlywheelHoodF = (.75*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
+    public static double kFlywheelHoodD = 0;
+
+    public static SimpleMotorFeedforward kFlyWheelHoodF = new SimpleMotorFeedforward(1.151, 0.00011755, 4.9668E-06);
 
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;

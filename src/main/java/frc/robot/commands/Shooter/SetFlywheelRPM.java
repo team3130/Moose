@@ -15,7 +15,8 @@ public class SetFlywheelRPM extends CommandBase {
     private final Timer timer = new Timer();
 
     public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
-        //mapping to object passed through parameter
+        //mapping to object passed through parameter[]\
+
         m_shooter = subsystem;
         m_magazine = magazine;
         m_requirements.add(subsystem);
@@ -30,8 +31,6 @@ public class SetFlywheelRPM extends CommandBase {
     public void initialize() {
         m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
         m_shooter.setFlywheelSetSpeed(m_shooter.getSpeedFromShuffleboard());
-        m_shooter.feedFlywheel();
-        m_shooter.feedHoodWheel();
         m_limelight.setLedState(true);
         timer.reset();
     }
@@ -45,7 +44,9 @@ public class SetFlywheelRPM extends CommandBase {
         if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 25 && m_shooter.getRPMHoodWheel() >= m_shooter.getHoodWheelSpeedFromShuffleboard() - 25) {
             m_shooter.setIndexerPercent(0.5);
             m_magazine.feedAll();
-        } 
+        }
+        m_shooter.setFlyWheelPIDLoop();
+        m_shooter.setHoodWheelPidLoop();
     }
 
     /**
@@ -64,8 +65,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // we do it again for the second ball
-        return timer.get() >= timeLimit;
+        return false;
     }
 
     /**
@@ -83,5 +83,6 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.setIndexerPercent(0);
         m_limelight.setLedState(false);
         timer.stop();
+        m_shooter.resetPID();
     }
 }
