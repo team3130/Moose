@@ -72,16 +72,21 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
-    public static double kFlywheelP = .22;
-    public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.53*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
+    public static double kFlywheelP = 7.1121E-05;
+    public static double kFlywheelI = 0;
+    public static double kFlywheelD = 0;
+
+    public static double flyWheelkS = 0.50292;
+    public static double flyWheelkV = 5.6502E-05;
+    public static double flyWheelkA = 5.9365E-06;
 
     public static double kFlywheelHoodP = 0.00010408;
     public static double kFlywheelHoodI = 0.0;
     public static double kFlywheelHoodD = 0;
 
-    public static SimpleMotorFeedforward kFlyWheelHoodF = new SimpleMotorFeedforward(1.151, 0.00011755, 4.9668E-06);
+    public static double kTopShooterKS = 1.151;
+    public static double kTopShooterKV = 0.00011755;
+    public static double kTopShooterKA = 4.9668E-06;
 
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;

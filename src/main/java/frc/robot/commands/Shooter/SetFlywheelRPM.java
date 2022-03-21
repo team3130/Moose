@@ -11,12 +11,10 @@ public class SetFlywheelRPM extends CommandBase {
     private final Shooter m_shooter;
     private final Magazine m_magazine;
     private Limelight m_limelight;
-    private final double timeLimit = 2;
     private final Timer timer = new Timer();
 
     public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
-        //mapping to object passed through parameter[]\
-
+        // mapping to object passed through parameter
         m_shooter = subsystem;
         m_magazine = magazine;
         m_requirements.add(subsystem);
@@ -84,5 +82,6 @@ public class SetFlywheelRPM extends CommandBase {
         m_limelight.setLedState(false);
         timer.stop();
         m_shooter.resetPID();
+        m_shooter.stopAll();
     }
 }
