@@ -22,6 +22,7 @@ public class Hood extends SubsystemBase implements GeneralUtils {
     //Create necessary objects
     private WPI_TalonSRX m_hood;
     private WheelSpeedCalculations winchCurve;
+
     //Create and define all standard data types needed
     public Hood() {
         m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD_MOTOR);
@@ -44,10 +45,12 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     public void zero() {
         m_hood.set(ControlMode.MotionMagic, 0);
+
     }
 
     public void toPos(double pos) {
         m_hood.set(ControlMode.MotionMagic, Util.scaleRotationsToNativeUnits(RobotMap.HoodScalarToRotations, pos));
+
     }
 
     public WheelSpeedCalculations getWinchCurve(){
@@ -56,6 +59,10 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     public double getDistance() {
         return Util.scaleNativeUnitsToRotations(RobotMap.HoodScalarToRotations, (long) m_hood.getSelectedSensorPosition());
+    }
+
+    public boolean canShoot(double currentSetpoint){
+        return Math.abs(currentSetpoint - m_hood.getSelectedSensorPosition()) <= 128;
     }
 
     @Override
@@ -70,6 +77,7 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
+
 
     }
 }

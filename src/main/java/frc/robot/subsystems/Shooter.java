@@ -187,7 +187,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return getRPM() >= getSpeedFromShuffleboard() - 50; // 50 is the range
+        return getRPM() >= getSpeedFromShuffleboard() - 50 && getRPMHoodWheel() >= getHoodWheelSpeedFromShuffleboard() - 50; // 50 is the range
     }
 
     public void feedHoodWheel() {

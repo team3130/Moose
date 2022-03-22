@@ -42,7 +42,7 @@ import java.util.List;
 public class RobotContainer {
     private ArrayList<GeneralUtils> m_generalUtils;
     // Supporting classes
-    protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations();
+    //protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations();
     protected Limelight m_limelight = new Limelight();
 
     // define subsystems here
@@ -113,8 +113,8 @@ public class RobotContainer {
         }
         else if (m_chooser_driver.getSelected().equals("Test")) {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenHeld(new FaceTarget(m_chassis, m_limelight));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new SpinHood(m_hood, 1));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SpinHood(m_hood, -1));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new SpinHood(m_hood, m_limelight,1));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new SpinHood(m_hood, m_limelight, -1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new ZeroHood(m_hood));

@@ -3,22 +3,29 @@ package frc.robot.commands.Shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
+    private final Hood m_hood;
     private boolean hitSpeed = false;
     private Limelight limelight;
-    private WheelSpeedCalculations wheelSpeedCalculations;
+    private WheelSpeedCalculations shooterCurve;
+    private WheelSpeedCalculations hoodCurve;
 
-    public Shoot(Shooter subsystem, Limelight limelight) {
+    public Shoot(Shooter subsystem, Hood hood, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
+        m_hood = hood;
         m_requirements.add(subsystem);
+        m_requirements.add(hood);
 
         this.limelight = limelight;
-        this.wheelSpeedCalculations = m_shooter.getShooterCurve();
+        this.shooterCurve = m_shooter.getShooterCurve();
+        hoodCurve = m_hood.getWinchCurve();
+
     }
 
     /**
@@ -40,9 +47,10 @@ public class Shoot extends CommandBase {
         else {
             double x = limelight.getDistanceToTarget();
             if (5 <= x) {
-                m_shooter.setFlywheelSpeed(wheelSpeedCalculations.getSpeed(x));
+                m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
+                m_hood.toPos(hoodCurve.getSpeed(x));
             }
-            if (m_shooter.canShoot()) {
+            if (m_shooter.canShoot() && m_hood.canShoot(hoodCurve.getSpeed(x))) {
                 m_shooter.feedIndexer();
                 hitSpeed = true;
             }
