@@ -121,9 +121,8 @@ public class RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new SpindexTimed(m_shooter, 0.1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
-            new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenHeld(new SpinHoodWheel(m_shooter));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenHeld(new SpinHoodWheel(m_shooter));
         }
 
         // weapons controls

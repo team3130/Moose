@@ -51,7 +51,7 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
-        m_magazineCenter.set(0);
+        stopAll();
     }
 
     public void feedCenter() {
@@ -74,6 +74,12 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     public void feedAll() {
         feedCenter();
         feedSides();
+    }
+
+    public void stopAll() {
+        m_magazineCenter.set(0);
+        m_magazineRight.set(0);
+        m_magazineLeft.set(0);
     }
 
 

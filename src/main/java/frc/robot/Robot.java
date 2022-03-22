@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
-    m_chooser_driver.setDefaultOption("Cody", "Cody");
+    m_chooser_driver.setDefaultOption("Test", "Test");
     m_chooser_driver.addOption("Maddie", "Maddie");
     m_chooser_driver.addOption("Test", "Test");
     SmartDashboard.putData("Driver", m_chooser_driver);

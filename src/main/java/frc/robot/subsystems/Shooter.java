@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
+import frc.robot.utils.Utils;
 
 public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
@@ -45,6 +46,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public Shooter() {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
+
+        Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
 
         m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
         m_hoodWheel.setInverted(false);
@@ -130,7 +133,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void setFlyWheelPIDLoop() {
-        m_flywheel.set(ControlMode.PercentOutput, pidFlywheel.calculate(m_flywheel.getSelectedSensorVelocity()) + pidFlyWheelF.calculate(pidFlywheel.getSetpoint()));
+        double out = pidFlywheel.calculate(Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheel.getSelectedSensorVelocity())) + pidFlyWheelF.calculate(pidFlywheel.getSetpoint());
+        System.out.println("flywheel velocity error: " + pidFlywheel.getVelocityError());
+        m_flywheel.set(ControlMode.PercentOutput, out);
     }
 
     public void setHoodWheelTopSpeed(double rpm) {
@@ -138,7 +143,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void setHoodWheelPidLoop() {
-        m_hoodWheel.set(ControlMode.PercentOutput, pidTopShooter.calculate(m_hoodWheel.getSelectedSensorVelocity()) + pidTopShooterF.calculate(pidTopShooter.getSetpoint()));
+        double out = pidTopShooter.calculate(Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) m_hoodWheel.getSelectedSensorVelocity())) + pidTopShooterF.calculate(pidTopShooter.getSetpoint());
+        System.out.println("Top shooter velocity error:" + pidTopShooter.getVelocityError());
+        m_hoodWheel.set(ControlMode.PercentOutput, out);
     }
 
     public void spinHoodWheel() {

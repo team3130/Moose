@@ -447,7 +447,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void spinToAngle(double angle) {
-        System.out.println(m_spinnyPID.calculate(angle));
         driveArcade(0, -m_spinnyPID.calculate(angle), false);
     }
 

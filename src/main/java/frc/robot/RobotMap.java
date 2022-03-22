@@ -61,7 +61,7 @@ public class RobotMap {
     //
     public static final double kFalconTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
-    public static final double kTopShooterGearRatio = 2;
+    public static final double kTopShooterGearRatio = (double) 1/2;
     public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
     public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
 
@@ -73,7 +73,7 @@ public class RobotMap {
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
     public static double kFlywheelP = 7.1121E-05;
-    public static double kFlywheelI = 0;
+    public static double kFlywheelI = 7.1121E-06;
     public static double kFlywheelD = 0;
 
     public static double flyWheelkS = 0.50292;
@@ -81,7 +81,7 @@ public class RobotMap {
     public static double flyWheelkA = 5.9365E-06;
 
     public static double kFlywheelHoodP = 0.00010408;
-    public static double kFlywheelHoodI = 0.0;
+    public static double kFlywheelHoodI = 0.000010408;
     public static double kFlywheelHoodD = 0;
 
     public static double kTopShooterKS = 1.151;

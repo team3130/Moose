@@ -28,7 +28,7 @@ public class SetFlywheelRPM extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
-        m_shooter.setFlywheelSetSpeed(m_shooter.getSpeedFromShuffleboard());
+        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
         m_limelight.setLedState(true);
         timer.reset();
     }
@@ -41,7 +41,6 @@ public class SetFlywheelRPM extends CommandBase {
     public void execute() {
         if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 25 && m_shooter.getRPMHoodWheel() >= m_shooter.getHoodWheelSpeedFromShuffleboard() - 25) {
             m_shooter.setIndexerPercent(0.5);
-            m_magazine.feedAll();
         }
         m_shooter.setFlyWheelPIDLoop();
         m_shooter.setHoodWheelPidLoop();
@@ -79,6 +78,7 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.setFlywheelSpeed(0);
         m_shooter.setHoodWheelTopSpeed(0);
         m_shooter.setIndexerPercent(0);
+        m_magazine.stopAll();
         m_limelight.setLedState(false);
         timer.stop();
         m_shooter.resetPID();
