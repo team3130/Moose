@@ -51,22 +51,25 @@ public class WheelSpeedCalculations {
 
     private ArrayList<DataPoint> data_MainStorage;
     private LinearInterp speedCurve;
-    private String FILEPATH;
+    private final String FILEPATH;
 
-    public static enum CurveMechanism {SHOOTER, HOOD_WINCH}
+    public enum CurveMechanism {SHOOTER, HOOD_WINCH}
     private CurveMechanism mechanism;
 
     public WheelSpeedCalculations(CurveMechanism mechanism) {
         this.mechanism = mechanism;
-        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves";
+        String dir = Filesystem.getDeployDirectory() + File.separator + "curves";
 
-        if (mechanism == SHOOTER) {
-            FILEPATH = FILEPATH + File.separator + "ShooterPlaceHolder.csv";
+        switch (mechanism) {
+            case SHOOTER:
+                FILEPATH = dir + File.separator + "ShooterPlaceHolder.csv";
+                break;
+            case HOOD_WINCH:
+                FILEPATH = dir + File.separator + "HoodPlaceHolder.csv";
+                break;
+            default:
+                FILEPATH = dir;
         }
-        else if (mechanism == HOOD_WINCH) {
-            FILEPATH = FILEPATH + File.separator + "HoodPlaceHolder.csv";
-        }
-
 
         data_MainStorage = new ArrayList<>();
         readFile();
@@ -85,7 +88,7 @@ public class WheelSpeedCalculations {
 
         speedCurve = new LinearInterp(data_Dist, data_Speed);
     }
-    
+
     public void readFile() {
         data_MainStorage.clear();
 
