@@ -117,9 +117,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void setFlywheelSpeed(double rpm) {
-//        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
-//        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
-//        pidFlywheel.setSetpoint(rpm);
         m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
@@ -133,7 +130,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void setHoodWheelTopSpeed(double rpm) {
         m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
     }
-
 
     public void spinHoodWheel() {
         m_hoodWheel.set(ControlMode.PercentOutput, 0.3);

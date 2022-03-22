@@ -93,7 +93,7 @@ public class RobotMap {
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;
     public static double kHoodD = 0;
-    public static double kHoodF = 0;
+    public static double kHoodV = 0;
 
     /**
      * Limelight

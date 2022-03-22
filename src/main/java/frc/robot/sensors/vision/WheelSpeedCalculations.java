@@ -1,6 +1,8 @@
 package frc.robot.sensors.vision;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.RobotMap;
 import frc.robot.utils.LinearInterp;
 
 import java.io.BufferedReader;
@@ -9,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.HOOD_WINCH;
 import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.SHOOTER;
@@ -74,22 +77,9 @@ public class WheelSpeedCalculations {
         ArrayList<Double> data_Dist = new ArrayList<>();
         ArrayList<Double> data_Speed = new ArrayList<>();
 
-        if (FILEPATH != null) {
-
-        for (int iii = 0; iii < data_MainStorage.size(); iii++) {
-            DataPoint pt = data_MainStorage.get(iii);
+        for (DataPoint pt : data_MainStorage) {
             data_Dist.add(pt.distance);
             data_Speed.add(pt.speed);
-        }
-    }
-        else{
-            for (int i = 0; i < 2; i++){
-                data_Dist.add((double)i);
-
-                if(mechanism == SHOOTER)data_Speed.add(3200.0);
-                else{data_Speed.add(0.0);}
-            }
-
         }
 
         speedCurve = new LinearInterp(data_Dist, data_Speed);
@@ -100,11 +90,14 @@ public class WheelSpeedCalculations {
 
         try (BufferedReader br = new BufferedReader(new FileReader(FILEPATH))) {
             for (String line; (line = br.readLine()) != null; ) {
-                if (!line.equals("")) data_MainStorage.add(new DataPoint(line));
+                if (!line.equals("")) {
+                    data_MainStorage.add(new DataPoint(line));
+                }
             }
-            // line is not visible here.
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        catch (IOException e) {
+            DriverStation.reportError("There was a problem in Wheel Speed Calculations", RobotMap.debug);
+            data_MainStorage.addAll(List.of(new DataPoint(Double.MIN_NORMAL, (mechanism == SHOOTER) ? 3200 : 0), new DataPoint(Double.MAX_VALUE, (mechanism == SHOOTER) ? 3200 : 0)));
         }
 
         data_MainStorage.sort(compPoint);

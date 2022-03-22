@@ -30,9 +30,15 @@ public class SpinHood extends CommandBase {
     public void initialize() {
 
         double x = limelight.getDistanceToTarget();
-        if(!limelight.hasTrack()){m_hood.setSpeed(0.4 * direction);}
-        else{
-            if(x >= 5){m_hood.toPos(hoodCurve.getSpeed(x));}
+
+        if (!limelight.hasTrack()) {
+            m_hood.setSpeed(0.4 * direction);
+        }
+
+        else {
+            if (x >= 5) {
+                m_hood.toPos(hoodCurve.getSpeed(x));
+            }
         }
     }
 

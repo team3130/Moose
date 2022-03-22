@@ -1,24 +1,18 @@
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Hood;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
-import frc.robot.subsystems.Magazine;
-import frc.robot.subsystems.Shooter;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Hood;
 
-public class SetFlywheelRPM extends CommandBase {
+public class HoodToPoint extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Shooter m_shooter;
-    private final Magazine m_magazine;
-    private final Limelight m_limelight;
+    private final Hood m_hood;
 
-    public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
-        // mapping to object passed through parameter
-        m_shooter = subsystem;
-        m_magazine = magazine;
+    public HoodToPoint(Hood subsystem) {
+        //mapping to object passed through parameter
+        m_hood = subsystem;
         m_requirements.add(subsystem);
-        m_requirements.add(magazine);
-        this.m_limelight = m_limelight;
     }
 
     /**
@@ -26,12 +20,8 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.updatePID();
-
-        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
-        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
-
-        m_limelight.setLedState(true);
+        m_hood.updatePID();
+        m_hood.toPos(m_hood.getSetPos());
     }
 
     /**
@@ -40,10 +30,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.canShoot()) {
-            m_shooter.setIndexerPercent(0.5);
-            m_magazine.feedAll();
-        }
+
     }
 
     /**
@@ -62,7 +49,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return m_hood.atPosition();
     }
 
     /**
@@ -75,8 +62,6 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.stopAll();
-        m_magazine.stopAll();
-        m_limelight.setLedState(false);
+        m_hood.setSpeed(0);
     }
 }
