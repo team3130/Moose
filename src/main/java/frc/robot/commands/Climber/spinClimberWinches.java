@@ -1,19 +1,19 @@
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Climber;
 
 public class spinClimberWinches extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Climber m_climber;
-    private final int direction;
 
 
-    public spinClimberWinches(Climber subsystem, int direction) {
+    public spinClimberWinches(Climber subsystem) {
         //mapping to object passed through parameter
         m_climber = subsystem;
         m_requirements.add(subsystem);
-        this.direction = direction;
     }
 
     /**
@@ -21,7 +21,6 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_climber.setSpeed(0.5 * direction);
     }
 
     /**
@@ -30,7 +29,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void execute() {
-
+        m_climber.driveTank(RobotContainer.m_weaponsGamepad.getRawAxis(1) * 0.7, RobotContainer.m_weaponsGamepad.getRawAxis(5) * 0.7, true);
     }
 
     /**
