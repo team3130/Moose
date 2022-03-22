@@ -51,19 +51,20 @@ public class WheelSpeedCalculations {
 
     private ArrayList<DataPoint> data_MainStorage;
     private LinearInterp speedCurve;
-    private final String FILEPATH;
+    private String FILEPATH;
 
     public static enum CurveMechanism {SHOOTER, HOOD_WINCH}
     private CurveMechanism mechanism;
 
     public WheelSpeedCalculations(CurveMechanism mechanism) {
         this.mechanism = mechanism;
+        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves";
+
         if (mechanism == SHOOTER) {
-            FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "ShooterPlaceHolder.csv";
-        } else if (mechanism == HOOD_WINCH) {
-            FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "HoodPlaceHolder.csv";
-        } else {
-            FILEPATH = null;
+            FILEPATH = FILEPATH + File.separator + "ShooterPlaceHolder.csv";
+        }
+        else if (mechanism == HOOD_WINCH) {
+            FILEPATH = FILEPATH + File.separator + "HoodPlaceHolder.csv";
         }
 
 
@@ -83,8 +84,8 @@ public class WheelSpeedCalculations {
         }
 
         speedCurve = new LinearInterp(data_Dist, data_Speed);
-
-}
+    }
+    
     public void readFile() {
         data_MainStorage.clear();
 
@@ -99,7 +100,7 @@ public class WheelSpeedCalculations {
             data_MainStorage.addAll(List.of(
                     new DataPoint(0, (mechanism == SHOOTER) ? 3200 : 0),
                     new DataPoint(500, (mechanism == SHOOTER) ? 3200 : 0)));
-            DriverStation.reportError("There was a problem in Wheel Speed Calculations", RobotMap.debug);
+            DriverStation.reportError("Could not read CSV, defaulting", false);
         }
 
         data_MainStorage.sort(compPoint);
