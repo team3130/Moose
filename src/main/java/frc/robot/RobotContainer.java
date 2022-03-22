@@ -17,6 +17,7 @@ import frc.robot.commands.Chassis.Shift;
 import frc.robot.commands.Chassis.resetOdometery;
 import frc.robot.commands.Climber.spinClimberWinches;
 import frc.robot.commands.Climber.ToggleClimber;
+import frc.robot.commands.Hood.HoodToPoint;
 import frc.robot.commands.Hood.SpinHood;
 import frc.robot.commands.Hood.ZeroHood;
 import frc.robot.commands.Intake.DeployAndSpintake;
@@ -122,7 +123,8 @@ public class RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new ZeroHood(m_hood));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new SpindexTimed(m_shooter, 0.1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new HoodToPoint(m_hood));
+            new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenHeld(new SpinHoodWheel(m_shooter));
         }

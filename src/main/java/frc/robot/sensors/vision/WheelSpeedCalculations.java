@@ -96,8 +96,10 @@ public class WheelSpeedCalculations {
             }
         }
         catch (IOException e) {
+            data_MainStorage.addAll(List.of(
+                    new DataPoint(0, (mechanism == SHOOTER) ? 3200 : 0),
+                    new DataPoint(500, (mechanism == SHOOTER) ? 3200 : 0)));
             DriverStation.reportError("There was a problem in Wheel Speed Calculations", RobotMap.debug);
-            data_MainStorage.addAll(List.of(new DataPoint(Double.MIN_NORMAL, (mechanism == SHOOTER) ? 3200 : 0), new DataPoint(Double.MAX_VALUE, (mechanism == SHOOTER) ? 3200 : 0)));
         }
 
         data_MainStorage.sort(compPoint);
