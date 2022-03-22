@@ -6,8 +6,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -26,9 +24,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private double hoodWheelSetSpeed = 1000;
     private double indexerSetSpeed = 0.5; // default 50%
 
-    private PIDController pidFlywheel, pidTopShooter;
-    private SimpleMotorFeedforward pidFlyWheelF, pidTopShooterF;
-
     private WheelSpeedCalculations shooterCurve;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
@@ -40,9 +35,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
     private NetworkTableEntry RPMHoodWheel = tab.add("Shooter Top Current RPM", 0).getEntry();
 
-    private NetworkTableEntry P = tab.add("Flywheel P", RobotMap.kFlywheelP).getEntry();
-    private NetworkTableEntry I = tab.add("Flywheel I", RobotMap.kFlywheelI).getEntry();
-    private NetworkTableEntry D = tab.add("Flywheel D", RobotMap.kFlywheelD).getEntry();
+    private NetworkTableEntry P = tab.add("Top Flywheel P", RobotMap.kFlywheelHoodP).getEntry();
+    private NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelHoodI).getEntry();
+    private NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelHoodD).getEntry();
+    private NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.kTopShooterKV).getEntry();
 
 
     //Create and define all standard data types needed
@@ -54,12 +50,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_hoodWheel.setInverted(false);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
-
-        pidFlywheel = new PIDController(RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD);
-        pidTopShooter = new PIDController(RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD);
-
-        pidFlyWheelF = new SimpleMotorFeedforward(RobotMap.flyWheelkS, RobotMap.flyWheelkV, RobotMap.flyWheelkA);
-        pidTopShooterF = new SimpleMotorFeedforward(RobotMap.flyWheelkS, RobotMap.flyWheelkV, RobotMap.flyWheelkA);
+        Utils.configPIDF(m_hoodWheel, RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD, RobotMap.kTopShooterKV);
 
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Coast);
@@ -138,21 +129,11 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_hoodWheel.set(0);
     }
 
-    public void setFlyWheelPIDLoop() {
-/*        double out = pidFlywheel.calculate(Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheel.getSelectedSensorVelocity())) + pidFlyWheelF.calculate(pidFlywheel.getSetpoint());
-        System.out.println("flywheel velocity error: " + pidFlywheel.getVelocityError());
-        m_flywheel.set(ControlMode.PercentOutput, out);*/
-    }
 
     public void setHoodWheelTopSpeed(double rpm) {
-        pidTopShooter.setSetpoint(rpm);
+        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
     }
 
-    public void setHoodWheelPidLoop() {
-        double out = pidTopShooter.calculate(Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) m_hoodWheel.getSelectedSensorVelocity())) + pidTopShooterF.calculate(pidTopShooter.getSetpoint());
-        System.out.println("Top shooter velocity error:" + pidTopShooter.getVelocityError());
-        m_hoodWheel.set(ControlMode.PercentOutput, out);
-    }
 
     public void spinHoodWheel() {
         m_hoodWheel.set(ControlMode.PercentOutput, 0.3);
@@ -178,11 +159,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         hoodWheelSetSpeed = speed;
     }
 
-    public void resetPID() {
-        pidTopShooter.reset();
-        pidFlywheel.reset();
-    }
-
     /**
      * Runs flywheel at flywheelSetSpeed
      */
@@ -206,7 +182,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return getRPM() >= getSpeedFromShuffleboard() - 50 && getRPMHoodWheel() >= getHoodWheelSpeedFromShuffleboard() - 50; // 50 is the range
+        return Math.abs(getRPM() - getSpeedFromShuffleboard()) <= 25  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 25; // 25 is the range
     }
 
     public void feedHoodWheel() {
@@ -215,6 +191,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public WheelSpeedCalculations getShooterCurve(){
         return shooterCurve;
+    }
+
+    public void updatePID() {
+        Utils.configPIDF(m_hoodWheel, P.getDouble(RobotMap.kFlywheelHoodP), I.getDouble(RobotMap.kFlywheelHoodI), D.getDouble(RobotMap.kFlywheelHoodD), V.getDouble(RobotMap.kTopShooterKV));
     }
 
 }

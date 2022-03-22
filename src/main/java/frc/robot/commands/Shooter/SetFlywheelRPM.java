@@ -10,7 +10,7 @@ public class SetFlywheelRPM extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
     private final Magazine m_magazine;
-    private Limelight m_limelight;
+    private final Limelight m_limelight;
     private final Timer timer = new Timer();
 
     public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
@@ -27,8 +27,9 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-//        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
-        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
+        m_shooter.updatePID();
+        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
+//        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
         m_limelight.setLedState(true);
         timer.reset();
     }
@@ -42,8 +43,6 @@ public class SetFlywheelRPM extends CommandBase {
         if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 25 && m_shooter.getRPMHoodWheel() >= m_shooter.getHoodWheelSpeedFromShuffleboard() - 25) {
             m_shooter.setIndexerPercent(0.5);
         }
-//        m_shooter.setFlyWheelPIDLoop();
-//        m_shooter.setHoodWheelPidLoop();
     }
 
     /**
@@ -75,13 +74,9 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setFlywheelSpeed(0);
-        m_shooter.setHoodWheelTopSpeed(0);
-        m_shooter.setIndexerPercent(0);
         m_magazine.stopAll();
+        m_shooter.stopAll();
         m_limelight.setLedState(false);
         timer.stop();
-        m_shooter.resetPID();
-        m_shooter.stopAll();
     }
 }

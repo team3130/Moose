@@ -76,7 +76,7 @@ public class RobotMap {
     public static double kFlywheelI = 0;
     public static double kFlywheelD = 0;
 
-    public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0;
+    public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0.5816;
     public static double flyWheelkV = 0.12 * WPItoCTREFeedForwardConversion;
@@ -87,7 +87,7 @@ public class RobotMap {
     public static double kFlywheelHoodD = 0;
 
     public static double kTopShooterKS = 1.151;
-    public static double kTopShooterKV = 0.00011755;
+    public static double kTopShooterKV = 0.00011755 * WPItoCTREFeedForwardConversion;
     public static double kTopShooterKA = 4.9668E-06;
 
     public static double kHoodP = 0.125;
