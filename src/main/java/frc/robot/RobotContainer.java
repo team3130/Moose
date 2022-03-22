@@ -89,6 +89,8 @@ public class RobotContainer {
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
         m_chooser = new Chooser(autonChooser, this);
+
+        m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
     }
 
     public Chooser getChooser() {
@@ -134,9 +136,8 @@ public class RobotContainer {
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spinzine(m_magazine, 1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spinzine(m_magazine, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new spinClimberWinches(m_climber, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new spinClimberWinches(m_climber, 1));
         }
+
         else if (m_chooser_weapons.getSelected().equals("Parker")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new Spinzine(m_magazine, 1)); // ltrigger
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine)); //rbumber
