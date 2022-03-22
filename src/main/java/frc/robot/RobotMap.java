@@ -72,13 +72,15 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
-    public static double kFlywheelP = 7.1121E-05;
-    public static double kFlywheelI = 7.1121E-06;
+    public static double kFlywheelP = 0.25;
+    public static double kFlywheelI = 0;
     public static double kFlywheelD = 0;
 
-    public static double flyWheelkS = 0.50292;
-    public static double flyWheelkV = 5.6502E-05;
-    public static double flyWheelkA = 5.9365E-06;
+    public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0;
+
+    public static double flyWheelkS = 0.5816;
+    public static double flyWheelkV = 0.11275 * WPItoCTREFeedForwardConversion;
+    public static double flyWheelkA = 0.0082804;
 
     public static double kFlywheelHoodP = 0.00010408;
     public static double kFlywheelHoodI = 0.000010408;

@@ -47,10 +47,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
 
-        Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
-
         m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
         m_hoodWheel.setInverted(false);
+
+        Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
 
         pidFlywheel = new PIDController(RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD);
         pidTopShooter = new PIDController(RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD);
@@ -123,7 +123,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void setFlywheelSpeed(double rpm) {
 //        configPIDF(m_flywheelMaster, testP.getDouble(RobotMap.kFlywheelP), 0.0, testD.getDouble(RobotMap.kFlywheelD), RobotMap.kFlywheelF);
 //        System.out.println("P: " + testP.getDouble(RobotMap.kFlywheelP) + " D: " + testD.getDouble(RobotMap.kFlywheelD) + " Setpoint: " + Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
-        pidFlywheel.setSetpoint(rpm);
+//        pidFlywheel.setSetpoint(rpm);
+        m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
     }
 
     public void stopAll() {
@@ -133,9 +134,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void setFlyWheelPIDLoop() {
-        double out = pidFlywheel.calculate(Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheel.getSelectedSensorVelocity())) + pidFlyWheelF.calculate(pidFlywheel.getSetpoint());
+/*        double out = pidFlywheel.calculate(Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) m_flywheel.getSelectedSensorVelocity())) + pidFlyWheelF.calculate(pidFlywheel.getSetpoint());
         System.out.println("flywheel velocity error: " + pidFlywheel.getVelocityError());
-        m_flywheel.set(ControlMode.PercentOutput, out);
+        m_flywheel.set(ControlMode.PercentOutput, out);*/
     }
 
     public void setHoodWheelTopSpeed(double rpm) {
