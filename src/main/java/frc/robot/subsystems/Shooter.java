@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.utils.Utils;
 
 public class Shooter extends SubsystemBase implements GeneralUtils {
@@ -27,6 +28,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     private PIDController pidFlywheel, pidTopShooter;
     private SimpleMotorFeedforward pidFlyWheelF, pidTopShooterF;
+
+    private WheelSpeedCalculations shooterCurve;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
@@ -61,6 +64,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Coast);
         m_indexer.setInverted(true);
+
+        shooterCurve = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
     }
 
     public double getRawSpeed() {
@@ -201,11 +206,15 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return getRPM() >= getSpeedFromShuffleboard() - 50; // 50 is the range
+        return getRPM() >= getSpeedFromShuffleboard() - 50 && getRPMHoodWheel() >= getHoodWheelSpeedFromShuffleboard() - 50; // 50 is the range
     }
 
     public void feedHoodWheel() {
         setHoodWheelTopSpeed(hoodWheelSetSpeed);
+    }
+
+    public WheelSpeedCalculations getShooterCurve(){
+        return shooterCurve;
     }
 
 }

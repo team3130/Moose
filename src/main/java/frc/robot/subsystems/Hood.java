@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.utils.Utils;
 
 public class Hood extends SubsystemBase implements GeneralUtils {
@@ -20,10 +21,13 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     //Create necessary objects
     private WPI_TalonSRX m_hood;
+    private WheelSpeedCalculations winchCurve;
+
     //Create and define all standard data types needed
     public Hood() {
         m_hood = new WPI_TalonSRX(RobotMap.CAN_HOOD_MOTOR);
         m_hood.setInverted(false);
+        winchCurve = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.HOOD_WINCH);
 
         Utils.configMotionMagic(m_hood, 1024, 1024);
         Utils.configPIDF(m_hood,
@@ -41,14 +45,24 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     public void zero() {
         m_hood.set(ControlMode.MotionMagic, 0);
+
     }
 
     public void toPos(double pos) {
         m_hood.set(ControlMode.MotionMagic, Util.scaleRotationsToNativeUnits(RobotMap.HoodScalarToRotations, pos));
+
+    }
+
+    public WheelSpeedCalculations getWinchCurve(){
+        return winchCurve;
     }
 
     public double getDistance() {
         return Util.scaleNativeUnitsToRotations(RobotMap.HoodScalarToRotations, (long) m_hood.getSelectedSensorPosition());
+    }
+
+    public boolean canShoot(double currentSetpoint){
+        return Math.abs(currentSetpoint - m_hood.getSelectedSensorPosition()) <= 128;
     }
 
     @Override
@@ -63,6 +77,7 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
+
 
     }
 }

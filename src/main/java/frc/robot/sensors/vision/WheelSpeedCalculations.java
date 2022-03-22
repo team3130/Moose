@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.HOOD_WINCH;
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.SHOOTER;
+
 public class WheelSpeedCalculations {
 
     private static final Comparator<DataPoint> compPoint = Comparator.comparingDouble(p -> p.distance);
 
-    private static class DataPoint {
+    private class DataPoint {
         double distance;
         double speed;
 
@@ -47,8 +50,19 @@ public class WheelSpeedCalculations {
     private LinearInterp speedCurve;
     private final String FILEPATH;
 
-    public WheelSpeedCalculations() {
-        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "RapidReactMarchFirst.csv";
+    public static enum CurveMechanism {SHOOTER, HOOD_WINCH}
+    private CurveMechanism mechanism;
+
+    public WheelSpeedCalculations(CurveMechanism mechanism) {
+        this.mechanism = mechanism;
+        if (mechanism == SHOOTER) {
+            FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "ShooterPlaceHolder.csv";
+        } else if (mechanism == HOOD_WINCH) {
+            FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "HoodPlaceHolder.csv";
+        } else {
+            FILEPATH = null;
+        }
+
 
         data_MainStorage = new ArrayList<>();
         readFile();
@@ -60,15 +74,27 @@ public class WheelSpeedCalculations {
         ArrayList<Double> data_Dist = new ArrayList<>();
         ArrayList<Double> data_Speed = new ArrayList<>();
 
+        if (FILEPATH != null) {
+
         for (int iii = 0; iii < data_MainStorage.size(); iii++) {
             DataPoint pt = data_MainStorage.get(iii);
             data_Dist.add(pt.distance);
             data_Speed.add(pt.speed);
         }
+    }
+        else{
+            for (int i = 0; i < 2; i++){
+                data_Dist.add((double)i);
+
+                if(mechanism == SHOOTER)data_Speed.add(3200.0);
+                else{data_Speed.add(0.0);}
+            }
+
+        }
 
         speedCurve = new LinearInterp(data_Dist, data_Speed);
-    }
 
+}
     public void readFile() {
         data_MainStorage.clear();
 
