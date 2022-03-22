@@ -66,7 +66,7 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setIndexerSpeed(0);
+        m_shooter.setIndexerPercent(0);
         m_shooter.setFlywheelSpeed(0);
         timer.stop();
     }

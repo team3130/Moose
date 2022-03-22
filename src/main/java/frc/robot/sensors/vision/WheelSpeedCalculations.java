@@ -1,6 +1,8 @@
 package frc.robot.sensors.vision;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.RobotMap;
 import frc.robot.utils.LinearInterp;
 
 import java.io.BufferedReader;
@@ -9,12 +11,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.HOOD_WINCH;
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.SHOOTER;
 
 public class WheelSpeedCalculations {
 
     private static final Comparator<DataPoint> compPoint = Comparator.comparingDouble(p -> p.distance);
 
-    private static class DataPoint {
+    private class DataPoint {
         double distance;
         double speed;
 
@@ -47,8 +53,23 @@ public class WheelSpeedCalculations {
     private LinearInterp speedCurve;
     private final String FILEPATH;
 
-    public WheelSpeedCalculations() {
-        FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves" + File.separator + "RapidReactMarchFirst.csv";
+    public enum CurveMechanism {SHOOTER, HOOD_WINCH}
+    private CurveMechanism mechanism;
+
+    public WheelSpeedCalculations(CurveMechanism mechanism) {
+        this.mechanism = mechanism;
+        String dir = Filesystem.getDeployDirectory() + File.separator + "curves";
+
+        switch (mechanism) {
+            case SHOOTER:
+                FILEPATH = dir + File.separator + "ShooterPlaceHolder.csv";
+                break;
+            case HOOD_WINCH:
+                FILEPATH = dir + File.separator + "HoodPlaceHolder.csv";
+                break;
+            default:
+                FILEPATH = dir;
+        }
 
         data_MainStorage = new ArrayList<>();
         readFile();
@@ -60,8 +81,7 @@ public class WheelSpeedCalculations {
         ArrayList<Double> data_Dist = new ArrayList<>();
         ArrayList<Double> data_Speed = new ArrayList<>();
 
-        for (int iii = 0; iii < data_MainStorage.size(); iii++) {
-            DataPoint pt = data_MainStorage.get(iii);
+        for (DataPoint pt : data_MainStorage) {
             data_Dist.add(pt.distance);
             data_Speed.add(pt.speed);
         }
@@ -74,11 +94,16 @@ public class WheelSpeedCalculations {
 
         try (BufferedReader br = new BufferedReader(new FileReader(FILEPATH))) {
             for (String line; (line = br.readLine()) != null; ) {
-                if (!line.equals("")) data_MainStorage.add(new DataPoint(line));
+                if (!line.equals("")) {
+                    data_MainStorage.add(new DataPoint(line));
+                }
             }
-            // line is not visible here.
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        catch (IOException e) {
+            data_MainStorage.addAll(List.of(
+                    new DataPoint(0, (mechanism == SHOOTER) ? 3200 : 0),
+                    new DataPoint(500, (mechanism == SHOOTER) ? 3200 : 0)));
+            DriverStation.reportError("Could not read CSV, defaulting", false);
         }
 
         data_MainStorage.sort(compPoint);

@@ -1,18 +1,18 @@
-package frc.robot.commands.Magazine;
+package frc.robot.commands.Hood;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Magazine;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Hood;
 
-public class Spinzine extends CommandBase {
+public class HoodToPoint extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Magazine m_magazine;
-    private final int direction;
+    private final Hood m_hood;
 
-    public Spinzine(Magazine magazine, int direction) {
-        // mapping to object passed through parameter
-        m_magazine = magazine;
-        m_requirements.add(m_magazine);
-        this.direction = direction;
+    public HoodToPoint(Hood subsystem) {
+        //mapping to object passed through parameter
+        m_hood = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
@@ -20,9 +20,8 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_magazine.updateCenterSpeed(0.6 * direction);
-        m_magazine.updateSideSpeed(0.4 * direction);
-        m_magazine.feedAll();
+        m_hood.updatePID();
+        m_hood.toPos(m_hood.getSetPos());
     }
 
     /**
@@ -50,7 +49,7 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return m_hood.atPosition();
     }
 
     /**
@@ -63,7 +62,6 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_magazine.setCenterSpeed(0);
-        m_magazine.setSideSpeeds(0);
+        m_hood.setSpeed(0);
     }
 }

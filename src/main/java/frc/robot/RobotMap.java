@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
@@ -58,25 +59,41 @@ public class RobotMap {
      */
 
     //
-    public static final double kFlywheelTicksPerRevolution = 2048; // Checked 2/11
+    public static final double kFalconTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
-    public static final double kTopShooterGearRatio = 2;
-    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
-    public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFlywheelTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
+    public static final double kTopShooterGearRatio = (double) 1/2;
+    public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
+    public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
 
     public static final double kIndexerGearRatio = 5.0;
     public static final double kIndexerRPMtoNativeUnitsScalar = (RobotMap.kIndexerTicksPerRevolution / (10.0 * 60.0)) / kIndexerGearRatio;
-    public static final double kIndexerTicksPerRevolution = 2048; //TODO: Find real value
+    public static final double kIndexerTicksPerRevolution = 2048;
 
-    public static double kFlywheelP = .22;
-    public static double kFlywheelI = 0.0;
-    public static double kFlywheelD = 12;
-    public static double kFlywheelF = (.51*1023.0)/10650.0; // Checked 2/11/20, Optimal speed at 51% power
+    // this might not be actual rotations, but it doesn't matter
+    public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
+
+    public static double kFlywheelP = 0.15;
+    public static double kFlywheelI = 0;
+    public static double kFlywheelD = 0;
+
+    public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
+
+    public static double flyWheelkS = 0.5816;
+    public static double flyWheelkV = 0.12 * WPItoCTREFeedForwardConversion;
+    public static double flyWheelkA = 0.0082804;
+
+    public static double kFlywheelHoodP = 0.00010408;
+    public static double kFlywheelHoodI = 0.000010408;
+    public static double kFlywheelHoodD = 0;
+
+    public static double kTopShooterKS = 1.151;
+    public static double kTopShooterKV = 0.00011755 * WPItoCTREFeedForwardConversion;
+    public static double kTopShooterKA = 4.9668E-06;
 
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;
     public static double kHoodD = 0;
-    public static double kHoodF = 0;
+    public static double kHoodV = 0;
 
     /**
      * Limelight
@@ -84,13 +101,13 @@ public class RobotMap {
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static final double kLimelightPitch =  -45;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightPitch =  -38.5;   // Facing up is negative, in degrees Checked: 2/17
     public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO: FIND FOR 2022
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
-    public static final double kLimelightHeight = 0.84;     // Height of camera aperture from the ground
-    public static final double kLimelightLength = 9.5;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
+    public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
+    public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
-    public static final double kLimelightCalibrationDist = 120.0; // Exact horizontal distance between target and lens TODO: FIND FOR 2022
+    public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
@@ -101,46 +118,47 @@ public class RobotMap {
      */
     public static final double kChassisMaxVoltage = 12.0;
     // the distance between the left and the right wheels: IN METERS
-    public static final double trackDistance = Units.inchesToMeters(25.49125); //taken 3/9/22 PRACTICE
+    public static final double trackDistance = Units.inchesToMeters(27.089); //taken 3/20/22 COMP
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
-    public static final double kChassisLowGearRatio = 0.1; //TODO: FIND VALUE
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = Units.inchesToMeters(3.93425);//taken 3/9/22 PRACTICE
+    public static final double kWheelDiameter = 0.100305;//taken 3/20/22 COMP
     public static final double kMaxHighGearDriveSpeed = 0.8;
     public static final double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;
     public static final double kMaxRampRate = 0.7;
-    public static final double kChassisEncoderError = 1.0934926; //calculated 3/10/22 retains 3-6 cm error
+    public static final double kChassisEncoderError = 1; //TODO: Still needs to be determined for comp bot
+
+    public static double ChassisSpinKP = 0.0125;
+    public static double ChassisSpinKI = 0;
+    public static double ChassisSpinKD = 0;
 
     // max velocity of chassis in meters per second
-    public static final double kMaxVelocityMPS = 0.33;
-    public static final double kMaxAccelerationMPS = 0.1;
+    public static final double kMaxVelocityMPS = 2.25;
+    public static final double kMaxAccelerationMPS = 1.5;
 
     /**
      * PID for Chassis
      */
-    //TODO: figure out why auton moves with a constant offset of 20cm
-    public static double LChassiskP = 3.3073; //Practice bot 3/10/22
-    public static double LChassiskI = 0;
+            // solution found, cry harder
+    public static double LChassiskP = 3.186; //Practice bot 3/10/22
+    public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2.8909;
-    public static double RChassiskI = 0;
+    public static double RChassiskP = 2.6838;
+    public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.68159;
-    public static double ChassiskV = 2.2418;
-    public static double ChassiskA = 0.4963;
+    public static double ChassiskS = 0.66218;
+    public static double ChassiskV = 2.3117;
+    public static double ChassiskA = 0.33604;
 
     /**
      * PNM IDs
      */
     public static final int PNM_Shift = 0;
     public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
-
-    public static final int PNM_CLIMBER_ACTUATOR_LEFT = 2; //TODO FIND THESE
-    public static final int PNM_CLIMBER_ACTUATOR_RIGHT = 3; //TODO FIND THESE
+    public static final int PNM_CLIMBER_ACTUATOR = 2;
 
     /**
      * Gamepad Button List

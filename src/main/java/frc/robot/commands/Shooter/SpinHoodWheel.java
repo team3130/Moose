@@ -1,18 +1,21 @@
-package frc.robot.commands.Magazine;
+package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.Shooter;
 
-public class Spinzine extends CommandBase {
+public class SpinHoodWheel extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Magazine m_magazine;
-    private final int direction;
+    private final Shooter m_shooter;
+    private final double timeLimit = 2;
+    private final Timer timer = new Timer();
 
-    public Spinzine(Magazine magazine, int direction) {
-        // mapping to object passed through parameter
-        m_magazine = magazine;
-        m_requirements.add(m_magazine);
-        this.direction = direction;
+    public SpinHoodWheel(Shooter subsystem) {
+        //mapping to object passed through parameter
+        m_shooter = subsystem;
+        m_requirements.add(subsystem);
     }
 
     /**
@@ -20,9 +23,9 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_magazine.updateCenterSpeed(0.6 * direction);
-        m_magazine.updateSideSpeed(0.4 * direction);
-        m_magazine.feedAll();
+        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
+        m_shooter.feedHoodWheel();
+        timer.reset();
     }
 
     /**
@@ -31,7 +34,6 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void execute() {
-
     }
 
     /**
@@ -50,7 +52,8 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        // we do it again for the second ball
+        return timer.get() >= timeLimit;
     }
 
     /**
@@ -63,7 +66,9 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_magazine.setCenterSpeed(0);
-        m_magazine.setSideSpeeds(0);
+        m_shooter.setFlywheelSpeed(0);
+        m_shooter.setHoodWheelTopSpeed(0);
+        m_shooter.setIndexerPercent(0);
+        timer.stop();
     }
 }

@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
@@ -15,6 +17,9 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_magazineCenter;
     private WPI_TalonSRX m_magazineRight;
     private WPI_TalonSRX m_magazineLeft;
+
+    private double centerSpeed = 0.6;
+    private double sideSpeed = 0.4;
 
     //Create and define all standard data types needed
     public Magazine() {
@@ -46,7 +51,41 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
+        stopAll();
+    }
+
+    public void feedCenter() {
+        m_magazineCenter.set(centerSpeed);
+    }
+
+    public void updateSpeeds(double center, double side) {
+        centerSpeed = center;
+        sideSpeed = side;
+    }
+
+    public void updateSideSpeed(double sideSpeed) {
+        this.sideSpeed = sideSpeed;
+    }
+
+    public void updateCenterSpeed(double centerSpeed) {
+        this.centerSpeed = centerSpeed;
+    }
+
+    public void feedAll() {
+        feedCenter();
+        feedSides();
+    }
+
+    public void stopAll() {
         m_magazineCenter.set(0);
+        m_magazineRight.set(0);
+        m_magazineLeft.set(0);
+    }
+
+
+    public void feedSides() {
+        m_magazineLeft.set(sideSpeed);
+        m_magazineRight.set(sideSpeed);
     }
 }
 

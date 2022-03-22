@@ -1,19 +1,23 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
+import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class SetFlywheelRPM extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private boolean hitSpeed = false;
-    private Limelight m_limelight;
+    private final Magazine m_magazine;
+    private final Limelight m_limelight;
 
-    public SetFlywheelRPM(Shooter subsystem, Limelight m_limelight) {
-        //mapping to object passed through parameter
+    public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
+        // mapping to object passed through parameter
         m_shooter = subsystem;
+        m_magazine = magazine;
         m_requirements.add(subsystem);
+        m_requirements.add(magazine);
         this.m_limelight = m_limelight;
     }
 
@@ -22,9 +26,12 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.feedFlywheel();
-        m_shooter.setShooterTopSpeed(m_shooter.getTopSpeedFromShuffleboard());
-        /*m_limelight.setLedState(true);*/
+        m_shooter.updatePID();
+
+        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
+        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
+
+        m_limelight.setLedState(true);
     }
 
     /**
@@ -33,12 +40,10 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.getRPM() == m_shooter.getFlywheelSetSpeed()) {
-            hitSpeed = true;
+        if (m_shooter.canShoot()) {
+            m_shooter.setIndexerPercent(0.5);
+            m_magazine.feedAll();
         }
-        if (m_shooter.getRPM() >= m_shooter.getSpeedFromShuffleboard() - 50) {
-            m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());
-        } 
     }
 
     /**
@@ -57,7 +62,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        return false;
     }
 
     /**
@@ -70,9 +75,8 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setFlywheelSpeed(0);
-        m_shooter.setShooterTopSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        m_shooter.stopAll();
+        m_magazine.stopAll();
         m_limelight.setLedState(false);
     }
 }

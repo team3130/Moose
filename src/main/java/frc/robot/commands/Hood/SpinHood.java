@@ -3,6 +3,8 @@ package frc.robot.commands.Hood;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Hood;
 import java.util.Set;
 
@@ -10,12 +12,15 @@ public class SpinHood extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Hood m_hood;
     private final int direction;
+    private Limelight limelight;
+    private WheelSpeedCalculations hoodCurve;
 
-    public SpinHood(Hood subsystem, int direction) {
+    public SpinHood(Hood subsystem, Limelight limelight, int direction) {
         //mapping to object passed through parameter
         m_hood = subsystem;
         m_requirements.add(subsystem);
         this.direction = direction;
+        hoodCurve = m_hood.getWinchCurve();
     }
 
     /**
@@ -23,7 +28,18 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_hood.setSpeed(0.4 * direction);
+
+        double x = limelight.getDistanceToTarget();
+
+        if (!limelight.hasTrack()) {
+            m_hood.setSpeed(0.4 * direction);
+        }
+
+        else {
+            if (x >= 5) {
+                m_hood.toPos(hoodCurve.getSpeed(x));
+            }
+        }
     }
 
     /**
@@ -51,7 +67,6 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -66,6 +81,5 @@ public class SpinHood extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_hood.setSpeed(0);
-        m_hood.zero();
     }
 }

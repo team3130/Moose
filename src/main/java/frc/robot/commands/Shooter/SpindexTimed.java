@@ -1,18 +1,22 @@
-package frc.robot.commands.Magazine;
+package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Shooter;
 
-public class Spinzine extends CommandBase {
+public class SpindexTimed extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Magazine m_magazine;
-    private final int direction;
+    private final Shooter m_shooter;
+    private final double time;
+    private Timer timer;
 
-    public Spinzine(Magazine magazine, int direction) {
-        // mapping to object passed through parameter
-        m_magazine = magazine;
-        m_requirements.add(m_magazine);
-        this.direction = direction;
+    public SpindexTimed(Shooter shooter, double time) {
+        //mapping to object passed through parameter
+        m_shooter = shooter;
+        m_requirements.add(shooter);
+        this.time = time;
+        timer = new Timer();
     }
 
     /**
@@ -20,9 +24,9 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_magazine.updateCenterSpeed(0.6 * direction);
-        m_magazine.updateSideSpeed(0.4 * direction);
-        m_magazine.feedAll();
+        timer.reset();
+        timer.start();
+        m_shooter.feedIndexer();
     }
 
     /**
@@ -50,7 +54,7 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return (timer.hasElapsed(time));
     }
 
     /**
@@ -63,7 +67,7 @@ public class Spinzine extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_magazine.setCenterSpeed(0);
-        m_magazine.setSideSpeeds(0);
+        m_shooter.setIndexerPercent(0);
+        timer.stop();
     }
 }
