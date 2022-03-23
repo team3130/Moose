@@ -153,21 +153,22 @@ public class Chooser {
 
     }
 
-    public void AddThreeBallPoseTwo() {
+    public void AddTwoBall() {
         AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToFirstBall.wpilib.json")));
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         AutonCommand DriveToShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/DriveToShoot.wpilib.json")));
-        RamseteCommand spin = ramseteCommandFactory.apply(TrajectoryGenerator.generateTrajectory(List.of(PathOne.getEndPosition(), DriveToShoot.getStartPosition()), config));
+        CommandBase spin = new SpinChassisToAngle(container.getChassis(), 180);
         ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight()));
 
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(
-                        new ParallelDeadlineGroup(PathOne.getCmd(),deployIntake),
+                        new ParallelDeadlineGroup(PathOne.getCmd(), deployIntake),
                         spin,
                         DriveToShoot.getCmd(),
                         shoot
                 );
-        m_autonChooser.addOption("3Ball2", new AutonCommand(commandGroup, PathOne.getStartPosition()));
+
+        m_autonChooser.addOption("2Ball", new AutonCommand(commandGroup, PathOne.getStartPosition()));
     }
 
     public void Add1Ball() {

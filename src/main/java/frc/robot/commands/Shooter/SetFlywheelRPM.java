@@ -68,9 +68,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        {
             return timer.get() >= time;
-        }
     }
 
     /**
@@ -86,5 +84,6 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.stopAll();
         m_magazine.stopAll();
         m_limelight.setLedState(false);
+        timer.stop();
     }
 }
