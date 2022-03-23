@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.FaceTarget;
+import frc.robot.commands.Chassis.SpinChassisToAngle;
+import frc.robot.commands.Chassis.resetOdometery;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.subsystems.Chassis;
@@ -126,6 +128,29 @@ public class Chooser {
         );
 
         m_autonChooser.setDefaultOption("3Ball", new AutonCommand(commandGroup, PathOne.getStartPosition()));
+    }
+
+    public void addThreeBallPathTwo() {
+        AutonCommand pathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToFirstBall3Ball2.wpilib.json")));
+        CommandBase shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight()));
+        CommandBase spin1 = new SpinChassisToAngle(container.getChassis(), 180);
+        RamseteCommand pathTwo = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToSecondBall3Ball2.wpilib.json")));
+        CommandBase spin2 = new SpinChassisToAngle(container.getChassis(), 180);
+        RamseteCommand pathThree = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("GoToShoot3Ball2.wpilib.json")));
+        CommandBase shoot2 = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight()));
+
+        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(pathOne.getCmd(), new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
+                shoot,
+                spin1,
+                new ParallelDeadlineGroup(pathTwo, new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
+                spin2,
+                pathThree,
+                shoot2
+        );
+
+        m_autonChooser.addOption("3Ball2", new AutonCommand(commandGroup, pathOne.getStartPosition()));
+
     }
 
     public void AddThreeBallPoseTwo() {

@@ -1,27 +1,22 @@
 package frc.robot.commands.Chassis;
 
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
-import frc.robot.SupportingClassess.Chooser;
-import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 
-public class FaceTarget extends CommandBase {
+public class SpinChassisToAngle extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis;
-    private final Limelight m_limelight;
-
-    private double angle = 0;
+    private double angle;
     private Timer timer;
-    private double time = 1;
+    private double time = 1; //TODO at GF needs tuning
 
-    public FaceTarget(Chassis chassis, Limelight limelight) {
+    public SpinChassisToAngle(Chassis chassis, double angle) {
         //mapping to object passed through parameter
         m_chassis = chassis;
         m_requirements.add(chassis);
-        m_limelight = limelight;
+        this.angle = angle;
         timer = new Timer();
     }
 
@@ -32,8 +27,7 @@ public class FaceTarget extends CommandBase {
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         m_chassis.updatePIDValues();
-        angle = m_chassis.getAngle() - m_limelight.getHeading().getDegrees();
-        m_chassis.setSpinnySetPoint(angle);
+        m_chassis.setSpinnySetPoint(angle + m_chassis.getAngle());
         m_chassis.resetPIDLoop();
         timer.reset();
         timer.start();
@@ -46,7 +40,7 @@ public class FaceTarget extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(time);
+        return m_chassis.getAtSetpoint() || timer.hasElapsed(time);
     }
 
     @Override
