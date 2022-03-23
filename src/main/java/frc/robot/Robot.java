@@ -50,7 +50,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer(m_autonChooser);
     m_chooser = m_robotContainer.getChooser();
-    m_chooser.addAllCommands();
+//    m_chooser.addAllCommands();
+    m_chooser.add3Ball();
   }
 
   /**
@@ -78,6 +79,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     AutonCommand cmd = m_autonChooser.getSelected();
+    m_robotContainer.getLimelight().setLedState(true);
 
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());

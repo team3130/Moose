@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
@@ -21,7 +22,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonSRX m_indexer;
 
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
-    private double hoodWheelSetSpeed = 1000;
+    private double hoodWheelSetSpeed = 1200;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private WheelSpeedCalculations shooterCurve;
@@ -48,6 +49,14 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
         m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
         m_hoodWheel.setInverted(false);
+
+        // restricting voltage for the flywheel
+        m_flywheel.configVoltageCompSaturation(9);
+        m_flywheel.enableVoltageCompensation(true);
+
+        // restricting voltage for the hood wheel
+        m_hoodWheel.configVoltageCompSaturation(9);
+        m_hoodWheel.enableVoltageCompensation(true);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
         Utils.configPIDF(m_hoodWheel, RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD, RobotMap.kTopShooterKV);
@@ -83,6 +92,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         RPM.setNumber(getRPM());
         RPMHoodWheel.setNumber(getRPMHoodWheel());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
+        SmartDashboard.putBoolean("Can Shoot?", canShoot());
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
         // pidFlywheel.setPID(P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD));
     }
@@ -121,9 +131,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void stopAll() {
-        m_indexer.set(0);
-        m_flywheel.set(0);
-        m_hoodWheel.set(0);
+        m_indexer.set(ControlMode.PercentOutput, 0);
+        m_flywheel.set(ControlMode.PercentOutput, 0);
+        m_hoodWheel.set(ControlMode.PercentOutput, 0);
     }
 
 
@@ -178,7 +188,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return Math.abs(getRPM() - getSpeedFromShuffleboard()) <= 25  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 25; // 25 is the range
+        return Math.abs(getRPM() - getSpeedFromShuffleboard()) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
     }
 
     public void feedHoodWheel() {

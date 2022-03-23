@@ -31,7 +31,7 @@ public class DeployAndSpintake extends CommandBase {
     @Override
     public void initialize() {
         m_intake.deployIntake(true);
-        m_intake.setSpeed(0.45 * direction);
+        m_intake.setSpeed(0.65 * direction);
         m_magazine.setCenterSpeed(0.6);
         m_magazine.setSideSpeeds(0.4);
     }
@@ -61,7 +61,8 @@ public class DeployAndSpintake extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;}
+        return false;
+    }
 
     /**
      * The action to take when the command ends. Called when either the command

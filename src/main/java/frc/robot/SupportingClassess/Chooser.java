@@ -94,33 +94,38 @@ public class Chooser {
 
     }
 
-    public SequentialCommandGroup add3Ball() {
+    public void add3Ball() {
         AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/Start.wpilib.json")));
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         RamseteCommand GoToFirstBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstBall3Ball.wpilib.json")));
         RamseteCommand goToFirstShoot = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/FirstShoot.wpilib.json")));
-        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight()));
+        ParallelDeadlineGroup shoot = new ParallelDeadlineGroup( new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight()), new FaceTarget(container.getChassis(), container.getLimelight()));
         RamseteCommand toSecondBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/ToSecondBall.wpilib.json")));
         RamseteCommand pickupSecondBall = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/GoThroughSecond.wpilib.json")));
         CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         RamseteCommand SecondBallAndShoot = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball/SecondBallAndShoot.wpilib.json")));
         CommandBase shoot2 = new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight());
 
-        SequentialCommandGroup commandGroup =
-                new SequentialCommandGroup(
-                        PathOne.getCmd(),
-                        new ParallelDeadlineGroup(GoToFirstBall, deployIntake),
-                        goToFirstShoot,
-                        shoot,
-                        toSecondBall,
-                        new ParallelDeadlineGroup(pickupSecondBall, deployIntake2),
-                        SecondBallAndShoot,
-                        shoot2
-                );
+        CommandBase commandGroup =
+            new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(
+                    new SequentialCommandGroup(
+                            PathOne.getCmd(),
+                            GoToFirstBall,
+                            goToFirstShoot),
+                    new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
+                    shoot,
+                    new ParallelDeadlineGroup(
+                            new SequentialCommandGroup(
+                            toSecondBall,
+                            pickupSecondBall,
+                            SecondBallAndShoot),
+                            new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)
+                    ),
+                    shoot2
+        );
 
-        m_autonChooser.addOption("3Ball", new AutonCommand(commandGroup, PathOne.getStartPosition()));
-
-        return commandGroup;
+        m_autonChooser.setDefaultOption("3Ball", new AutonCommand(commandGroup, PathOne.getStartPosition()));
     }
 
     public void AddThreeBallPoseTwo() {

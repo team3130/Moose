@@ -72,22 +72,22 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
-    public static double kFlywheelP = 0.15;
+    public static double kFlywheelP = 0.02;
     public static double kFlywheelI = 0;
     public static double kFlywheelD = 0;
 
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0.5816;
-    public static double flyWheelkV = 0.12 * WPItoCTREFeedForwardConversion;
+    public static double flyWheelkV = 0.0635;
     public static double flyWheelkA = 0.0082804;
 
-    public static double kFlywheelHoodP = 0.00010408;
-    public static double kFlywheelHoodI = 0.000010408;
+    public static double kFlywheelHoodP = 0.0007;
+    public static double kFlywheelHoodI = 0.000000075;
     public static double kFlywheelHoodD = 0;
 
     public static double kTopShooterKS = 1.151;
-    public static double kTopShooterKV = 0.00011755 * WPItoCTREFeedForwardConversion;
+    public static double kTopShooterKV = 0.0775;
     public static double kTopShooterKA = 4.9668E-06;
 
     public static double kHoodP = 0.125;
@@ -111,8 +111,6 @@ public class RobotMap {
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
-    public static final double angleOffset = 2; // Arbitrary value for how many degrees offset the target should be before shooting
-
     /**
      * Chassis
      */
@@ -129,9 +127,9 @@ public class RobotMap {
     public static final double kMaxRampRate = 0.7;
     public static final double kChassisEncoderError = 1; //TODO: Still needs to be determined for comp bot
 
-    public static double ChassisSpinKP = 0.0125;
-    public static double ChassisSpinKI = 0;
-    public static double ChassisSpinKD = 0;
+    public static double ChassisSpinKP = 0.025;
+    public static double ChassisSpinKI = 0.001;
+    public static double ChassisSpinKD = 0.0025;
 
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 2.25;
@@ -141,17 +139,17 @@ public class RobotMap {
      * PID for Chassis
      */
             // solution found, cry harder
-    public static double LChassiskP = 3.186; //Practice bot 3/10/22
+    public static double LChassiskP = 3.2631; //Practice bot 3/10/22
     public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2.6838;
+    public static double RChassiskP = 3.3821;
     public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.66218;
-    public static double ChassiskV = 2.3117;
-    public static double ChassiskA = 0.33604;
+    public static double ChassiskS = 0.62711;
+    public static double ChassiskV = 2.3297;
+    public static double ChassiskA = 0.81929;
 
     /**
      * PNM IDs

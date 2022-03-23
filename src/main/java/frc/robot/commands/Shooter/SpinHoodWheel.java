@@ -23,6 +23,7 @@ public class SpinHoodWheel extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_shooter.updatePID();
         m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
         m_shooter.feedHoodWheel();
         timer.reset();
@@ -66,9 +67,7 @@ public class SpinHoodWheel extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setFlywheelSpeed(0);
-        m_shooter.setHoodWheelTopSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        m_shooter.stopAll();
         timer.stop();
     }
 }

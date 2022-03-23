@@ -70,13 +70,14 @@ public class Hood extends SubsystemBase implements GeneralUtils {
         return Util.scaleNativeUnitsToRotations(RobotMap.HoodScalarToRotations, (long) m_hood.getSelectedSensorPosition());
     }
 
-    public boolean canShoot(double currentSetpoint){
+    public boolean canShoot(double currentSetpoint) {
         return Math.abs(currentSetpoint - m_hood.getSelectedSensorPosition()) <= 128;
     }
 
     @Override
     public void outputToShuffleboard() {
         SmartDashboard.putNumber("Angle", getDistance());
+        SmartDashboard.putBoolean("Hood At Position", atPosition());
     }
 
     @Override
@@ -86,7 +87,6 @@ public class Hood extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
-
 
     }
 
@@ -99,7 +99,12 @@ public class Hood extends SubsystemBase implements GeneralUtils {
     }
 
     public void updatePID() {
-        Utils.configPIDF(m_hood, P.getDouble(RobotMap.kHoodP), I.getDouble(RobotMap.kHoodI), D.getDouble(RobotMap.kHoodD), V.getDouble(RobotMap.kHoodV));
+        Utils.configPIDF(m_hood,
+                P.getDouble(RobotMap.kHoodP),
+                I.getDouble(RobotMap.kHoodI),
+                D.getDouble(RobotMap.kHoodD),
+                V.getDouble(RobotMap.kHoodV)
+        );
     }
 }
 
