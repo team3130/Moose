@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
 //    m_chooser.addAllCommands();
     m_chooser.add3Ball();
     m_chooser.addThreeBallPathTwo();
+    m_chooser.addTwoBall();
   }
 
   /**

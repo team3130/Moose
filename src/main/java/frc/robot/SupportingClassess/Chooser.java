@@ -153,7 +153,7 @@ public class Chooser {
 
     }
 
-    public void AddTwoBall() {
+    public void addTwoBall() {
         AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToFirstBall.wpilib.json")));
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         AutonCommand DriveToShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/DriveToShoot.wpilib.json")));
