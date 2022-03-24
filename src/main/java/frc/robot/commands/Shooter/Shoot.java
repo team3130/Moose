@@ -1,38 +1,48 @@
 package frc.robot.commands.Shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private final Hood m_hood;
-    private boolean hitSpeed = false;
+    private final Magazine m_magazine;
     private Limelight limelight;
     private WheelSpeedCalculations shooterCurve;
-    private WheelSpeedCalculations hoodCurve;
 
-    public Shoot(Shooter subsystem, Hood hood, Limelight limelight) {
+    private Timer timer;
+    private double time = 2;
+
+    public Shoot(Shooter subsystem, Magazine magazine, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
-        m_hood = hood;
+        m_magazine = magazine;
         m_requirements.add(subsystem);
-        m_requirements.add(hood);
+        m_requirements.add(magazine);
 
         this.limelight = limelight;
-        this.shooterCurve = m_shooter.getShooterCurve();
-        hoodCurve = m_hood.getWinchCurve();
 
+        shooterCurve = m_shooter.getShooterCurve();
+
+        timer = new Timer();
     }
 
     /**
      * The initial subroutine of a command.  Called once when the command is initially scheduled.
      */
     @Override
-    public void initialize() {}
+    public void initialize() {
+        m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(limelight.getDistanceToTarget()));
+        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
+
+        timer.reset();
+        timer.start();
+    }
 
     /**
      * The main body of a command.  Called repeatedly while the command is scheduled.
@@ -41,18 +51,17 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         // Find the flywheel speed
-        if (!limelight.hasTrack()){
+        if (!limelight.hasTrack()) {
             m_shooter.setFlywheelSpeed(m_shooter.getRPM());
         }
         else {
             double x = limelight.getDistanceToTarget();
             if (5 <= x) {
                 m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
-                m_hood.toPos(hoodCurve.getSpeed(x));
             }
-            if (m_shooter.canShoot() && m_hood.canShoot(hoodCurve.getSpeed(x))) {
+           if (m_shooter.canShoot()) {
                 m_shooter.feedIndexer();
-                hitSpeed = true;
+                m_magazine.feedAll();
             }
         }
     }
@@ -73,7 +82,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return hitSpeed && m_shooter.getRPM() <= m_shooter.getFlywheelSetSpeed() * 0.75; // if flywheel dropped 75% of its speed
+        return timer.hasElapsed(time);
     }
 
     /**
@@ -86,7 +95,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setFlywheelSpeed(0);
-        m_shooter.setIndexerPercent(0);
+        m_shooter.stopAll();
+        m_magazine.stopAll();
     }
 }

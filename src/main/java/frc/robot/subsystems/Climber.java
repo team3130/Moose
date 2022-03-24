@@ -23,7 +23,9 @@ public class Climber extends SubsystemBase {
     public Climber() {
         m_climber_motor = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_LEFT);
         m_climber_motor_follower = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_RIGHT);
-        m_climber_motor_follower.follow(m_climber_motor);
+
+        m_climber_motor_follower.setInverted(true);
+       // m_climber_motor_follower.follow(m_climber_motor);
 
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);
 
@@ -44,6 +46,11 @@ public class Climber extends SubsystemBase {
 
     public void driveTank(double left, double right, boolean squared) {
         drive.tankDrive(left, right, squared);
+    }
+
+    public void configRampRate(double rampSeconds){
+        m_climber_motor.configOpenloopRamp(rampSeconds);
+        m_climber_motor_follower.configOpenloopRamp(rampSeconds);
     }
 }
 

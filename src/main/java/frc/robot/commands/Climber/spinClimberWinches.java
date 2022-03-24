@@ -2,7 +2,6 @@ package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Climber;
 
 public class spinClimberWinches extends CommandBase {
@@ -21,6 +20,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void initialize() {
+       
     }
 
     /**
@@ -61,6 +61,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
+       // m_climber.setSpeed(0);
         m_climber.setSpeed(0);
     }
 }

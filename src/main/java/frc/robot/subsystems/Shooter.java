@@ -202,5 +202,4 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void updatePID() {
         Utils.configPIDF(m_hoodWheel, P.getDouble(RobotMap.kFlywheelHoodP), I.getDouble(RobotMap.kFlywheelHoodI), D.getDouble(RobotMap.kFlywheelHoodD), V.getDouble(RobotMap.kTopShooterKV));
     }
-
 }

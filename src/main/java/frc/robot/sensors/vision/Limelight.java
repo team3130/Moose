@@ -168,7 +168,7 @@ public class Limelight implements GeneralUtils {
     }
 
     public Rotation2d getHeading() {
-        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d(Math.PI);
+        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d(0);
     }
 
     public Matrix<N3,N1> getInnerTarget() {
@@ -286,4 +286,7 @@ public class Limelight implements GeneralUtils {
     public void autonInit() {setLedState(true);}
     public void disable() {setLedState(false);}
 
+    public void toggleLEDstate() {
+        boolean b = (visionTable.getEntry("ledMode").getDouble(3) == 3) ? visionTable.getEntry("ledMode").setNumber(1) : visionTable.getEntry("ledMode").setNumber(3);
+    }
 }

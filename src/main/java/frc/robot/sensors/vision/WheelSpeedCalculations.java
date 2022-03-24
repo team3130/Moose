@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.HOOD_WINCH;
-import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.SHOOTER;
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.*;
 
 public class WheelSpeedCalculations {
 
@@ -53,7 +52,7 @@ public class WheelSpeedCalculations {
     private LinearInterp speedCurve;
     private String FILEPATH;
 
-    public static enum CurveMechanism {SHOOTER, HOOD_WINCH}
+    public enum CurveMechanism {SHOOTER, HOOD_WINCH}
     private CurveMechanism mechanism;
 
     public WheelSpeedCalculations(CurveMechanism mechanism) {
@@ -61,7 +60,7 @@ public class WheelSpeedCalculations {
         FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves";
 
         if (mechanism == SHOOTER) {
-            FILEPATH = FILEPATH + File.separator + "ShooterPlaceHolder.csv";
+            FILEPATH = FILEPATH + File.separator + "RapidReactMarchFirst.csv";
         }
         else if (mechanism == HOOD_WINCH) {
             FILEPATH = FILEPATH + File.separator + "HoodPlaceHolder.csv";
