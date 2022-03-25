@@ -37,7 +37,9 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(limelight.getDistanceToTarget()));
+        m_shooter.updatePID();
+
+        m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
         m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
 
         timer.reset();
@@ -50,19 +52,16 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        // Find the flywheel speed
-        if (!limelight.hasTrack()) {
-            m_shooter.setFlywheelSpeed(m_shooter.getRPM());
-        }
-        else {
+        limelight.setLedState(true);
+        if (limelight.hasTrack()) {
             double x = limelight.getDistanceToTarget();
             if (5 <= x) {
                 m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
             }
-           if (m_shooter.canShoot()) {
-                m_shooter.feedIndexer();
-                m_magazine.feedAll();
-            }
+        }
+       if (m_shooter.canShoot()) {
+            m_shooter.feedIndexer();
+            m_magazine.feedAll();
         }
     }
 

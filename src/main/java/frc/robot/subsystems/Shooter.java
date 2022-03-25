@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
+import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.utils.Utils;
 
@@ -20,6 +21,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
     private WPI_TalonFX m_hoodWheel;
     private WPI_TalonSRX m_indexer;
+
+    private Limelight m_limelight;
 
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
     private double hoodWheelSetSpeed = 1200;
@@ -43,7 +46,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
 
     //Create and define all standard data types needed
-    public Shooter() {
+    public Shooter(Limelight limelight) {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
 
@@ -66,6 +69,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_indexer.setInverted(true);
 
         shooterCurve = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
+
+        m_limelight = limelight;
     }
 
     public double getRawSpeed() {
@@ -188,6 +193,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
+        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
+    }
+
+    public boolean canShootSetFlywheel() {
         return Math.abs(getRPM() - getSpeedFromShuffleboard()) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
     }
 

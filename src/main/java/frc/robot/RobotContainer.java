@@ -48,7 +48,7 @@ public class RobotContainer {
     protected Limelight m_limelight = new Limelight();
 
     // define subsystems here
-    Shooter m_shooter = new Shooter();
+    Shooter m_shooter = new Shooter(m_limelight);
     Chassis m_chassis = new Chassis();
     Intake m_intake = new Intake();
     Magazine m_magazine = new Magazine();
@@ -132,12 +132,14 @@ public class RobotContainer {
         if (m_chooser_weapons.getSelected().equals("Ben")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_shooter, m_magazine, m_limelight));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new Shoot(m_shooter, m_magazine, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spinzine(m_magazine, 1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spinzine(m_magazine, -1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
         }
 
         else if (m_chooser_weapons.getSelected().equals("Parker")) {

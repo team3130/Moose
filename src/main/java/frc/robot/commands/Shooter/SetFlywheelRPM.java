@@ -46,7 +46,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.canShoot()) {
+        if (m_shooter.canShootSetFlywheel()) {
             m_shooter.setIndexerPercent(0.5);
             m_magazine.feedAll();
         }
