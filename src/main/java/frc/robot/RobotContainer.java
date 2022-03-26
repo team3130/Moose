@@ -7,14 +7,14 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
 import frc.robot.SupportingClassess.GeneralUtils;
-import frc.robot.commands.Chassis.FaceTarget;
-import frc.robot.commands.Chassis.Shift;
-import frc.robot.commands.Chassis.resetOdometery;
+import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Climber.spinClimberWinches;
 import frc.robot.commands.Climber.ToggleClimber;
 import frc.robot.commands.Hood.HoodToPoint;
@@ -23,15 +23,11 @@ import frc.robot.commands.Hood.ZeroHood;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Magazine.Spinzine;
-import frc.robot.commands.Shooter.SetFlywheelRPM;
-import frc.robot.commands.Shooter.Shoot;
-import frc.robot.commands.Shooter.SpinHoodWheel;
-import frc.robot.commands.Shooter.SpindexTimed;
+import frc.robot.commands.Shooter.*;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.*;
-import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.Spintake;
 
@@ -119,27 +115,26 @@ public class RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_X).whenHeld(new ZeroHood(m_hood));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new SpindexTimed(m_shooter, 0.1));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new HoodToPoint(m_hood));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenHeld(new SpinHoodWheel(m_shooter));
         }
 
         // weapons controls
         if (m_chooser_weapons.getSelected().equals("Ben")) {
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new Shoot(m_shooter, m_magazine, m_limelight));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new FaceTarget(m_chassis, m_limelight));
+           new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new ParallelDeadlineGroup(new TimedFaceTarget(m_chassis, m_limelight), new Shoot(m_shooter, m_limelight)));
+//            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new ChooseFlywheelRPM(m_shooter, m_magazine, 3300));
+//            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new ChooseFlywheelRPM(m_shooter, m_magazine, 3500));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spinzine(m_magazine, 1));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new Spinzine(m_magazine, -1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new SpindexTimed(m_shooter, 1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
+//            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
         }
 
         else if (m_chooser_weapons.getSelected().equals("Parker")) {

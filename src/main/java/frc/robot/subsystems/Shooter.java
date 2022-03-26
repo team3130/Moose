@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private Limelight m_limelight;
 
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
-    private double hoodWheelSetSpeed = 1200;
+    private double hoodWheelSetSpeed = 0;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private WheelSpeedCalculations shooterCurve;
@@ -97,7 +97,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         RPM.setNumber(getRPM());
         RPMHoodWheel.setNumber(getRPMHoodWheel());
         shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
-        SmartDashboard.putBoolean("Can Shoot?", canShoot());
+        SmartDashboard.putBoolean("Can Shoot?", canShootSetFlywheel(getSpeedFromShuffleboard()));
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
         // pidFlywheel.setPID(P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD));
     }
@@ -196,8 +196,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
     }
 
-    public boolean canShootSetFlywheel() {
-        return Math.abs(getRPM() - getSpeedFromShuffleboard()) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
+    public boolean canShootSetFlywheel(double point) {
+        return Math.abs(getRPM() - point) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
     }
 
     public void feedHoodWheel() {
