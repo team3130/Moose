@@ -7,7 +7,7 @@ import frc.robot.subsystems.Shooter;
 public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private final double timeLimit = 3;
+    private final double timeLimit = 2;
     private final Timer timer = new Timer();
 
     public AutonShoot(Shooter subsystem) {

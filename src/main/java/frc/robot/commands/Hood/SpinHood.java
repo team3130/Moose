@@ -13,14 +13,14 @@ public class SpinHood extends CommandBase {
     private final Hood m_hood;
     private final int direction;
     private Limelight limelight;
-    private WheelSpeedCalculations hoodCurve;
+//    private WheelSpeedCalculations hoodCurve;
 
     public SpinHood(Hood subsystem, Limelight limelight, int direction) {
         //mapping to object passed through parameter
         m_hood = subsystem;
         m_requirements.add(subsystem);
         this.direction = direction;
-        hoodCurve = m_hood.getWinchCurve();
+        /*hoodCurve = m_hood.getWinchCurve();*/
     }
 
     /**
@@ -37,7 +37,7 @@ public class SpinHood extends CommandBase {
 
         else {
             if (x >= 5) {
-                m_hood.toPos(hoodCurve.getSpeed(x));
+//                m_hood.toPos(hoodCurve.getSpeed(x));
             }
         }
     }
