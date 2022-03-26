@@ -2,18 +2,29 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.sensors.vision.Limelight;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Shooter;
 
 public class AutonShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private final double timeLimit = 2;
-    private final Timer timer = new Timer();
+    private Limelight limelight;
+    private WheelSpeedCalculations shooterCurve;
 
-    public AutonShoot(Shooter subsystem) {
+    private Timer timer;
+    private double time = 1.25;
+
+    public AutonShoot(Shooter subsystem, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
+
+        this.limelight = limelight;
+
+        shooterCurve = m_shooter.getShooterCurve();
+
+        timer = new Timer();
     }
 
     /**
@@ -21,6 +32,11 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void initialize() {
+        m_shooter.updatePID();
+
+        m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
+        m_shooter.setHoodWheelTopSpeed(0);
+
         timer.reset();
         timer.start();
     }
@@ -31,9 +47,16 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void execute() {
-        m_shooter.feedFlywheel();
-        if (m_shooter.getRPM() >= m_shooter.getFlywheelSetSpeed() - 50) {
+        limelight.setLedState(true);
+        if (limelight.hasTrack()) {
+            double x = limelight.getDistanceToTarget();
+            if (5 <= x) {
+                m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
+            }
+        }
+       if (m_shooter.canShoot()) {
             m_shooter.feedIndexer();
+//            m_magazine.feedAll();
         }
     }
 
@@ -53,7 +76,7 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return timer.get() >= timeLimit;
+        return timer.hasElapsed(time);
     }
 
     /**
@@ -66,9 +89,6 @@ public class AutonShoot extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setIndexerPercent(0);
-        m_shooter.setFlywheelSpeed(0);
-        timer.stop();
+        m_shooter.stopAll();
     }
 }
-

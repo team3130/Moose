@@ -1,12 +1,8 @@
 package frc.robot.commands.Hood;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.sensors.vision.Limelight;
-import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Hood;
-import java.util.Set;
 
 public class SpinHood extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
@@ -20,6 +16,7 @@ public class SpinHood extends CommandBase {
         m_hood = subsystem;
         m_requirements.add(subsystem);
         this.direction = direction;
+        this.limelight = limelight;
         /*hoodCurve = m_hood.getWinchCurve();*/
     }
 

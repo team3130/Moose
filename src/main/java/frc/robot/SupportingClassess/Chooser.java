@@ -20,8 +20,10 @@ import frc.robot.commands.Chassis.SpinChassisToAngle;
 import frc.robot.commands.Chassis.TimedFaceTarget;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Magazine.TimedSpinzine;
+import frc.robot.commands.Shooter.AutonShoot;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.doNothing;
 import frc.robot.subsystems.Chassis;
 
 import java.io.File;
@@ -133,36 +135,73 @@ public class Chooser {
     }
 
     public void addThreeBallPathTwo() {
-        AutonCommand pathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToFirstBall3Ball2.wpilib.json")));
-        CommandBase shoot = new ParallelCommandGroup(new TimedFaceTarget(container.getChassis(), container.getLimelight()), new Shoot(container.getShooter(), container.getLimelight()), new TimedSpinzine(container.getMagazine(), 1, 0.1));
+        AutonCommand pathOne = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToFirstBall3Ball2.wpilib.json")
+                )
+        );
+        CommandBase shoot = new ParallelCommandGroup(
+                new TimedFaceTarget(container.getChassis(), container.getLimelight()),
+                new Shoot(container.getShooter(), container.getLimelight()),
+                new TimedSpinzine(container.getMagazine(), 1, 0.1)
+        );
         CommandBase spin1 = new SpinChassisToAngle(container.getChassis(), 180);
-        RamseteCommand pathTwo = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToSecondBall3Ball2.wpilib.json")));
+        RamseteCommand pathTwo = ramseteCommandFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToSecondBall3Ball2.wpilib.json")
+                )
+        );
         CommandBase spin2 = new SpinChassisToAngle(container.getChassis(), 180);
-        RamseteCommand pathThree = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToShoot3Ball2.wpilib.json")));
-        CommandBase shoot2 = new ParallelCommandGroup(new TimedFaceTarget(container.getChassis(), container.getLimelight()), new Shoot(container.getShooter(), container.getLimelight()));
-
-        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
-                new ParallelDeadlineGroup(pathOne.getCmd(), new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
-                shoot,
-                spin1,
-                new ParallelDeadlineGroup(pathTwo, new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
-                spin2,
-                pathThree,
-                shoot2
+        RamseteCommand pathThree = ramseteCommandFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball2/GoToShoot3Ball2.wpilib.json")
+                )
+        );
+        CommandBase shoot2 = new ParallelCommandGroup(
+                new TimedFaceTarget(container.getChassis(), container.getLimelight()),
+                new Shoot(container.getShooter(), container.getLimelight())
         );
 
-        m_autonChooser.addOption("3Ball2", new AutonCommand(commandGroup, pathOne.getStartPosition()));
+        SequentialCommandGroup commandGroup =
+                new SequentialCommandGroup(
+                    new ParallelDeadlineGroup(pathOne.getCmd(), new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
+                    shoot,
+                    spin1,
+                    new ParallelDeadlineGroup(pathTwo, new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1)),
+                    spin2,
+                    pathThree,
+                    shoot2
+                );
 
+        m_autonChooser.addOption("3Ball2", new AutonCommand(commandGroup, pathOne.getStartPosition()));
+    }
+
+    public void addFiller() {
+        m_autonChooser.addOption("Nothing", new AutonCommand(new doNothing(container.getChassis()), new Pose2d()));
     }
 
     public void addTwoBall() {
-        AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/2Ball/GoToFirstBall.wpilib.json")));
+        AutonCommand PathOne = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/2Ball/GoToFirstBall.wpilib.json")
+                )
+        );
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
         CommandBase spinzine = new TimedSpinzine(container.getMagazine(), 1, 0.1);
-        AutonCommand DriveToShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/2Ball/DriveToShoot2Ball.wpilib.json")));
+        AutonCommand DriveToShoot = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/2Ball/DriveToShoot2Ball.wpilib.json")
+                )
+        );
         CommandBase spin = new SpinChassisToAngle(container.getChassis(), 180);
-        ParallelCommandGroup shoot = new ParallelCommandGroup(new TimedFaceTarget(container.getChassis(), container.getLimelight()), new Shoot(container.getShooter(), container.getLimelight()));
-        ParallelCommandGroup shoot2 = new ParallelCommandGroup(new TimedFaceTarget(container.getChassis(), container.getLimelight()), new Shoot(container.getShooter(), container.getLimelight()));
+        ParallelCommandGroup shoot = new ParallelCommandGroup(
+                new TimedFaceTarget(container.getChassis(), container.getLimelight()),
+                new Shoot(container.getShooter(), container.getLimelight())
+        );
+        ParallelCommandGroup shoot2 = new ParallelCommandGroup(
+                new TimedFaceTarget(container.getChassis(), container.getLimelight()),
+                new Shoot(container.getShooter(), container.getLimelight())
+        );
 
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(
@@ -178,14 +217,23 @@ public class Chooser {
     }
 
     public void Add1Ball() {
-        AutonCommand Move = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/Move/MoveOut.wpilib.json")));
-        ParallelCommandGroup shoot = new ParallelCommandGroup(new FaceTarget(container.getChassis(), container.getLimelight()), new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight()));
+        AutonCommand Move = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/Move/MoveOut.wpilib.json")
+                )
+        );
+
+        ParallelCommandGroup shoot = new ParallelCommandGroup(
+                new FaceTarget(container.getChassis(), container.getLimelight()),
+                new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight())
+        );
 
         SequentialCommandGroup commandGroup =
                 new SequentialCommandGroup(
                         Move.getCmd(),
                         shoot
                 );
+
         m_autonChooser.addOption("1Ball", new AutonCommand(commandGroup, Move.getStartPosition()));
     }
 
@@ -301,5 +349,73 @@ public class Chooser {
 
     public TrajectoryConfig getConfig() {
         return config;
+    }
+
+    public void add3Ball3() {
+        AutonCommand goToFirstBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball3/GoToBall3Ball3.wpilib.json")
+                )
+        );
+
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+
+        AutonCommand ReverseToShoot = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball3/GoToShoot3Ball3.wpilib.json")
+                )
+        );
+
+        SequentialCommandGroup shoot = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(
+                    new AutonShoot(container.getShooter(), container.getLimelight()),
+                    new FaceTarget(container.getChassis(), container.getLimelight())
+                ),
+                new TimedSpinzine(container.getMagazine(), 1, 0.1),
+                new ParallelDeadlineGroup(
+                        new AutonShoot(container.getShooter(), container.getLimelight()),
+                        new FaceTarget(container.getChassis(), container.getLimelight())
+                )
+        );
+
+        AutonCommand GoToLastBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball3/GoToLastBall3.wpilib.json")
+                )
+        );
+
+        // Sequentially this must occur before GoToLastBall it must be generated after GoToLastBall
+        CommandBase spin = new SpinChassisToAngle(container.getChassis(), GoToLastBall.getStartPosition().getRotation().getDegrees());
+
+        CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+
+        AutonCommand GoToShootLast = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball3/GoToShootLast3Ball3.wpilib.json")
+                )
+        );
+
+        CommandBase spin2 = new SpinChassisToAngle(container.getChassis(), GoToShootLast.getStartPosition().getRotation().getDegrees());
+
+        SequentialCommandGroup shoot2 = new SequentialCommandGroup(
+                new TimedSpinzine(container.getMagazine(), 1, 0.1),
+                new ParallelDeadlineGroup(
+                        new AutonShoot(container.getShooter(), container.getLimelight()),
+                        new FaceTarget(container.getChassis(), container.getLimelight())
+                )
+        );
+
+        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake),
+                ReverseToShoot.getCmd(),
+                shoot,
+                spin,
+                new ParallelDeadlineGroup(GoToLastBall.getCmd(), deployIntake2),
+                spin2,
+                GoToShootLast.getCmd(),
+                shoot2
+        );
+
+        m_autonChooser.addOption("Desperate 3 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
     }
 }
