@@ -34,6 +34,7 @@ public class DeployAndSpintake extends CommandBase {
         m_intake.setSpeed(0.65 * direction);
         m_magazine.setCenterSpeed(0.6);
         m_magazine.setSideSpeeds(0.4);
+        m_magazine.feedAll();
     }
 
     /**
