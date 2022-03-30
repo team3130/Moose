@@ -11,7 +11,6 @@ public class HoodPnuematics extends SubsystemBase {
 // so that they are initialized before the constructor is called.
 
     //Create necessary objects
-
     private Solenoid m_solenoid;
 
     //Create and define all standard data types needed
@@ -19,13 +18,13 @@ public class HoodPnuematics extends SubsystemBase {
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_HOOD_ACTUATOR);
     }
 
-    public boolean toggleIntake() {
+    public boolean toggleHood() {
         m_solenoid.toggle();
         return m_solenoid.get();
     }
 
     public boolean toggled() {
         return m_solenoid.get();
-
+    }
 }
 
