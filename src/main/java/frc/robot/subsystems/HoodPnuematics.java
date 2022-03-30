@@ -9,7 +9,7 @@ public class Hood_Pnuematics extends SubsystemBase {
 
     //Create necessary objects
 
-    private Solenoid m_solenoid:
+    private Solenoid m_solenoid;
 
     //Create and define all standard data types needed
     public Hood_Pnuematics() {
