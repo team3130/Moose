@@ -2,23 +2,28 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.HoodPnuematics;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
+    private final HoodPnuematics m_hood;
     private Limelight limelight;
     private WheelSpeedCalculations shooterCurve;
 
     private Timer timer;
     private double time = 2;
 
-    public Shoot(Shooter subsystem, Limelight limelight) {
+    public Shoot(Shooter subsystem, HoodPnuematics hood, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
+        m_hood = hood;
         m_requirements.add(subsystem);
+        m_requirements.add(hood);
 
         this.limelight = limelight;
 
@@ -39,6 +44,12 @@ public class Shoot extends CommandBase {
 
         timer.reset();
         timer.start();
+
+        if (RobotMap.TARGET_DISTANCE >= limelight.getDistanceToTarget()) {
+            m_hood.deployHood(false);
+        } else {
+            m_hood.deployHood(true);
+        }
     }
 
     /**

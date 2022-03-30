@@ -42,6 +42,7 @@ public class RobotMap {
     public static final int CAN_SHOOTER_UPPER_MOTOR = 13;
     public static final int CAN_HOOD_MOTOR = 14;
     public static final int PNM_HOOD_ACTUATOR; // this needs a value
+    public static final int TARGET_DISTANCE = 3;
 
     // Intake
     public static final int CAN_INTAKE_MOTOR = 10;

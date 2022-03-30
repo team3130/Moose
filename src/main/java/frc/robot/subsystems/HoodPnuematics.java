@@ -18,9 +18,8 @@ public class HoodPnuematics extends SubsystemBase {
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_HOOD_ACTUATOR);
     }
 
-    public boolean toggleHood() {
-        m_solenoid.toggle();
-        return m_solenoid.get();
+    public void deployHood(boolean deploy) {
+        m_solenoid.set(deploy);
     }
 
     public boolean toggled() {
