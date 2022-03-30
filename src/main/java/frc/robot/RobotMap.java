@@ -41,8 +41,6 @@ public class RobotMap {
     public static final char CAN_SHOOTER_MOTOR = 7;
     public static final int CAN_SHOOTER_UPPER_MOTOR = 13;
     public static final int CAN_HOOD_MOTOR = 14;
-    public static final int PNM_HOOD_ACTUATOR; // this needs a value
-    public static final int TARGET_DISTANCE = 3;
 
     // Intake
     public static final int CAN_INTAKE_MOTOR = 10;
@@ -74,10 +72,12 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
+    public static final int TARGET_DISTANCE = 3;
+
     public static double kFlywheelP = 0.02;
     public static double kFlywheelI = 0;
     public static double kFlywheelD = 0;
-
+    
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0.5816;
@@ -159,6 +159,7 @@ public class RobotMap {
     public static final int PNM_Shift = 0;
     public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
     public static final int PNM_CLIMBER_ACTUATOR = 2;
+    public static final int PNM_HOOD_ACTUATOR = 3;
 
     /**
      * Gamepad Button List
