@@ -35,7 +35,7 @@ public class SpinChassisToAbsoluteAngle extends CommandBase {
 
     @Override
     public void execute() {
-        m_chassis.spinToAngle(m_chassis.getAngle());
+        m_chassis.faceTarget(m_chassis.getAngle());
     }
 
     @Override

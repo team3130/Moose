@@ -1,10 +1,7 @@
 package frc.robot.commands.Chassis;
 
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotMap;
-import frc.robot.SupportingClassess.Chooser;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 
@@ -36,7 +33,7 @@ public class FaceTarget extends CommandBase {
 
     @Override
     public void execute() {
-        m_chassis.spinToAngle(m_chassis.getAngle());
+        m_chassis.faceTarget(m_chassis.getAngle());
     }
 
     @Override

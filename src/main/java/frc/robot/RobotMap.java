@@ -131,6 +131,11 @@ public class RobotMap {
     public static double ChassisSpinKI = 0.001;
     public static double ChassisSpinKD = 0.0025;
 
+    public static double ChassisLateralP = 2;
+    public static double ChassisLateralI = 0;
+    public static double ChassisLateralD = 0;
+
+
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 2.25;
     public static final double kMaxAccelerationMPS = 1.5;
@@ -150,6 +155,7 @@ public class RobotMap {
     public static double ChassiskS = 0.62711;
     public static double ChassiskV = 2.3297;
     public static double ChassiskA = 0.81929;
+
 
     /**
      * PNM IDs
