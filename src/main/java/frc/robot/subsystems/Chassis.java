@@ -457,6 +457,10 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         // FIXME: might do scuffed stuff, if it does then just base it off of the right side
         driveArcade(m_LaterallPID.calculate(0), -m_spinnyPID.calculate(angle), false);
     }
+    public void faceTarget(double angle, double translationPos) {
+        // FIXME: might do scuffed stuff, if it does then just base it off of the right side
+        driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
+    }
 
     public boolean getAtSetpoint() {
         return m_spinnyPID.atSetpoint() && m_LaterallPID.atSetpoint();
@@ -466,8 +470,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_spinnyPID.setSetpoint(setpoint);
     }
 
-    public void setLateralSetPoint() {
-        m_LaterallPID.setSetpoint(0);
+    public void setLateralSetPoint(double setpoint) {
+        m_LaterallPID.setSetpoint(setpoint);
     }
 
     public void updatePIDValues() {
@@ -484,6 +488,12 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void resetPIDLoop() {
         m_spinnyPID.reset();
         m_LaterallPID.reset();
+    }
+
+    public double getCurrentVectorDist(){
+       return Math.sqrt(
+               Math.pow(getPose().getX(), 2) + Math.pow(getPose().getY(), 2)
+       );
     }
 
 }
