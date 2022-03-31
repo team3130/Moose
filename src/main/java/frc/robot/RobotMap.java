@@ -121,10 +121,10 @@ public class RobotMap {
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
     public static final double kWheelDiameter = 0.100305;//taken 3/20/22 COMP
-    public static final double kMaxHighGearDriveSpeed = 0.8;
-    public static final double kMaxTurnThrottle = 0.9;
+    public static double kMaxHighGearDriveSpeed = 0.8;
+    public static double kMaxTurnThrottle = 0.9;
     public static final double kDriveDeadband = 0.02;
-    public static final double kMaxRampRate = 0.7;
+    public static double kMaxRampRate = 0.7;
     public static final double kChassisEncoderError = 1; //TODO: Still needs to be determined for comp bot
 
     public static double ChassisSpinKP = 0.025;

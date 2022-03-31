@@ -72,10 +72,20 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
-    private NetworkTableEntry sliderTurn = tab
-            .add("Turn Speed Sensitivity", 10)
+
+    private NetworkTableEntry sliderRampRate = tab.add("Max ramp rate", RobotMap.kMaxRampRate)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 10))
+            .withProperties(Map.of("min", 0.1, "max", 3))
+            .getEntry();
+
+    private NetworkTableEntry sliderForwardVelocity = tab.add("Max forward velocity", RobotMap.kMaxHighGearDriveSpeed)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .getEntry();
+
+    private NetworkTableEntry sliderTurn = tab.add("Max turn speed", RobotMap.kMaxTurnThrottle)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
 
@@ -213,6 +223,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void periodic() {
         // update odometry for relevant positional data
         m_odometry.update(Navx.getRotation(), getDistanceR(), getDistanceL());
+        updateRampThings();
     }
 
     /**
@@ -265,6 +276,13 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public double getSpeed() {
         return 0.5 * (getSpeedL() + getSpeedR());
+    }
+
+    public void updateRampThings() {
+        RobotMap.kMaxRampRate = sliderRampRate.getDouble(RobotMap.kMaxRampRate);
+        RobotMap.kMaxTurnThrottle = sliderTurn.getDouble(RobotMap.kMaxTurnThrottle);
+        RobotMap.kMaxHighGearDriveSpeed = sliderForwardVelocity.getDouble(RobotMap.kMaxHighGearDriveSpeed);
+        configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -436,14 +454,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorFront.set(0);
         m_rightMotorFront.set(0);
         m_drive.stopMotor();
-    }
-
-    public double getMoveSpeedSensitivityFromShuffleboard() {
-        return sliderMove.getDouble(10);
-    }
-
-    public double getTurnSpeedSensitivityFromShuffleboard() {
-        return sliderTurn.getDouble(10);
     }
 
     public void spinToAngle(double angle) {
