@@ -491,9 +491,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public double getCurrentVectorDist(){
-       return Math.sqrt(
-               Math.pow(getPose().getX(), 2) + Math.pow(getPose().getY(), 2)
-       );
+        return getPose().getX();
     }
 
 }
