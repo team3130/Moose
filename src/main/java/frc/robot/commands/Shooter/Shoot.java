@@ -56,7 +56,7 @@ public class Shoot extends CommandBase {
         }
        if (m_shooter.canShoot()) {
             m_shooter.feedIndexer();
-//            m_magazine.feedAll();
+////            m_magazine.feedAll();
         }
     }
 

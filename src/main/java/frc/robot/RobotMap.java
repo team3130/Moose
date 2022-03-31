@@ -79,7 +79,7 @@ public class RobotMap {
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0.5816;
-    public static double flyWheelkV = 0.0635;
+    public static double flyWheelkV = 0.0655;
     public static double flyWheelkA = 0.0082804;
 
     public static double kFlywheelHoodP = 0.0007;
@@ -101,8 +101,8 @@ public class RobotMap {
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static final double kLimelightPitch =  -36.27676493753503;   // Facing up is negative, in degrees Checked: 2/17
-    public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO: FIND FOR 2022
+    public static final double kLimelightPitch =  -46.8;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightYaw = -Math.asin((double) 1/6);        // Aiming bias, facing left is positive TODO: FIND FOR 2022
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
     public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
