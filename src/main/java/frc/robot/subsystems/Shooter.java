@@ -65,7 +65,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
 
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
-        m_indexer.setNeutralMode(NeutralMode.Coast);
+        m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
 
         shooterCurve = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
