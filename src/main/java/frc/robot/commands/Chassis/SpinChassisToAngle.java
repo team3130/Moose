@@ -10,7 +10,7 @@ public class SpinChassisToAngle extends CommandBase {
     private final Chassis m_chassis;
     private double angle;
     private Timer timer;
-    private double time = 1; //TODO at GF needs tuning
+    private double time = 1; //TODO at comp: needs tuning
 
     public SpinChassisToAngle(Chassis chassis, double angle) {
         //mapping to object passed through parameter
@@ -35,7 +35,7 @@ public class SpinChassisToAngle extends CommandBase {
 
     @Override
     public void execute() {
-        m_chassis.spinToAngle(m_chassis.getAngle());
+        m_chassis.faceTarget(m_chassis.getAngle());
     }
 
     @Override

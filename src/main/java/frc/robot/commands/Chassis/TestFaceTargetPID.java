@@ -2,7 +2,6 @@ package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
-import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 
 public class TestFaceTargetPID extends CommandBase {
@@ -31,7 +30,7 @@ public class TestFaceTargetPID extends CommandBase {
 
     @Override
     public void execute() {
-        m_chassis.spinToAngle(m_chassis.getAngle());
+        m_chassis.faceTarget(m_chassis.getAngle());
     }
 
     @Override
