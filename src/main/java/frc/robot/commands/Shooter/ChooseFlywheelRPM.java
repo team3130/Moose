@@ -33,6 +33,9 @@ public class ChooseFlywheelRPM extends CommandBase {
 
         m_shooter.setHoodWheelTopSpeed(0);
         m_shooter.setFlywheelSpeed(setPoint);
+        m_shooter.setIndexerPercent(0.5);
+        
+        m_magazine.feedAll();
 
         timer.reset();
         timer.start();
@@ -44,9 +47,7 @@ public class ChooseFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.canShootSetFlywheel(setPoint)) {
-            m_shooter.setIndexerPercent(0.5);
-            m_magazine.feedAll();
+        {
         }
     }
 
