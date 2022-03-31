@@ -455,7 +455,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     public void faceTarget(double angle) {
         // FIXME: might do scuffed stuff, if it does then just base it off of the right side
-        driveArcade(m_LaterallPID.calculate((getDistanceL() + getDistanceR()) / 2), -m_spinnyPID.calculate(angle), false);
+        driveArcade(m_LaterallPID.calculate(0), -m_spinnyPID.calculate(angle), false);
     }
 
     public boolean getAtSetpoint() {
@@ -467,7 +467,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void setLateralSetPoint() {
-        m_LaterallPID.setSetpoint((getDistanceR() + getDistanceL()) / 2);
+        m_LaterallPID.setSetpoint(0);
     }
 
     public void updatePIDValues() {
