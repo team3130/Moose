@@ -34,6 +34,8 @@ public class SetFlywheelRPM extends CommandBase {
         m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
         m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
 
+        m_magazine.setCenterSpeed(0.3);
+
         m_limelight.setLedState(true);
 
         timer.reset();
@@ -48,7 +50,7 @@ public class SetFlywheelRPM extends CommandBase {
     public void execute() {
         if (m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard())) {
             m_shooter.setIndexerPercent(0.5);
-//            m_magazine.feedAll();
+            m_magazine.feedAll();
         }
     }
 

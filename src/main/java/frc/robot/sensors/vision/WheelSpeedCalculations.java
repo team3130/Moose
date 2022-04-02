@@ -60,7 +60,7 @@ public class WheelSpeedCalculations {
         FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves";
 
         if (mechanism == SHOOTER) {
-            FILEPATH = FILEPATH + File.separator + "ShooterCurvesMarch2.csv";
+            FILEPATH = FILEPATH + File.separator + "RapidReactThird.csv";
         }
         else if (mechanism == HOOD_WINCH) {
             FILEPATH = FILEPATH + File.separator + "HoodPlaceHolder.csv";

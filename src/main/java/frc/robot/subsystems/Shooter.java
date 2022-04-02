@@ -39,10 +39,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
     private NetworkTableEntry RPMHoodWheel = tab.add("Shooter Top Current RPM", 0).getEntry();
 
-    private NetworkTableEntry P = tab.add("Top Flywheel P", RobotMap.kFlywheelHoodP).getEntry();
-    private NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelHoodI).getEntry();
-    private NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelHoodD).getEntry();
-    private NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.kTopShooterKV).getEntry();
+    private NetworkTableEntry P = tab.add("Top Flywheel P", RobotMap.kFlywheelP).getEntry();
+    private NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelI).getEntry();
+    private NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelD).getEntry();
+    private NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.flyWheelkV).getEntry();
 
 
     //Create and define all standard data types needed
@@ -50,8 +50,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
 
-        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
-        m_hoodWheel.setInverted(false);
+        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_HOOD_MOTOR);
+
+        m_hoodWheel.follow(m_flywheel);
 
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);
@@ -62,10 +63,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_hoodWheel.enableVoltageCompensation(true);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
-        Utils.configPIDF(m_hoodWheel, RobotMap.kFlywheelHoodP, RobotMap.kFlywheelHoodI, RobotMap.kFlywheelHoodD, RobotMap.kTopShooterKV);
 
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
-        m_indexer.setNeutralMode(NeutralMode.Coast);
+        m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
 
         shooterCurve = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
@@ -209,6 +209,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void updatePID() {
-        Utils.configPIDF(m_hoodWheel, P.getDouble(RobotMap.kFlywheelHoodP), I.getDouble(RobotMap.kFlywheelHoodI), D.getDouble(RobotMap.kFlywheelHoodD), V.getDouble(RobotMap.kTopShooterKV));
+        Utils.configPIDF(m_flywheel, P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD), V.getDouble(RobotMap.flyWheelkV));
     }
 }

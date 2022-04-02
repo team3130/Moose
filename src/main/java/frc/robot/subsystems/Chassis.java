@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -24,7 +23,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.DefaultDrive;
@@ -63,6 +61,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     private final Field2d m_fieldPos;
 
     private final PIDController m_spinnyPID;
+    private final PIDController m_LaterallPID;
 
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
@@ -89,9 +88,13 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .getEntry();
 
 
-    private NetworkTableEntry P = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
-    private NetworkTableEntry I = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
-    private NetworkTableEntry D = tab.add("Chassis D", RobotMap.ChassisSpinKD).getEntry();
+    private NetworkTableEntry Ps = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
+    private NetworkTableEntry Is = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
+    private NetworkTableEntry Ds = tab.add("Chassis D", RobotMap.ChassisSpinKD).getEntry();
+
+    private NetworkTableEntry Pl = tab.add("Chassis lateral P",  RobotMap.ChassisLateralP).getEntry();
+    private NetworkTableEntry Il = tab.add("Chassis lateral I", RobotMap.ChassisLateralI).getEntry();
+    private NetworkTableEntry Dl = tab.add("Chassis lateral D", RobotMap.ChassisLateralD).getEntry();
 
     // Create and define all standard data types needed
     public Chassis() {
@@ -146,6 +149,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_fieldPos = new Field2d();
 
         m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
+        m_LaterallPID = new PIDController(RobotMap.ChassisLateralP, RobotMap.ChassisLateralI, RobotMap.ChassisLateralD);
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -437,8 +441,11 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         SmartDashboard.putBoolean("Shifted", m_shifter.get());
 
-        SmartDashboard.putNumber("Chassis Position Error", m_spinnyPID.getPositionError());
-        SmartDashboard.putNumber("Chassis Velocity Error", m_spinnyPID.getVelocityError());
+        SmartDashboard.putNumber("Chassis Spinny Position Error", m_spinnyPID.getPositionError());
+        SmartDashboard.putNumber("Chassis Spinny Velocity Error", m_spinnyPID.getVelocityError());
+
+        SmartDashboard.putNumber("Chassis Lateral Position Error", m_LaterallPID.getPositionError());
+        SmartDashboard.putNumber("Chassis Lateral Velocity Error", m_LaterallPID.getVelocityError());
 
         m_fieldPos.setRobotPose(this.getPose());
         SmartDashboard.putData("Field position", m_fieldPos);
@@ -456,29 +463,53 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_drive.stopMotor();
     }
 
-    public void spinToAngle(double angle) {
+    public double getMoveSpeedSensitivityFromShuffleboard() {
+        return sliderMove.getDouble(10);
+    }
+
+    public double getTurnSpeedSensitivityFromShuffleboard() {
+        return sliderTurn.getDouble(10);
+    }
+
+    public void faceTarget(double angle) {
+        // FIXME: might do scuffed stuff, if it does then just base it off of the right side
         driveArcade(0, -m_spinnyPID.calculate(angle), false);
+    }
+    public void faceTarget(double angle, double translationPos) {
+        // FIXME: might do scuffed stuff, if it does then just base it off of the right side
+        driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
     }
 
     public boolean getAtSetpoint() {
-        return m_spinnyPID.atSetpoint();
+        return m_spinnyPID.atSetpoint() && m_LaterallPID.atSetpoint();
     }
 
     public void setSpinnySetPoint(double setpoint) {
+        System.out.println("Set point: " + setpoint);
         m_spinnyPID.setSetpoint(setpoint);
     }
 
+    public void setLateralSetPoint(double setpoint) {
+        m_LaterallPID.setSetpoint(setpoint);
+    }
+
     public void updatePIDValues() {
-        m_spinnyPID.setPID(P.getDouble(RobotMap.ChassisSpinKP), I.getDouble(RobotMap.ChassisSpinKI), D.getDouble(RobotMap.ChassisSpinKD));
+        m_spinnyPID.setPID(Ps.getDouble(RobotMap.ChassisSpinKP), Is.getDouble(RobotMap.ChassisSpinKI), Ds.getDouble(RobotMap.ChassisSpinKD));
+        m_LaterallPID.setPID(Pl.getDouble(RobotMap.ChassisSpinKP), Il.getDouble(RobotMap.ChassisSpinKI), Dl.getDouble(RobotMap.ChassisSpinKD));
     }
 
     public void tuneTolerance() {
-        //TODO: get real values
-        m_spinnyPID.setTolerance(2, 3);
+        m_spinnyPID.setTolerance(5, 3);
+        m_LaterallPID.setTolerance(0.25, 0.25);
     }
 
     public void resetPIDLoop() {
         m_spinnyPID.reset();
+        m_LaterallPID.reset();
+    }
+
+    public double getCurrentVectorDist(){
+        return getPose().getX();
     }
 
 }

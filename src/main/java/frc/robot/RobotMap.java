@@ -79,7 +79,7 @@ public class RobotMap {
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0.5816;
-    public static double flyWheelkV = 0.0635;
+    public static double flyWheelkV = 0.0655;
     public static double flyWheelkA = 0.0082804;
 
     public static double kFlywheelHoodP = 0.0007;
@@ -101,8 +101,8 @@ public class RobotMap {
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static final double kLimelightPitch =  -36.27676493753503;   // Facing up is negative, in degrees Checked: 2/17
-    public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive TODO: FIND FOR 2022
+    public static final double kLimelightPitch =  -38.5;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightYaw = -Math.asin((double) 1/6);        // Aiming bias, facing left is positive TODO: FIND FOR 2022
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
     public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
@@ -120,16 +120,21 @@ public class RobotMap {
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = 0.100305;//taken 3/20/22 COMP
-    public static double kMaxHighGearDriveSpeed = 0.8;
+    public static final double kWheelDiameter = Units.inchesToMeters(3.79);//taken 3/20/22 COMP
     public static double kMaxTurnThrottle = 0.9;
+    public static double kMaxHighGearDriveSpeed = 0.8;
     public static final double kDriveDeadband = 0.02;
+    public static final double kChassisEncoderError = 1.0934926; //TODO: Still needs to be determined for comp bot
     public static double kMaxRampRate = 0.7;
-    public static final double kChassisEncoderError = 1; //TODO: Still needs to be determined for comp bot
 
-    public static double ChassisSpinKP = 0.025;
-    public static double ChassisSpinKI = 0.001;
-    public static double ChassisSpinKD = 0.0025;
+    public static double ChassisSpinKP = 0.03;
+    public static double ChassisSpinKI = 0;
+    public static double ChassisSpinKD = 0.0075;
+
+    public static double ChassisLateralP = 2;
+    public static double ChassisLateralI = 0;
+    public static double ChassisLateralD = 0;
+
 
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 2.25;
@@ -139,17 +144,18 @@ public class RobotMap {
      * PID for Chassis
      */
             // solution found, cry harder
-    public static double LChassiskP = 3.2631; //Practice bot 3/10/22
+    public static double LChassiskP = 3.3395; //Practice bot 3/10/22
     public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 3.3821;
+    public static double RChassiskP = 3.5376;
     public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.62711;
-    public static double ChassiskV = 2.3297;
-    public static double ChassiskA = 0.81929;
+    public static double ChassiskS = 0.56182;
+    public static double ChassiskV = 2.4236;
+    public static double ChassiskA = 0.88058;
+
 
     /**
      * PNM IDs
