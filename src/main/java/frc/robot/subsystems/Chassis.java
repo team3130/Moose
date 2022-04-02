@@ -481,9 +481,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void tuneTolerance() {
-        //TODO: get real values
-        m_spinnyPID.setTolerance(2, 3);
-        m_LaterallPID.setTolerance(0.5, 0.5);
+        m_spinnyPID.setTolerance(1, 3);
+        m_LaterallPID.setTolerance(0.25, 0.25);
     }
 
     public void resetPIDLoop() {

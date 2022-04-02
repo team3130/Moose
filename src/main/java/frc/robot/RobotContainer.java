@@ -106,7 +106,6 @@ public class RobotContainer {
         }
         else if (m_chooser_driver.getSelected().equals("Test")) {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinChassisToAngle(m_chassis, 180));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new resetOdometery(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, 1));

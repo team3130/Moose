@@ -9,15 +9,12 @@ public class SpinChassisToAbsoluteAngle extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis;
     private double angle;
-    private Timer timer;
-    private double time = 1;
 
     public SpinChassisToAbsoluteAngle(Chassis chassis, double angle) {
         //mapping to object passed through parameter
         m_chassis = chassis;
         m_requirements.add(chassis);
         this.angle = angle;
-        timer = new Timer();
     }
 
     /**
@@ -29,8 +26,6 @@ public class SpinChassisToAbsoluteAngle extends CommandBase {
         m_chassis.updatePIDValues();
         m_chassis.setSpinnySetPoint((angle <= 180) ? angle : angle - 360);
         m_chassis.resetPIDLoop();
-        timer.reset();
-        timer.start();
     }
 
     @Override
@@ -40,12 +35,11 @@ public class SpinChassisToAbsoluteAngle extends CommandBase {
 
     @Override
     public boolean isFinished() {
-       return m_chassis.getAtSetpoint() || timer.hasElapsed(time);
+       return m_chassis.getAtSetpoint();
     }
 
     @Override
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
-        timer.stop();
     }
 }
