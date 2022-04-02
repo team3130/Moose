@@ -455,7 +455,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     public void faceTarget(double angle) {
         // FIXME: might do scuffed stuff, if it does then just base it off of the right side
-        driveArcade(m_LaterallPID.calculate(0), -m_spinnyPID.calculate(angle), false);
+        driveArcade(0, -m_spinnyPID.calculate(angle), false);
     }
     public void faceTarget(double angle, double translationPos) {
         // FIXME: might do scuffed stuff, if it does then just base it off of the right side
@@ -467,6 +467,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void setSpinnySetPoint(double setpoint) {
+        System.out.println("Set point: " + setpoint);
         m_spinnyPID.setSetpoint(setpoint);
     }
 

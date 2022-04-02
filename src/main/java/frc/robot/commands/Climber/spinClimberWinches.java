@@ -29,7 +29,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void execute() {
-        m_climber.driveTank(RobotContainer.m_weaponsGamepad.getRawAxis(1) * 0.7, RobotContainer.m_weaponsGamepad.getRawAxis(5) * 0.7, true);
+        m_climber.driveTank(RobotContainer.m_weaponsGamepad.getRawAxis(5) * 0.85, RobotContainer.m_weaponsGamepad.getRawAxis(1) * 0.85, true);
     }
 
     /**

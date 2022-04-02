@@ -4,21 +4,26 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
     private Limelight limelight;
+    private Magazine m_magazine;
     private WheelSpeedCalculations shooterCurve;
 
     private Timer timer;
     private double time = 2;
 
-    public Shoot(Shooter subsystem, Limelight limelight) {
+    public Shoot(Shooter subsystem, Magazine magazine, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
+
+        m_magazine = magazine;
+        m_requirements.add(magazine);
 
         this.limelight = limelight;
 
@@ -56,7 +61,7 @@ public class Shoot extends CommandBase {
         }
        if (m_shooter.canShoot()) {
             m_shooter.feedIndexer();
-////            m_magazine.feedAll();
+            m_magazine.feedAll();
         }
     }
 
@@ -90,5 +95,6 @@ public class Shoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.stopAll();
+        m_magazine.stopAll();
     }
 }
