@@ -373,7 +373,7 @@ public class Chooser {
                 )
         );
 
-        CommandBase reset = new resetOdometery(container.getChassis(), new Pose2d(ReverseToShoot.getEndPosition().getX(), ReverseToShoot.getEndPosition().getY(), new Rotation2d(ReverseToShoot.getEndPosition().getRotation().getDegrees() + container.getChassis().getPose().getRotation().getDegrees())));
+        CommandBase reset = new resetOdometery(container.getChassis(), new Pose2d(ReverseToShoot.getEndPosition().getX(), ReverseToShoot.getEndPosition().getY(), ReverseToShoot.getEndPosition().getRotation()));
 
         ParallelDeadlineGroup shoot = new ParallelDeadlineGroup(
                     new Shoot(container.getShooter(), container.getMagazine(), container.getLimelight()),
