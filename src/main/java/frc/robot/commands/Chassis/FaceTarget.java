@@ -12,7 +12,7 @@ public class FaceTarget extends CommandBase {
 
     private double angle = 0;
 
-    private double optional = 0;
+    private Pose2d pose;
 
     public FaceTarget(Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
@@ -26,6 +26,7 @@ public class FaceTarget extends CommandBase {
      */
     @Override
     public void initialize() {
+        pose = m_chassis.getPose();
         m_chassis.configRampRate(2);
         m_chassis.updatePIDValues();
         m_chassis.resetOdometry(new Pose2d());
@@ -48,5 +49,6 @@ public class FaceTarget extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
+        m_chassis.resetOdometry(pose);
     }
 }
