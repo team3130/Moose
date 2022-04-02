@@ -15,10 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
-import frc.robot.commands.Chassis.FaceTarget;
-import frc.robot.commands.Chassis.SpinChassisToAngle;
-import frc.robot.commands.Chassis.TimedFaceTarget;
-import frc.robot.commands.Chassis.resetOdometery;
+import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Magazine.TimedSpinzine;
 import frc.robot.commands.Shooter.AutonShoot;
@@ -376,17 +373,12 @@ public class Chooser {
                 )
         );
 
-        SequentialCommandGroup shoot = new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
-                    new AutonShoot(container.getShooter(), container.getLimelight()),
+        CommandBase reset = new resetOdometery(container.getChassis(), new Pose2d(ReverseToShoot.getEndPosition().getX(), ReverseToShoot.getEndPosition().getY(), ReverseToShoot.getEndPosition().getRotation()));
+
+        ParallelDeadlineGroup shoot = new ParallelDeadlineGroup(
+                    new Shoot(container.getShooter(), container.getMagazine(), container.getLimelight()),
                     new FaceTarget(container.getChassis(), container.getLimelight())
-                ),
-                new TimedSpinzine(container.getMagazine(), 1, 0.1),
-                new ParallelDeadlineGroup(
-                        new AutonShoot(container.getShooter(), container.getLimelight()),
-                        new FaceTarget(container.getChassis(), container.getLimelight())
-                )
-        );
+                );
 
         AutonCommand GoToLastBall = autonCmdFactory.apply(
                 trajectoryFactory.apply(
@@ -395,7 +387,7 @@ public class Chooser {
         );
 
         // Sequentially this must occur before GoToLastBall it must be generated after GoToLastBall
-        CommandBase spin = new SpinChassisToAngle(container.getChassis(), GoToLastBall.getStartPosition().getRotation().getDegrees());
+        CommandBase spin = new SpinChassisToAbsoluteAngle(container.getChassis(), GoToLastBall.getStartPosition().getRotation().getDegrees());
 
         CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
 
@@ -405,7 +397,7 @@ public class Chooser {
                 )
         );
 
-        CommandBase spin2 = new SpinChassisToAngle(container.getChassis(), GoToShootLast.getStartPosition().getRotation().getDegrees());
+        CommandBase spin2 = new SpinChassisToAbsoluteAngle(container.getChassis(), GoToShootLast.getStartPosition().getRotation().getDegrees());
 
         SequentialCommandGroup shoot2 = new SequentialCommandGroup(
                 new TimedSpinzine(container.getMagazine(), 1, 0.1),
@@ -419,10 +411,10 @@ public class Chooser {
                 new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake),
                 ReverseToShoot.getCmd(),
                 shoot,
+                reset,
                 spin,
                 new ParallelDeadlineGroup(GoToLastBall.getCmd(), deployIntake2),
                 spin2,
-                GoToShootLast.getCmd(),
                 shoot2
         );
 

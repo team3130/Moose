@@ -71,16 +71,26 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
             .getEntry();
-    private NetworkTableEntry sliderTurn = tab
-            .add("Turn Speed Sensitivity", 10)
+
+    private NetworkTableEntry sliderRampRate = tab.add("Max ramp rate", RobotMap.kMaxRampRate)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 10))
+            .withProperties(Map.of("min", 0.1, "max", 3))
+            .getEntry();
+
+    private NetworkTableEntry sliderForwardVelocity = tab.add("Max forward velocity", RobotMap.kMaxHighGearDriveSpeed)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .getEntry();
+
+    private NetworkTableEntry sliderTurn = tab.add("Max turn speed", RobotMap.kMaxTurnThrottle)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
 
-    private NetworkTableEntry Ps = tab.add("Chassis spinny P",  RobotMap.ChassisSpinKP).getEntry();
-    private NetworkTableEntry Is = tab.add("Chassis spinny I", RobotMap.ChassisSpinKI).getEntry();
-    private NetworkTableEntry Ds = tab.add("Chassis spinny D", RobotMap.ChassisSpinKD).getEntry();
+    private NetworkTableEntry Ps = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
+    private NetworkTableEntry Is = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
+    private NetworkTableEntry Ds = tab.add("Chassis D", RobotMap.ChassisSpinKD).getEntry();
 
     private NetworkTableEntry Pl = tab.add("Chassis lateral P",  RobotMap.ChassisLateralP).getEntry();
     private NetworkTableEntry Il = tab.add("Chassis lateral I", RobotMap.ChassisLateralI).getEntry();
@@ -217,6 +227,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void periodic() {
         // update odometry for relevant positional data
         m_odometry.update(Navx.getRotation(), getDistanceR(), getDistanceL());
+        updateRampThings();
     }
 
     /**
@@ -269,6 +280,13 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public double getSpeed() {
         return 0.5 * (getSpeedL() + getSpeedR());
+    }
+
+    public void updateRampThings() {
+        RobotMap.kMaxRampRate = sliderRampRate.getDouble(RobotMap.kMaxRampRate);
+        RobotMap.kMaxTurnThrottle = sliderTurn.getDouble(RobotMap.kMaxTurnThrottle);
+        RobotMap.kMaxHighGearDriveSpeed = sliderForwardVelocity.getDouble(RobotMap.kMaxHighGearDriveSpeed);
+        configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -481,7 +499,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void tuneTolerance() {
-        m_spinnyPID.setTolerance(1, 3);
+        m_spinnyPID.setTolerance(5, 3);
         m_LaterallPID.setTolerance(0.25, 0.25);
     }
 

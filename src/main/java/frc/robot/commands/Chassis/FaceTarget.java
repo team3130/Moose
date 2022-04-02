@@ -12,6 +12,8 @@ public class FaceTarget extends CommandBase {
 
     private double angle = 0;
 
+    private double optional = 0;
+
     public FaceTarget(Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
         m_chassis = chassis;
