@@ -11,12 +11,14 @@ import frc.robot.subsystems.Chassis;
 
 public class resetOdometery extends InstantCommand {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Chassis m_chassis;
+    private final Chassis m_chassis ;
+    private final Pose2d m_resetpose;
 
-    public resetOdometery(Chassis chassis) {
+    public resetOdometery(Chassis chassis, Pose2d Current) {
         //mapping to object passed through parameter
         m_chassis = chassis;
         m_requirements.add(chassis);
+        m_resetpose = Current;
     }
 
     /**
@@ -25,7 +27,7 @@ public class resetOdometery extends InstantCommand {
     @Override
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
-        m_chassis.resetOdometry(new Pose2d(0, 0, new Rotation2d()));
+        m_chassis.resetOdometry(m_resetpose);
     }
 
     /**
