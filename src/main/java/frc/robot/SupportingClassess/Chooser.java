@@ -18,7 +18,6 @@ import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Magazine.TimedSpinzine;
-import frc.robot.commands.Shooter.AutonShoot;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.doNothing;
@@ -391,7 +390,7 @@ public class Chooser {
         SequentialCommandGroup shoot2 = new SequentialCommandGroup(
                 new TimedSpinzine(container.getMagazine(), 1, 0.1),
                 new ParallelDeadlineGroup(
-                        new AutonShoot(container.getShooter(), container.getLimelight()),
+                        new Shoot(container.getShooter(), container.getMagazine(), container.getLimelight()),
                         new FaceTarget(container.getChassis(), container.getLimelight())
                 )
         );

@@ -1,6 +1,7 @@
 package frc.robot.commands.Chassis;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
@@ -49,6 +50,10 @@ public class FaceTarget extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
-        m_chassis.resetOdometry(pose);
+        m_chassis.resetOdometry(new Pose2d(
+                m_chassis.getPose().getX() + pose.getX(),
+                m_chassis.getPose().getY() + pose.getY(),
+                new Rotation2d(m_chassis.getPose().getRotation().getDegrees() + pose.getRotation().getDegrees())
+        ));
     }
 }
