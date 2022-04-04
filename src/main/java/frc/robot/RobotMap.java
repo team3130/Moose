@@ -114,7 +114,7 @@ public class RobotMap {
     /**
      * Chassis
      */
-    public static final double kChassisMaxVoltage = 12.0;
+    public static final double kChassisMaxVoltage = 10.0;
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = Units.inchesToMeters(27.089); //taken 3/20/22 COMP
     public static final double kEncoderResolution = 2048; // checked 2/28/22
@@ -134,6 +134,9 @@ public class RobotMap {
     public static double ChassisLateralP = 2;
     public static double ChassisLateralI = 0;
     public static double ChassisLateralD = 0;
+
+
+    public static double MaxMotorTemp = 80;
 
 
     // max velocity of chassis in meters per second
@@ -163,7 +166,7 @@ public class RobotMap {
     public static final int PNM_Shift = 0;
     public static final int PNM_INTAKE_ACTUATOR_LEFT = 1;
     public static final int PNM_CLIMBER_ACTUATOR = 2;
-
+    public static final int PNM_CHASSIS_COOLER = 3;
     /**
      * Gamepad Button List
      */

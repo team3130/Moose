@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -96,6 +97,11 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     private NetworkTableEntry Il = tab.add("Chassis lateral I", RobotMap.ChassisLateralI).getEntry();
     private NetworkTableEntry Dl = tab.add("Chassis lateral D", RobotMap.ChassisLateralD).getEntry();
 
+    private NetworkTableEntry RBTemp = tab.add("Right back temp", -1).getEntry();
+    private NetworkTableEntry RFTemp = tab.add("Right front temp", -1).getEntry();
+    private NetworkTableEntry LBTemp = tab.add("Left back temp", -1).getEntry();
+    private NetworkTableEntry LFTemp = tab.add("Left front temp", -1).getEntry();
+
     // Create and define all standard data types needed
     public Chassis() {
         // Making the motors
@@ -117,6 +123,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_rightMotorFront.enableVoltageCompensation(true);
         m_leftMotorFront.enableVoltageCompensation(true);
+
+        m_leftMotorFront.getStatorCurrent();
+        m_leftMotorFront.getTemperature();
 
 
         m_rightMotorFront.setInverted(true);
@@ -150,6 +159,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
         m_LaterallPID = new PIDController(RobotMap.ChassisLateralP, RobotMap.ChassisLateralI, RobotMap.ChassisLateralD);
+
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -175,6 +185,30 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
             m_leftMotorBack.setNeutralMode(NeutralMode.Coast);
             m_rightMotorBack.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
+    public double motorTemp () {
+        double temp ;
+        double temp2;
+        if (m_leftMotorFront.getTemperature() >= m_leftMotorBack.getTemperature()) {
+             temp = m_leftMotorFront.getTemperature();
+        }
+        else {
+             temp = m_leftMotorBack.getTemperature();
+        }
+        if (m_rightMotorFront.getTemperature() >= m_rightMotorBack.getTemperature()) {
+             temp2 = m_rightMotorFront.getTemperature();
+        }
+        else {
+             temp2 = m_rightMotorBack.getTemperature();
+        }
+
+        if (temp >= temp2) {
+            return temp;
+        }
+        else {
+            return temp2;
         }
     }
 
@@ -228,6 +262,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         // update odometry for relevant positional data
         m_odometry.update(Navx.getRotation(), getDistanceR(), getDistanceL());
         updateRampThings();
+
+
+
     }
 
     /**
@@ -447,8 +484,16 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putNumber("Chassis Lateral Position Error", m_LaterallPID.getPositionError());
         SmartDashboard.putNumber("Chassis Lateral Velocity Error", m_LaterallPID.getVelocityError());
 
+        LBTemp.setNumber(m_leftMotorBack.getTemperature());
+        RBTemp.setNumber(m_rightMotorBack.getTemperature());
+        LFTemp.setNumber(m_leftMotorFront.getTemperature());
+        RFTemp.setNumber(m_rightMotorFront.getTemperature());
+
+
         m_fieldPos.setRobotPose(this.getPose());
         SmartDashboard.putData("Field position", m_fieldPos);
+
+
 
     }
 

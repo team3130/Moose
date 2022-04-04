@@ -12,6 +12,7 @@ import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Climber.ToggleClimber;
 import frc.robot.commands.Climber.spinClimberWinches;
+import frc.robot.commands.CoolerCommand;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.Spintake;
@@ -44,7 +45,7 @@ public class RobotContainer {
     Magazine m_magazine = new Magazine();
     Hood m_hood = new Hood();
     Climber m_climber = new Climber();
-
+    ChassisCooler m_chassiscooler = new ChassisCooler();
     protected Chooser m_chooser;
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
@@ -116,6 +117,7 @@ public class RobotContainer {
             //new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
+            new JoystickButton(m_driverGamepad, RobotMap. LST_BTN_X).whenHeld(new CoolerCommand(m_chassiscooler, m_chassis));
         }
 
         // weapons controls
