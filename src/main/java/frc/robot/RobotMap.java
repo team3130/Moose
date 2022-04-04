@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
@@ -124,7 +123,7 @@ public class RobotMap {
     public static double kMaxTurnThrottle = 0.9;
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static final double kDriveDeadband = 0.02;
-    public static final double kChassisEncoderError = 1.0934926; //TODO: Still needs to be determined for comp bot
+    public static final double kChassisEncoderError = 1.0934926;
     public static double kMaxRampRate = 0.7;
 
     public static double ChassisSpinKP = 0.03;

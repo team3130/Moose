@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -71,10 +69,20 @@ public class RobotContainer {
         return m_climber;
     }
 
-    public Magazine getMagazine() {return m_magazine;}
+    public Magazine getMagazine() {
+        return m_magazine;
+    }
 
     public Hood getHood() {
         return m_hood;
+    }
+
+    public ChassisCooler getChassisCooler() {
+        return m_chassiscooler;
+    }
+
+    public Chooser getChooser() {
+        return m_chooser;
     }
 
     public RobotContainer(SendableChooser<AutonCommand> autonChooser) {
@@ -84,10 +92,7 @@ public class RobotContainer {
         m_chooser = new Chooser(autonChooser, this);
 
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
-    }
-
-    public Chooser getChooser() {
-        return m_chooser;
+        m_chassiscooler.setDefaultCommand(new CoolerCommand(m_chassiscooler, m_chassis));
     }
 
     // Joysticks

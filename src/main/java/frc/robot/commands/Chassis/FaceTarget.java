@@ -1,7 +1,6 @@
 package frc.robot.commands.Chassis;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
@@ -30,16 +29,16 @@ public class FaceTarget extends CommandBase {
         pose = m_chassis.getPose();
         m_chassis.configRampRate(2);
         m_chassis.updatePIDValues();
-        m_chassis.resetOdometry(new Pose2d());
+/*        m_chassis.resetOdometry(new Pose2d());*/
         angle = m_chassis.getAngle() - m_limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);
-        m_chassis.setLateralSetPoint(0);
+/*        m_chassis.setLateralSetPoint(0);*/
         m_chassis.resetPIDLoop();
     }
 
     @Override
     public void execute() {
-        m_chassis.faceTarget(m_chassis.getAngle(), m_chassis.getCurrentVectorDist());
+        m_chassis.faceTarget(m_chassis.getAngle());
     }
 
     @Override
@@ -50,10 +49,10 @@ public class FaceTarget extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
-        m_chassis.resetOdometry(new Pose2d(
+/*        m_chassis.resetOdometry(new Pose2d(
                 m_chassis.getPose().getX() + pose.getX(),
                 m_chassis.getPose().getY() + pose.getY(),
                 new Rotation2d(m_chassis.getPose().getRotation().getDegrees() + pose.getRotation().getDegrees())
-        ));
+        ));*/
     }
 }

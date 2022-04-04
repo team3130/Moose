@@ -5,15 +5,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ChassisCooler;
-import frc.robot.subsystems.ExampleSubsystem;
 
 
 public class CoolerCommand extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final ChassisCooler m_ChassisCooler;
+
+    private final Chassis m_Chassis;
+
     private final Timer TimeSince;
     private final Timer FiringTime;
-    private final Chassis m_Chassis;
+
     public CoolerCommand(ChassisCooler subsystem, Chassis chassis) {
         //mapping to object passed through parameter
         m_ChassisCooler = subsystem;
@@ -28,10 +30,10 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-    m_ChassisCooler.SetCooler(false);
-    TimeSince.reset();
-    FiringTime.reset();
-    TimeSince.start();
+        m_ChassisCooler.SetCooler(false);
+        TimeSince.reset();
+        FiringTime.reset();
+        TimeSince.start();
 
     }
 
@@ -50,7 +52,7 @@ public class CoolerCommand extends CommandBase {
             FiringTime.stop();
             FiringTime.reset();
         }
-        }
+    }
 
 
    /* if (TimeSince.hasElapsed(0.5)) {
@@ -95,7 +97,7 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-    m_ChassisCooler.SetCooler(false);
-    FiringTime.stop();
+        m_ChassisCooler.SetCooler(false);
+        FiringTime.stop();
     }
 }
