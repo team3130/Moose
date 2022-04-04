@@ -366,7 +366,7 @@ public class Chooser {
         ParallelDeadlineGroup shoot = new ParallelDeadlineGroup(
                     new Shoot(container.getShooter(), container.getMagazine(), container.getLimelight()),
                     new FaceTarget(container.getChassis(), container.getLimelight())
-                );
+        );
 
         AutonCommand GoToLastBall = autonCmdFactory.apply(
                 trajectoryFactory.apply(

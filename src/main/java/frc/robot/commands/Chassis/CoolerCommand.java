@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -84,7 +84,7 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return FiringTime.hasElapsed(20);
+        return FiringTime.hasElapsed(10);
     }
 
     /**

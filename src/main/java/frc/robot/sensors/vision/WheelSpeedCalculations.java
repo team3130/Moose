@@ -1,8 +1,13 @@
 package frc.robot.sensors.vision;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.utils.LinearInterp;
 
 import java.io.BufferedReader;
@@ -12,12 +17,49 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.*;
 
-public class WheelSpeedCalculations {
+public class WheelSpeedCalculations implements GeneralUtils {
 
     private static final Comparator<DataPoint> compPoint = Comparator.comparingDouble(p -> p.distance);
+
+    private ShuffleboardTab tab = Shuffleboard.getTab("Wheel Speed Calculations");
+
+    private NetworkTableEntry sliderOffsetRPM = tab
+            .add("Slider Offset", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -5, "max", 5))
+            .getEntry();
+    private int CurrentOffset = 0;
+
+    @Override
+    public void outputToShuffleboard() {
+        if (sliderOffsetRPM.getDouble(CurrentOffset) != CurrentOffset) {
+            BallPressureChange((int) (sliderOffsetRPM.getDouble(CurrentOffset) - CurrentOffset));
+            CurrentOffset = (int) sliderOffsetRPM.getDouble(CurrentOffset);
+        }
+    }
+
+    public void ModifySlider(boolean HRL) {
+        if (HRL) {
+            sliderOffsetRPM.setNumber(sliderOffsetRPM.getDouble(CurrentOffset) + 1);
+        }
+        else {
+            sliderOffsetRPM.setNumber(sliderOffsetRPM.getDouble(CurrentOffset) - 1);
+        }
+    }
+
+    @Override
+    public void teleopInit() {
+
+    }
+
+    @Override
+    public void disable() {
+
+    }
 
     private class DataPoint {
         double distance;
@@ -34,6 +76,10 @@ public class WheelSpeedCalculations {
                 distance = Double.parseDouble(parts[0]);
                 speed = Double.parseDouble(parts[1]);
             }
+        }
+
+        public void AddSpeed(double Speeeeeed) {
+            speed += Speeeeeed;
         }
 
         @Override
@@ -104,6 +150,12 @@ public class WheelSpeedCalculations {
 
         data_MainStorage.sort(compPoint);
         loadCurve();
+    }
+
+    public void BallPressureChange (int PressureScale) {
+        for (int i = 0; i < data_MainStorage.size(); i++) {
+            data_MainStorage.get(i).AddSpeed(50 * PressureScale);
+        }
     }
 
     public double getSpeed(Double dist) {

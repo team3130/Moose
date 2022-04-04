@@ -489,12 +489,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         LFTemp.setNumber(m_leftMotorFront.getTemperature());
         RFTemp.setNumber(m_rightMotorFront.getTemperature());
 
-
         m_fieldPos.setRobotPose(this.getPose());
         SmartDashboard.putData("Field position", m_fieldPos);
-
-
-
     }
 
     @Override
@@ -517,11 +513,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void faceTarget(double angle) {
-        // FIXME: might do scuffed stuff, if it does then just base it off of the right side
         driveArcade(0, -m_spinnyPID.calculate(angle), false);
     }
     public void faceTarget(double angle, double translationPos) {
-        // FIXME: might do scuffed stuff, if it does then just base it off of the right side
         driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
     }
 
@@ -553,7 +547,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_LaterallPID.reset();
     }
 
-    public double getCurrentVectorDist(){
+    public double getCurrentVectorDist() {
         return getPose().getX();
     }
 

@@ -101,10 +101,10 @@ public class RobotMap {
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
     public static final double kLimelightPitch =  -38.5;   // Facing up is negative, in degrees Checked: 2/17
-    public static final double kLimelightYaw = -Math.asin((double) 1/6);        // Aiming bias, facing left is positive TODO: FIND FOR 2022
+    public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
-    public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis TODO: FIND FOR 2022
+    public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
     public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens
 
@@ -135,7 +135,7 @@ public class RobotMap {
     public static double ChassisLateralD = 0;
 
 
-    public static double MaxMotorTemp = 80;
+    public static double MaxMotorTemp = 95;
 
 
     // max velocity of chassis in meters per second

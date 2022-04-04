@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
 
     //Create and define all standard data types needed
-    public Shooter(Limelight limelight) {
+    public Shooter(Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
 
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
 
-        shooterCurve = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
+        shooterCurve = wheelSpeedCalculations;
 
         m_limelight = limelight;
     }

@@ -10,7 +10,7 @@ import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Climber.ToggleClimber;
 import frc.robot.commands.Climber.spinClimberWinches;
-import frc.robot.commands.CoolerCommand;
+import frc.robot.commands.Chassis.CoolerCommand;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.Spintake;
@@ -22,6 +22,7 @@ import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.Shooter.SpindexTimed;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.*;
 
 import java.util.ArrayList;
@@ -33,11 +34,11 @@ import java.util.List;
 public class RobotContainer {
     private ArrayList<GeneralUtils> m_generalUtils;
     // Supporting classes
-    //protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations();
+    protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
     protected Limelight m_limelight = new Limelight();
 
     // define subsystems here
-    Shooter m_shooter = new Shooter(m_limelight);
+    Shooter m_shooter = new Shooter(m_limelight, m_wheelSpeedCalculations);
     Chassis m_chassis = new Chassis();
     Intake m_intake = new Intake();
     Magazine m_magazine = new Magazine();
@@ -87,7 +88,7 @@ public class RobotContainer {
 
     public RobotContainer(SendableChooser<AutonCommand> autonChooser) {
         m_generalUtils = new ArrayList<>();
-        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood));
+        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood, m_wheelSpeedCalculations));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
         m_chooser = new Chooser(autonChooser, this);
 
@@ -140,6 +141,8 @@ public class RobotContainer {
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new SpindexTimed(m_shooter, 1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
 //            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(false));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(true));
         }
 
         else if (m_chooser_weapons.getSelected().equals("Parker")) {
