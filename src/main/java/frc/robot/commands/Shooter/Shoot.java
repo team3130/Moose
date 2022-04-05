@@ -59,7 +59,7 @@ public class Shoot extends CommandBase {
                 m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
             }
         }
-       if (m_shooter.canShoot()) {
+       if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard())) {
             m_shooter.feedIndexer();
             m_magazine.feedAll();
         }
