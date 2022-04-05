@@ -43,13 +43,23 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_Chassis.motorTemp() > RobotMap.MaxMotorTemp )  {
+       /* if (m_Chassis.motorTemp() > RobotMap.MaxMotorTemp )  {
             m_ChassisCooler.SetCooler(true);
             FiringTime.start();
         }
         else if (m_Chassis.motorTemp() < RobotMap.MaxMotorTemp - 5)    {
             m_ChassisCooler.SetCooler(false);
             FiringTime.stop();
+            FiringTime.reset();
+        } */
+        if (TimeSince.hasElapsed(10)) {
+            m_ChassisCooler.SetCooler(true);
+            FiringTime.start();
+            TimeSince.reset();
+        }
+
+        if (FiringTime.hasElapsed(0.5)) {
+            m_ChassisCooler.SetCooler(false);
             FiringTime.reset();
         }
     }
