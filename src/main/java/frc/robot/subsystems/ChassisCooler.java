@@ -9,7 +9,7 @@ public class ChassisCooler extends SubsystemBase {
     //Create necessary objects
     private final Solenoid m_cooler;
 
-    private boolean inverted;
+    private final boolean inverted = true;
 
     //Create and define all standard data types needed
     public ChassisCooler() {
