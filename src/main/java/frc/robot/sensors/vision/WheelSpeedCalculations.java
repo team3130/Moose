@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.utils.LinearInterp;
 
@@ -19,7 +18,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.*;
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.HOOD_WINCH;
+import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.SHOOTER;
 
 public class WheelSpeedCalculations implements GeneralUtils {
 
@@ -156,6 +156,7 @@ public class WheelSpeedCalculations implements GeneralUtils {
         for (int i = 0; i < data_MainStorage.size(); i++) {
             data_MainStorage.get(i).AddSpeed(50 * PressureScale);
         }
+        loadCurve();
     }
 
     public double getSpeed(Double dist) {
