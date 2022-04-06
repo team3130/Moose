@@ -17,15 +17,15 @@ public class ChassisCooler extends SubsystemBase {
         m_cooler.set(false);
     }
 
-    public void ToggleCooler () {
+    public void toggleCooler() {
         m_cooler.toggle();
     }
 
-    public void SetCooler(boolean Cool) {
+    public void setCooler(boolean Cool) {
         m_cooler.set(inverted^Cool);
     }
 
-    public Boolean GetCooler () {
+    public boolean getCooler() {
         return inverted^m_cooler.get();
     }
 

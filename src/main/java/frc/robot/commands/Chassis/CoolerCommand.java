@@ -2,7 +2,6 @@ package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ChassisCooler;
 
@@ -30,7 +29,7 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_ChassisCooler.SetCooler(false);
+        m_ChassisCooler.setCooler(false);
         TimeSince.reset();
         FiringTime.reset();
         TimeSince.start();
@@ -53,13 +52,13 @@ public class CoolerCommand extends CommandBase {
             FiringTime.reset();
         } */
         if (TimeSince.hasElapsed(10)) {
-            m_ChassisCooler.SetCooler(true);
+            m_ChassisCooler.setCooler(true);
             FiringTime.start();
             TimeSince.reset();
         }
 
         if (FiringTime.hasElapsed(0.5)) {
-            m_ChassisCooler.SetCooler(false);
+            m_ChassisCooler.setCooler(false);
             FiringTime.reset();
         }
     }
@@ -107,7 +106,7 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_ChassisCooler.SetCooler(false);
+        m_ChassisCooler.setCooler(false);
         FiringTime.stop();
     }
 }
