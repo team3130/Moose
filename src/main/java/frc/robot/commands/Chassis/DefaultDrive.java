@@ -33,7 +33,7 @@ public class DefaultDrive extends CommandBase {
         if (m_chassis.isShifted()) {
             moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
         }
-        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxTurnThrottle;
+        double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * (m_chassis.isShifted() ? RobotMap.kMaxTurnThrottle : 0.9);
 
         m_chassis.driveArcade(moveSpeed, turnSpeed, true);
     }

@@ -121,8 +121,12 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
+        m_rightMotorBack.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
+        m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_rightMotorFront.enableVoltageCompensation(true);
         m_leftMotorFront.enableVoltageCompensation(true);
+        m_rightMotorBack.enableVoltageCompensation(true);
+        m_leftMotorBack.enableVoltageCompensation(true);
 
         m_leftMotorFront.getStatorCurrent();
         m_leftMotorFront.getTemperature();
@@ -153,8 +157,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_shifter = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_Shift);
         m_shifter.set(false);
 
-        m_leftMotorBack.follow(m_leftMotorFront);
-        m_rightMotorBack.follow(m_rightMotorFront);
+/*        m_leftMotorBack.follow(m_leftMotorFront);
+        m_rightMotorBack.follow(m_rightMotorFront);*/
         m_fieldPos = new Field2d();
 
         m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);

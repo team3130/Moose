@@ -9,12 +9,12 @@ public class ChassisCooler extends SubsystemBase {
     //Create necessary objects
     private final Solenoid m_cooler;
 
-    private final boolean inverted = true;
+    private final boolean inverted = false;
 
     //Create and define all standard data types needed
     public ChassisCooler() {
         m_cooler = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CHASSIS_COOLER);
-        m_cooler.set(false);
+        setCooler(false);
     }
 
     public void toggleCooler() {

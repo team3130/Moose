@@ -1,18 +1,26 @@
-package frc.robot.commands.Climber;
+package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
-public class spinClimberWinches extends CommandBase {
+public class DeployAndSpintakeMagazineBack extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Climber m_climber;
+    private final Intake m_intake;
+    private final Magazine m_magazine;
+    private final int direction;
 
-
-    public spinClimberWinches(Climber subsystem) {
+    /**
+     * Meant to be run in a sequential command group with {@link TimedSpintake}
+     * @param intake {@link Intake}
+     */
+    public DeployAndSpintakeMagazineBack(Intake intake, Magazine magazine, int direction) {
         //mapping to object passed through parameter
-        m_climber = subsystem;
-        m_requirements.add(subsystem);
+        m_intake = intake;
+        m_magazine = magazine;
+        m_requirements.add(m_intake);
+        m_requirements.add(m_magazine);
+        this.direction = direction;
     }
 
     /**
@@ -20,7 +28,11 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void initialize() {
-       
+        m_intake.deployIntake(true);
+        m_intake.setSpeed(0.65 * direction);
+        m_magazine.setCenterSpeed(-0.6);
+        m_magazine.setSideSpeeds(-0.4);
+        m_magazine.feedAll();
     }
 
     /**
@@ -29,7 +41,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void execute() {
-        m_climber.driveTank(RobotContainer.m_weaponsGamepad.getRawAxis(1) * -0.85, RobotContainer.m_weaponsGamepad.getRawAxis(5) * -0.85, true);
+
     }
 
     /**
@@ -61,7 +73,9 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-       // m_climber.setSpeed(0);
-        m_climber.setSpeed(0);
+        m_intake.deployIntake(false);
+        m_intake.setSpeed(0);
+        m_magazine.setCenterSpeed(0);
+        m_magazine.setSideSpeeds(0);
     }
 }

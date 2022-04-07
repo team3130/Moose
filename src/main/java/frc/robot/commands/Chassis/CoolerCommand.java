@@ -2,6 +2,7 @@ package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ChassisCooler;
 
@@ -11,6 +12,8 @@ public class CoolerCommand extends CommandBase {
     private final ChassisCooler m_ChassisCooler;
 
     private final Chassis m_Chassis;
+
+    private boolean wasRunning = false;
 
     private final Timer TimeSince;
     private final Timer FiringTime;
@@ -42,24 +45,28 @@ public class CoolerCommand extends CommandBase {
      */
     @Override
     public void execute() {
-       /* if (m_Chassis.motorTemp() > RobotMap.MaxMotorTemp )  {
-            m_ChassisCooler.SetCooler(true);
-            FiringTime.start();
-        }
-        else if (m_Chassis.motorTemp() < RobotMap.MaxMotorTemp - 5)    {
-            m_ChassisCooler.SetCooler(false);
+       if (m_Chassis.motorTemp() > RobotMap.MaxMotorTemp || wasRunning) {
+           TimeSince.start();
+           FiringTime.start();
+           if (TimeSince.hasElapsed(7.5)) {
+               m_ChassisCooler.setCooler(true);
+               TimeSince.reset();
+           }
+
+           if (FiringTime.hasElapsed(0.5)) {
+               m_ChassisCooler.setCooler(false);
+               FiringTime.reset();
+           }
+           wasRunning = true;
+
+       }
+
+        if (m_Chassis.motorTemp() < RobotMap.MaxMotorTemp - 5)    {
+            m_ChassisCooler.setCooler(false);
             FiringTime.stop();
             FiringTime.reset();
-        } */
-        if (TimeSince.hasElapsed(10)) {
-            m_ChassisCooler.setCooler(true);
-            FiringTime.start();
-            TimeSince.reset();
-        }
-
-        if (FiringTime.hasElapsed(0.5)) {
-            m_ChassisCooler.setCooler(false);
-            FiringTime.reset();
+            TimeSince.stop();
+            wasRunning = false;
         }
     }
 
