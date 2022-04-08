@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Map;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -15,7 +13,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -29,7 +26,7 @@ import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
 
-import static frc.robot.utils.Utils.configPIDF;
+import java.util.Map;
 
 public class Chassis extends SubsystemBase implements GeneralUtils {
 
@@ -97,11 +94,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     private NetworkTableEntry Il = tab.add("Chassis lateral I", RobotMap.ChassisLateralI).getEntry();
     private NetworkTableEntry Dl = tab.add("Chassis lateral D", RobotMap.ChassisLateralD).getEntry();
 
-    private NetworkTableEntry RBTemp = tab.add("Right back temp", -1).getEntry();
-    private NetworkTableEntry RFTemp = tab.add("Right front temp", -1).getEntry();
-    private NetworkTableEntry LBTemp = tab.add("Left back temp", -1).getEntry();
-    private NetworkTableEntry LFTemp = tab.add("Left front temp", -1).getEntry();
-
     // Create and define all standard data types needed
     public Chassis() {
         // Making the motors
@@ -157,6 +149,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
         m_LaterallPID = new PIDController(RobotMap.ChassisLateralP, RobotMap.ChassisLateralI, RobotMap.ChassisLateralD);
 
+        tuneTolerance();
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -185,7 +178,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         }
     }
 
-    public double motorTemp () {
+    public double motorTemp() {
         double temp ;
         double temp2;
         if (m_leftMotorFront.getTemperature() >= m_leftMotorBack.getTemperature()) {
@@ -300,7 +293,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         resetEncoders();
         Navx.resetNavX();
         // sets 0 to be to the right of the bot, because 0 radians on the unit circle is to the right of north (as a bearing)
-        m_odometry.resetPosition(pose, new Rotation2d(0));
+        m_odometry.resetPosition(pose, pose.getRotation());
     }
 
     /**
@@ -368,7 +361,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public double getAngle() {
         if (Navx.getNavxPresent()) {
-            return Navx.getAngle();
+            return Navx.getRotation().getDegrees();
         } else {
             return 0;
         }
@@ -514,7 +507,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean getAtSetpoint() {
-        return m_spinnyPID.atSetpoint() && m_LaterallPID.atSetpoint();
+        return m_spinnyPID.atSetpoint();
     }
 
     public void setSpinnySetPoint(double setpoint) {
@@ -532,7 +525,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void tuneTolerance() {
-        m_spinnyPID.setTolerance(5, 3);
+        m_spinnyPID.setTolerance(2, 0.02);
         m_LaterallPID.setTolerance(0.25, 0.25);
     }
 

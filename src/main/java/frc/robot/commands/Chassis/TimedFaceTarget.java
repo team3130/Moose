@@ -44,7 +44,7 @@ public class TimedFaceTarget extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(time);
+        return timer.hasElapsed(time) || m_chassis.getAtSetpoint();
     }
 
     @Override

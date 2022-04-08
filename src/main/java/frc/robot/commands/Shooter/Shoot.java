@@ -2,8 +2,10 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
@@ -13,14 +15,20 @@ public class Shoot extends CommandBase {
     private Limelight limelight;
     private Magazine m_magazine;
     private WheelSpeedCalculations shooterCurve;
+    private Chassis m_chassis;
 
-    private Timer timer;
-    private double time = 2;
+    private Timer timerShoot;
+    private double timeShoot = 2;
 
-    public Shoot(Shooter subsystem, Magazine magazine, Limelight limelight) {
+    private final Timer timerSpin = new Timer();
+    private final double timeSpin = 0.5;
+
+    public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
 
         m_magazine = magazine;
         m_requirements.add(magazine);
@@ -29,7 +37,7 @@ public class Shoot extends CommandBase {
 
         shooterCurve = m_shooter.getShooterCurve();
 
-        timer = new Timer();
+        timerShoot = new Timer();
     }
 
     /**
@@ -37,13 +45,22 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_shooter.updatePID();
-
+        limelight.setLedState(true);
+//        m_shooter.updatePID();
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
         m_shooter.setHoodWheelTopSpeed(0);
 
-        timer.reset();
-        timer.start();
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
+        m_chassis.updatePIDValues();
+        double angle = m_chassis.getAngle() - limelight.getHeading().getDegrees();
+        m_chassis.setSpinnySetPoint(angle);
+        m_chassis.resetPIDLoop();
+
+        timerShoot.reset();
+        timerShoot.start();
+
+        timerSpin.reset();
+        timerSpin.start();
     }
 
     /**
@@ -52,14 +69,14 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        limelight.setLedState(true);
+        m_chassis.faceTarget(m_chassis.getAngle());
         if (limelight.hasTrack()) {
             double x = limelight.getDistanceToTarget();
             if (5 <= x) {
                 m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
             }
         }
-       if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard())) {
+       if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
             m_shooter.feedIndexer();
             m_magazine.feedAll();
         }
@@ -81,7 +98,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return timer.hasElapsed(time);
+        return timerShoot.hasElapsed(timeShoot);
     }
 
     /**
@@ -96,5 +113,8 @@ public class Shoot extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.stopAll();
         m_magazine.stopAll();
+        m_chassis.configRampRate(0);
+        timerShoot.stop();
+        timerSpin.stop();
     }
 }

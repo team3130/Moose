@@ -83,8 +83,6 @@ public class Robot extends TimedRobot {
     AutonCommand cmd = m_autonChooser.getSelected();
     m_robotContainer.getLimelight().setLedState(true);
 
-    m_robotContainer.getChassis().configRampRate(RobotMap.kMaxRampRate);
-
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());
     // week 0 auton attempt
