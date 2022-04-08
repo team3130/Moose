@@ -95,8 +95,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
-        RPMHoodWheel.setNumber(getRPMHoodWheel());
-        shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
+//        RPMHoodWheel.setNumber(getRPMHoodWheel());
+//        shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
         SmartDashboard.putBoolean("Can Shoot?", canShootSetFlywheel(getSpeedFromShuffleboard()));
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
         // pidFlywheel.setPID(P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD));

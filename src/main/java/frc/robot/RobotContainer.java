@@ -87,6 +87,7 @@ public class RobotContainer {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood, m_wheelSpeedCalculations));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
+        m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
         m_chooser = new Chooser(autonChooser, this);
 
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
@@ -136,7 +137,7 @@ public class RobotContainer {
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spinzine(m_magazine, 1));
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_Y).whenHeld(new DeployAndSpintakeMagazineBack(m_intake, m_magazine, 1));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new DeployAndSpintakeMagazineBack(m_intake, m_magazine, 1));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
 //            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
             new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(false));
@@ -159,8 +160,6 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
-        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
-        m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
         m_generalUtils.forEach(GeneralUtils::teleopInit);
     }
 

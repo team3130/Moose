@@ -48,12 +48,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer(m_autonChooser);
     m_chooser = m_robotContainer.getChooser();
-//    m_chooser.addAllCommands();
-    m_chooser.add3Ball();
-    m_chooser.addThreeBallPathTwo();
-    m_chooser.addTwoBall();
-    m_chooser.addFiller();
-    m_chooser.add3Ball3();
+    m_chooser.addAllCommands();
+//    m_chooser.add3Ball();
+//    m_chooser.addThreeBallPathTwo();
+//    m_chooser.addTwoBall();
+//    m_chooser.addFiller();
+//    m_chooser.add3Ball3();
   }
 
   /**
@@ -82,6 +82,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     AutonCommand cmd = m_autonChooser.getSelected();
     m_robotContainer.getLimelight().setLedState(true);
+
+    m_robotContainer.getChassis().configRampRate(RobotMap.kMaxRampRate);
 
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());
@@ -123,6 +125,7 @@ public class Robot extends TimedRobot {
     m_scheduler.clearButtons();
     m_robotContainer.disable();
     m_scheduler.cancelAll();
+    m_robotContainer.getChassis().configRampRate(0);
   }
 
   /** This function is called periodically when disabled. */

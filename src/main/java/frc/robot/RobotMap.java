@@ -120,7 +120,7 @@ public class RobotMap {
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
     public static final double kWheelDiameter = Units.inchesToMeters(3.79);//taken 3/20/22 COMP
-    public static double kMaxTurnThrottle = 0.9;
+    public static double kMaxTurnThrottle = 0.8;
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static final double kDriveDeadband = 0.02;
     public static final double kChassisEncoderError = 1.0934926;
@@ -146,17 +146,17 @@ public class RobotMap {
      * PID for Chassis
      */
             // solution found, cry harder
-    public static double LChassiskP = 3.3395; //Practice bot 3/10/22
+    public static double LChassiskP = 3.3347; //Practice bot 3/10/22
     public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 3.5376;
+    public static double RChassiskP = 3.2113;
     public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.56182;
-    public static double ChassiskV = 2.4236;
-    public static double ChassiskA = 0.88058;
+    public static double ChassiskS = 0.68513;
+    public static double ChassiskV = 2.2654;
+    public static double ChassiskA = 0.49134;
 
 
     /**

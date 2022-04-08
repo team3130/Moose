@@ -117,34 +117,27 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorBack.configFactoryDefault();
 
 
-        configureBreakMode(true);
-
         m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_rightMotorBack.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
-        m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
+        m_leftMotorBack.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_rightMotorFront.enableVoltageCompensation(true);
         m_leftMotorFront.enableVoltageCompensation(true);
         m_rightMotorBack.enableVoltageCompensation(true);
         m_leftMotorBack.enableVoltageCompensation(true);
 
-        m_leftMotorFront.getStatorCurrent();
-        m_leftMotorFront.getTemperature();
-
-
-        m_rightMotorFront.setInverted(true);
-        m_leftMotorFront.setInverted(false);
-        m_rightMotorBack.setInverted(true);
-        m_leftMotorBack.setInverted(false);
+        configureBreakMode(true);
 
         // configure the motor groups
         m_motorsRight = new MotorControllerGroup(m_rightMotorFront, m_rightMotorBack);
         m_motorsLeft = new MotorControllerGroup(m_leftMotorFront, m_leftMotorBack);
 
+        m_motorsRight.setInverted(true);
+
         // making a differential drive object that includes the two motor groups
         m_drive = new DifferentialDrive(m_motorsLeft, m_motorsRight);
         m_drive.setDeadband(RobotMap.kDriveDeadband);
-        m_drive.setSafetyEnabled(false);
+        m_drive.setSafetyEnabled(true);
 
         m_feedforward = new SimpleMotorFeedforward(RobotMap.ChassiskS, RobotMap.ChassiskV, RobotMap.ChassiskA);
         m_leftPIDController = new PIDController(RobotMap.LChassiskP, RobotMap.LChassiskI, RobotMap.LChassiskD);
@@ -265,10 +258,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void periodic() {
         // update odometry for relevant positional data
         m_odometry.update(Navx.getRotation(), getDistanceR(), getDistanceL());
-        updateRampThings();
-
-
-
+        //updateRampThings();
     }
 
     /**
@@ -327,7 +317,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         RobotMap.kMaxRampRate = sliderRampRate.getDouble(RobotMap.kMaxRampRate);
         RobotMap.kMaxTurnThrottle = sliderTurn.getDouble(RobotMap.kMaxTurnThrottle);
         RobotMap.kMaxHighGearDriveSpeed = sliderForwardVelocity.getDouble(RobotMap.kMaxHighGearDriveSpeed);
-        configRampRate(RobotMap.kMaxRampRate);
+        // configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -464,16 +454,16 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public void outputToShuffleboard() {
         // current velocity
-        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
-        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
+//        SmartDashboard.putNumber("Chassis Right Velocity", getSpeedR());
+//        SmartDashboard.putNumber("Chassis Left Velocity", getSpeedL());
 
         // percent output of motors
-        SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
-        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
+//        SmartDashboard.putNumber("Chassis Right Output %", m_rightMotorFront.getMotorOutputPercent());
+//        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
         // shifting
-        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         // bot position
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
@@ -488,10 +478,10 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putNumber("Chassis Lateral Position Error", m_LaterallPID.getPositionError());
         SmartDashboard.putNumber("Chassis Lateral Velocity Error", m_LaterallPID.getVelocityError());
 
-        LBTemp.setNumber(m_leftMotorBack.getTemperature());
-        RBTemp.setNumber(m_rightMotorBack.getTemperature());
-        LFTemp.setNumber(m_leftMotorFront.getTemperature());
-        RFTemp.setNumber(m_rightMotorFront.getTemperature());
+//        LBTemp.setNumber(m_leftMotorBack.getTemperature());
+//        RBTemp.setNumber(m_rightMotorBack.getTemperature());
+//        LFTemp.setNumber(m_leftMotorFront.getTemperature());
+//        RFTemp.setNumber(m_rightMotorFront.getTemperature());
 
         m_fieldPos.setRobotPose(this.getPose());
         SmartDashboard.putData("Field position", m_fieldPos);
