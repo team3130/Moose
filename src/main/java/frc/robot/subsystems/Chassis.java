@@ -118,18 +118,19 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_rightMotorBack.enableVoltageCompensation(true);
         m_leftMotorBack.enableVoltageCompensation(true);
 
+        m_rightMotorFront.setInverted(true);
+        m_rightMotorBack.setInverted(true);
+
         configureBreakMode(true);
 
         // configure the motor groups
         m_motorsRight = new MotorControllerGroup(m_rightMotorFront, m_rightMotorBack);
         m_motorsLeft = new MotorControllerGroup(m_leftMotorFront, m_leftMotorBack);
 
-        m_motorsRight.setInverted(true);
-
         // making a differential drive object that includes the two motor groups
         m_drive = new DifferentialDrive(m_motorsLeft, m_motorsRight);
         m_drive.setDeadband(RobotMap.kDriveDeadband);
-        m_drive.setSafetyEnabled(true);
+        m_drive.setSafetyEnabled(false);
 
         m_feedforward = new SimpleMotorFeedforward(RobotMap.ChassiskS, RobotMap.ChassiskV, RobotMap.ChassiskA);
         m_leftPIDController = new PIDController(RobotMap.LChassiskP, RobotMap.LChassiskI, RobotMap.LChassiskD);
@@ -293,7 +294,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         resetEncoders();
         Navx.resetNavX();
         // sets 0 to be to the right of the bot, because 0 radians on the unit circle is to the right of north (as a bearing)
-        m_odometry.resetPosition(pose, pose.getRotation());
+        m_odometry.resetPosition(pose, new Rotation2d(0));
     }
 
     /**
@@ -325,6 +326,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void configRampRate(double maxRampRateSeconds) {
         m_rightMotorFront.configOpenloopRamp(maxRampRateSeconds);
         m_leftMotorFront.configOpenloopRamp(maxRampRateSeconds);
+        m_rightMotorBack.configOpenloopRamp(maxRampRateSeconds);
+        m_leftMotorBack.configOpenloopRamp(maxRampRateSeconds);
     }
 
     /**
@@ -455,8 +458,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 //        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
         // shifting
-//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         // bot position
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
@@ -485,7 +488,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     @Override
     public void disable() {
-        configRampRate(0);
         m_leftMotorFront.set(0);
         m_rightMotorFront.set(0);
         m_drive.stopMotor();

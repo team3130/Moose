@@ -139,8 +139,8 @@ public class RobotMap {
 
 
     // max velocity of chassis in meters per second
-    public static final double kMaxVelocityMPS = 2.25;
-    public static final double kMaxAccelerationMPS = 1.5;
+    public static final double kMaxVelocityMPS = 1.5;
+    public static final double kMaxAccelerationMPS = 1;
 
     /**
      * PID for Chassis

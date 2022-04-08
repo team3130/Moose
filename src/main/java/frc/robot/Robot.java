@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
+import frc.robot.commands.Chassis.AutonDrive;
+import frc.robot.commands.Shooter.AutonShoot;
+import frc.robot.commands.Shooter.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -48,12 +52,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Weapons", m_chooser_weapons);
     m_robotContainer = new RobotContainer(m_autonChooser);
     m_chooser = m_robotContainer.getChooser();
-    m_chooser.addAllCommands();
+//    m_chooser.addAllCommands();
 //    m_chooser.add3Ball();
 //    m_chooser.addThreeBallPathTwo();
-//    m_chooser.addTwoBall();
-//    m_chooser.addFiller();
-//    m_chooser.add3Ball3();
+    m_chooser.addTwoBall();
+    m_chooser.addFiller();
+    m_chooser.add3Ball3();
+//    m_chooser.generateTestPath();
   }
 
   /**
@@ -85,16 +90,15 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());
-    // week 0 auton attempt
-    /*
+//    m_robotContainer.getLimelight().setLedState(true);
+/*    // week 0 auton attempt
     m_scheduler.schedule(
             new SequentialCommandGroup(
                     new AutonDrive(m_robotContainer.getChassis(), 0.75),
-                    new AutonShoot(m_robotContainer.getShooter()),
+                    new Shoot(m_robotContainer.getShooter(), m_robotContainer.getMagazine(), m_robotContainer.getChassis(), m_robotContainer.getLimelight()),
                     new AutonDrive(m_robotContainer.getChassis(), 0.6)
             )
-    );
-    */
+    );*/
   }
 
   /** This function is called periodically during autonomous. */

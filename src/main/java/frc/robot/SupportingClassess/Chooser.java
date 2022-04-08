@@ -47,7 +47,7 @@ public class Chooser {
         DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
                 chassis.getFeedforward(),
                 chassis.getmKinematics(),
-                12);
+                10);
 
         config = new TrajectoryConfig(RobotMap.kMaxVelocityMPS, RobotMap.kMaxAccelerationMPS);
         config.setKinematics(container.getChassis().getmKinematics()).addConstraint(autoVoltageConstraint);
@@ -193,8 +193,7 @@ public class Chooser {
         CommandBase spin = new SpinChassisToAngle(container.getChassis(), 180);
 
         ParallelDeadlineGroup shoot = new ParallelDeadlineGroup(
-                new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight()),
-                new FaceTarget(container.getChassis(), container.getLimelight())
+                new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight())
         );
 
         SequentialCommandGroup commandGroup =
@@ -324,7 +323,7 @@ public class Chooser {
         Chassis chassis = container.getChassis();
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(List.of(
                 chassis.getPose(),
-                    new Pose2d(0.8, 0, new Rotation2d(0))
+                    new Pose2d(1, 0, new Rotation2d(0))
                 // new Pose2d(3, 0, new Rotation2d(0))
         ), config);
         testPath = autonCmdFactory.apply(trajectory);

@@ -37,7 +37,6 @@ public class RobotContainer {
     Chassis m_chassis = new Chassis();
     Intake m_intake = new Intake();
     Magazine m_magazine = new Magazine();
-    Hood m_hood = new Hood();
     Climber m_climber = new Climber();
     ChassisCooler m_chassiscooler = new ChassisCooler();
     protected Chooser m_chooser;
@@ -69,10 +68,6 @@ public class RobotContainer {
         return m_magazine;
     }
 
-    public Hood getHood() {
-        return m_hood;
-    }
-
     public ChassisCooler getChassisCooler() {
         return m_chassiscooler;
     }
@@ -83,7 +78,7 @@ public class RobotContainer {
 
     public RobotContainer(SendableChooser<AutonCommand> autonChooser) {
         m_generalUtils = new ArrayList<>();
-        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_hood, m_wheelSpeedCalculations));
+        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_wheelSpeedCalculations));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
         m_chooser = new Chooser(autonChooser, this);
