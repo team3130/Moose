@@ -81,7 +81,7 @@ public class Shoot extends CommandBase {
         }
        if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
             
-            if (prevRPM > m_shooter.getRPM()){
+            if (prevRPM > m_shooter.getRPM() + 50){
                 shotOnce = true;
             }
 
