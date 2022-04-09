@@ -9,11 +9,11 @@ import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends CommandBase {
+public class BenShoot extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
     private Limelight limelight;
-    private Magazine m_magazine;
+    //private Magazine m_magazine;
     private WheelSpeedCalculations shooterCurve;
     private Chassis m_chassis;
 
@@ -23,15 +23,14 @@ public class Shoot extends CommandBase {
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
 
-    public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
+    public BenShoot(Shooter subsystem, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
         m_requirements.add(subsystem);
         m_chassis = chassis;
         m_requirements.add(chassis);
 
-        m_magazine = magazine;
-        m_requirements.add(magazine);
+
 
         this.limelight = limelight;
 
@@ -77,7 +76,7 @@ public class Shoot extends CommandBase {
         }
        if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
             m_shooter.feedIndexer();
-            m_magazine.feedAll();
+         //   m_magazine.feedAll();
         }
     }
 
@@ -111,7 +110,7 @@ public class Shoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.stopAll();
-        m_magazine.stopAll();
+       // m_magazine.stopAll();
         m_chassis.configRampRate(0);
         timerShoot.stop();
         timerSpin.stop();

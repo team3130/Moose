@@ -24,7 +24,8 @@ public class Climber extends SubsystemBase {
         m_climber_motor = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_LEFT);
         m_climber_motor_follower = new WPI_TalonSRX(RobotMap.CAN_CLIMBER_RIGHT);
 
-        m_climber_motor_follower.setInverted(false);
+        m_climber_motor_follower.setInverted(true);
+        m_climber_motor.setInverted(true);
        // m_climber_motor_follower.follow(m_climber_motor);
 
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);

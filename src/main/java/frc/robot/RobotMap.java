@@ -100,7 +100,7 @@ public class RobotMap {
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static final double kLimelightPitch =  -38.5;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightPitch =  -38.24;   // Facing up is negative, in degrees Checked: 2/17
     public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground
@@ -127,7 +127,7 @@ public class RobotMap {
     public static double kMaxRampRate = 0.7;
 
     public static double ChassisSpinKP = 0.011;
-    public static double ChassisSpinKI = 0;
+    public static double ChassisSpinKI = 0.005;
     public static double ChassisSpinKD = 0.003;
 
     public static double ChassisLateralP = 2;

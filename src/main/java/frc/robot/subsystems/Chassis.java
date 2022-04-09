@@ -458,8 +458,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 //        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
         // shifting
-        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         // bot position
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
@@ -527,7 +527,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void tuneTolerance() {
-        m_spinnyPID.setTolerance(2, 0.02);
+        m_spinnyPID.setTolerance(3.5, 0.02);
         m_LaterallPID.setTolerance(0.25, 0.25);
     }
 

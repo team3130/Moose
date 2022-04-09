@@ -52,8 +52,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
         m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_HOOD_MOTOR);
 
-        m_hoodWheel.follow(m_flywheel);
-
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);
         m_flywheel.enableVoltageCompensation(true);
@@ -61,6 +59,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         // restricting voltage for the hood wheel
         m_hoodWheel.configVoltageCompSaturation(9);
         m_hoodWheel.enableVoltageCompensation(true);
+
+        m_hoodWheel.follow(m_flywheel);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
 
@@ -113,7 +113,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     @Override
     public void disable() {
         m_flywheel.set(ControlMode.PercentOutput, 0);
-        m_hoodWheel.set(ControlMode.PercentOutput, 0);
         m_indexer.set(ControlMode.PercentOutput, 0);
     }
 
@@ -138,7 +137,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void stopAll() {
         m_indexer.set(ControlMode.PercentOutput, 0);
         m_flywheel.set(ControlMode.PercentOutput, 0);
-        m_hoodWheel.set(ControlMode.PercentOutput, 0);
     }
 
 

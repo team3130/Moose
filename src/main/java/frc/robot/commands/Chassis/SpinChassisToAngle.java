@@ -10,6 +10,8 @@ public class SpinChassisToAngle extends CommandBase {
     private final Chassis m_chassis;
     private double angle;
 
+    private Timer timer = new Timer();
+
     public SpinChassisToAngle(Chassis chassis, double angle) {
         //mapping to object passed through parameter
         m_chassis = chassis;
@@ -26,6 +28,9 @@ public class SpinChassisToAngle extends CommandBase {
         m_chassis.updatePIDValues();
         m_chassis.setSpinnySetPoint((angle + m_chassis.getAngle() <= 180) ? angle + m_chassis.getAngle() : angle + m_chassis.getAngle() - 360);
         m_chassis.resetPIDLoop();
+
+        timer.reset();
+        timer.start();
     }
 
     @Override
@@ -35,11 +40,12 @@ public class SpinChassisToAngle extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return m_chassis.getAtSetpoint();
+        return m_chassis.getAtSetpoint() || timer.hasElapsed(2);
     }
 
     @Override
     public void end(boolean interrupted) {
         m_chassis.configRampRate(0);
+        timer.stop();
     }
 }
