@@ -126,7 +126,7 @@ public class RobotMap {
     public static final double kChassisEncoderError = 1.0934926;
     public static double kMaxRampRate = 0.7;
 
-    public static double ChassisSpinKP = 0.03;
+    public static double ChassisSpinKP = 0.01;
     public static double ChassisSpinKI = 0;
     public static double ChassisSpinKD = 0.0075;
 
