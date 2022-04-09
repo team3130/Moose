@@ -22,8 +22,6 @@ public class Shoot extends CommandBase {
 
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
-    private double prevRPM = 0;
-    private boolean shotOnce = false;
 
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
@@ -71,7 +69,6 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-
         m_chassis.faceTarget(m_chassis.getAngle());
         if (limelight.hasTrack()) {
             double x = limelight.getDistanceToTarget();
@@ -80,21 +77,8 @@ public class Shoot extends CommandBase {
             }
         }
        if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-            
-            if (prevRPM > m_shooter.getRPM()){
-                shotOnce = true;
-            }
-
-            if(shotOnce){
-                m_shooter.feedIndexerSlow();
-                m_magazine.feedAll();
-
-            }
-            else{
-            prevRPM = m_shooter.getRPM();
             m_shooter.feedIndexer();
             m_magazine.feedAll();
-            }
         }
     }
 

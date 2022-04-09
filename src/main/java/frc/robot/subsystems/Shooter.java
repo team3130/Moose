@@ -192,10 +192,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         setIndexerPercent(indexerSetSpeed);
     }
 
-    public void feedIndexerSlow() {
-        setIndexerPercent(indexerSetSpeed - 0.10);
-    }
-
     public boolean canShoot() {
         return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
     }
