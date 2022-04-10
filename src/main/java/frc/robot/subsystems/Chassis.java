@@ -504,6 +504,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void faceTarget(double angle) {
         driveArcade(0, -m_spinnyPID.calculate(angle), false);
     }
+
     public void faceTarget(double angle, double translationPos) {
         driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
     }
@@ -528,6 +529,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     public void tuneTolerance() {
         m_spinnyPID.setTolerance(3.5, 0.02);
+        m_spinnyPID.setIntegratorRange(-0.1, 0.1);
         m_LaterallPID.setTolerance(0.25, 0.25);
     }
 

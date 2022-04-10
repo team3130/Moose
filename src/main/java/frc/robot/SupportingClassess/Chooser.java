@@ -228,6 +228,30 @@ public class Chooser {
         m_autonChooser.addOption("1Ball", new AutonCommand(commandGroup, Move.getStartPosition()));
     }
 
+    public void add2Ball2() {
+        AutonCommand goToFirstBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball3/GoToBall3Ball3.wpilib.json")
+                )
+        );
+
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+
+        AutonCommand ReverseToShoot = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3Ball3/GoToShoot3Ball3.wpilib.json")
+                )
+        );
+
+        CommandBase shoot = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
+
+        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake), ReverseToShoot.getCmd(), shoot
+                );
+
+        m_autonChooser.addOption("Funny 2 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
+    }
+
     public void add5Ball() {
         AutonCommand ToFirstBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("path/5Ball/ToFirstBall5Ball.wpilib.json")));
         CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
