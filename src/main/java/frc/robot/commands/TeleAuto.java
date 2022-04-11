@@ -1,10 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.SupportingClassess.Ball;
 import frc.robot.sensors.vision.Limelight;
-import frc.robot.subsystems.*;
-
-import java.util.HashMap;
+import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.Shooter;
 
 public class TeleAuto extends CommandBase {
     protected final Chassis m_chassis;
@@ -14,15 +16,16 @@ public class TeleAuto extends CommandBase {
 
     protected final Limelight m_limelight;
 
-    protected enum Action {
-        LOOKING_FOR_TARGET,
-        LOOKING_FOR_BALL,
-        GOING_TO_BALL,
-        GOING_TO_SHOOT,
+    protected final char LOOKING_AROUND = 0;
+    protected final char GOING_TO_BALL = 1;
+    protected final char GOING_TO_SHOOT = 2;
 
-    }
+    protected final Runnable[] functions;
 
-    protected final HashMap<Action, Runnable> map;
+    protected int state = 0;
+
+    protected Ball[] balls = new Ball[30];
+    protected int highest = 0;
 
     public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight) {
         m_chassis = chassis;
@@ -36,6 +39,8 @@ public class TeleAuto extends CommandBase {
         m_requirements.add(shooter);
         m_requirements.add(intake);
         m_requirements.add(magazine);
+
+        functions = new Runnable[] {this::lookAround, this::goToBall, this::driveToShoot};
     }
 
     /**
@@ -52,7 +57,7 @@ public class TeleAuto extends CommandBase {
      */
     @Override
     public void execute() {
-
+        functions[state].run();
     }
 
     /**
@@ -85,6 +90,16 @@ public class TeleAuto extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
+
+    }
+
+    public void lookAround() {}
+
+    public void lookingForBall() {}
+
+    public void goToBall() {}
+
+    public void driveToShoot() {
 
     }
 }
