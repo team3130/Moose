@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
@@ -108,7 +110,7 @@ public class RobotMap {
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
     public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens
     public static final double targetDistanceOffset = 0.6778625; // Radius of the target
-
+    public static final Pose2d kTargetPose = new Pose2d(8.2296, 4.1148, new Rotation2d());
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
     /**

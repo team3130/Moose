@@ -137,7 +137,7 @@ public class TeleAuto extends CommandBase {
             );
             timeSinceLook.reset();
         }
-        if ()
+        if () {}
 
     }
 
