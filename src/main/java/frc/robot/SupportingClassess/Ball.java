@@ -22,4 +22,8 @@ public class Ball {
     public double getDistance(double x, double y) {
         return Math.sqrt(Math.pow(pose[0] - x, 2) + Math.pow(pose[1] - y, 2));
     }
+
+    public double[] getPose() {
+        return pose;
+    }
 }

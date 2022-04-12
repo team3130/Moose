@@ -1,12 +1,11 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.SupportingClassess.AutonCommand;
-import frc.robot.SupportingClassess.Chooser;
-import frc.robot.SupportingClassess.GeneralUtils;
+import frc.robot.SupportingClassess.*;
 import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Climber.ToggleClimber;
 import frc.robot.commands.Climber.spinClimberWinches;
@@ -16,6 +15,7 @@ import frc.robot.commands.Shooter.BenShoot;
 import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.TeleAuto;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
@@ -41,6 +41,12 @@ public class RobotContainer {
     Climber m_climber = new Climber();
     ChassisCooler m_chassiscooler = new ChassisCooler();
     protected Chooser m_chooser;
+
+    NetworkTable JetsonNano = NetworkTableInstance.getDefault().getTable("Jetson nano");
+
+    BallManager ballManager = new BallManager(m_chassis, JetsonNano);
+    PathGeneration pathGeneration = new PathGeneration(m_wheelSpeedCalculations, m_chassis);
+    TeleAuto teleAuto = new TeleAuto(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, ballManager, m_chooser, JetsonNano);
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();

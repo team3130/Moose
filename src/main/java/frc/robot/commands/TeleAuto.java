@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.BallManager;
@@ -29,7 +30,9 @@ public class TeleAuto extends CommandBase {
 
     protected int state = 0;
 
-    public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser) {
+    protected final NetworkTable JetsonNano;
+
+    public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
         m_chassis = chassis;
         m_shooter = shooter;
         m_intake = intake;
@@ -45,6 +48,8 @@ public class TeleAuto extends CommandBase {
         m_requirements.add(magazine);
 
         functions = new Runnable[] {this::lookAround, this::goToBall, this::driveToShoot};
+
+        this.JetsonNano = JetsonNano;
     }
 
     /**
