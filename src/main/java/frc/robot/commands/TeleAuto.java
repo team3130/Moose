@@ -1,6 +1,11 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.BallManager;
@@ -31,6 +36,11 @@ public class TeleAuto extends CommandBase {
     protected int state = 0;
 
     protected final NetworkTable JetsonNano;
+    protected final NetworkTableEntry JetsonBalls;
+
+    protected Pose2d targetPos;
+
+    protected final Timer timeSinceLook;
 
     public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
         m_chassis = chassis;
@@ -50,6 +60,11 @@ public class TeleAuto extends CommandBase {
         functions = new Runnable[] {this::lookAround, this::goToBall, this::driveToShoot};
 
         this.JetsonNano = JetsonNano;
+        JetsonBalls = JetsonNano.getEntry("balls");
+
+        targetPos = new Pose2d();
+
+        timeSinceLook = new Timer();
     }
 
     /**
@@ -57,6 +72,7 @@ public class TeleAuto extends CommandBase {
      */
     @Override
     public void initialize() {
+        timeSinceLook.start();
 
     }
 
@@ -102,8 +118,27 @@ public class TeleAuto extends CommandBase {
 
     }
 
+    /**
+     * Periodic method to spin when we don't know what to do
+     */
     public void lookAround() {
         m_chassis.driveArcade(0, RobotMap.kSpinnySpeed, false);
+        if (m_limelight.hasTrack() && timeSinceLook.hasElapsed(2)) {
+            // current problem with this approach is that NAVX will eternally build up error forever, and we will eventually run into a wall
+            //
+            targetPos = new Pose2d(
+                    m_chassis.getPose().getTranslation().plus(
+                            // the vector between the target and the bot
+                            new Translation2d(
+                                    m_limelight.getDistanceToTarget(), m_limelight.getHeading().plus(m_chassis.getPose().getRotation())
+                            )
+                    ),
+                    m_chassis.getPose().getRotation()
+            );
+            timeSinceLook.reset();
+        }
+        if ()
+
     }
 
     public void goToBall() {

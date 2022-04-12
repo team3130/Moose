@@ -107,6 +107,7 @@ public class RobotMap {
     public static final double kLimelightLength = 0;    // Distance to the turret's rotation axis
     public static final double kLimelightOffset = 0;    // Side offset from the turret's plane of symmetry (left+)
     public static final double kLimelightCalibrationDist = Units.inchesToMeters(120.0); // Exact horizontal distance between target and lens
+    public static final double targetDistanceOffset = 0.6778625; // Radius of the target
 
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 

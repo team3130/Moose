@@ -63,7 +63,7 @@ public class Limelight implements GeneralUtils {
         translation = Algebra.buildVector(
                 RobotMap.kLimelightOffset,
                 RobotMap.kLimelightHeight,
-                RobotMap.kLimelightLength
+                RobotMap.kLimelightLength + RobotMap.targetDistanceOffset
         );
         realVector = Algebra.buildVector(0, 0, 0);
         sideVector = Algebra.buildVector(0, 0, 0);
