@@ -61,7 +61,7 @@ public class WheelSpeedCalculations implements GeneralUtils {
 
     }
 
-    private class DataPoint {
+    public class DataPoint {
         double distance;
         double speed;
 
@@ -90,6 +90,10 @@ public class WheelSpeedCalculations implements GeneralUtils {
         @SuppressWarnings("unused")
         public boolean equals(DataPoint other) {
             return distance == other.distance;
+        }
+
+        public double getDistance() {
+            return distance;
         }
     }
 
@@ -161,6 +165,10 @@ public class WheelSpeedCalculations implements GeneralUtils {
 
     public double getSpeed(Double dist) {
         return speedCurve.getY(dist);
+    }
+
+    public ArrayList<DataPoint> getMainDataStorage() {
+        return data_MainStorage;
     }
 
 }

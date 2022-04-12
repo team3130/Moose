@@ -137,6 +137,8 @@ public class RobotMap {
 
     public static double MaxMotorTemp = 90;
 
+    public static double kSpinnySpeed = 0.4;
+
 
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 1.5;

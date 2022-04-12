@@ -85,6 +85,11 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
+    private NetworkTableEntry sliderSpin = tab.add("Spinny speed", RobotMap.kSpinnySpeed)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -1, "max", 1))
+            .getEntry();
+
 
     private NetworkTableEntry Ps = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
     private NetworkTableEntry Is = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
@@ -107,7 +112,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorFront.configFactoryDefault();
         m_rightMotorBack.configFactoryDefault();
         m_leftMotorBack.configFactoryDefault();
-
 
         m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
@@ -481,6 +485,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         m_fieldPos.setRobotPose(this.getPose());
         SmartDashboard.putData("Field position", m_fieldPos);
+
+        RobotMap.kSpinnySpeed = sliderSpin.getDouble(RobotMap.kSpinnySpeed);
     }
 
     @Override

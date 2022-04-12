@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.SupportingClassess.Ball;
+import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.BallManager;
+import frc.robot.SupportingClassess.Chooser;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
@@ -15,7 +17,10 @@ public class TeleAuto extends CommandBase {
     protected final Magazine m_magazine;
 
     protected final Limelight m_limelight;
+    protected final BallManager m_ballManager;
+    protected final Chooser m_chooser;
 
+    // enums are too bulky for this, indices are superior
     protected final char LOOKING_AROUND = 0;
     protected final char GOING_TO_BALL = 1;
     protected final char GOING_TO_SHOOT = 2;
@@ -24,16 +29,15 @@ public class TeleAuto extends CommandBase {
 
     protected int state = 0;
 
-    protected Ball[] balls = new Ball[30];
-    protected int highest = 0;
-
-    public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight) {
+    public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser) {
         m_chassis = chassis;
         m_shooter = shooter;
         m_intake = intake;
         m_magazine = magazine;
 
         m_limelight = limelight;
+        m_ballManager = ballManager;
+        m_chooser = chooser;
 
         m_requirements.add(chassis);
         m_requirements.add(shooter);
@@ -57,6 +61,7 @@ public class TeleAuto extends CommandBase {
      */
     @Override
     public void execute() {
+        // hashmaps are too slow...
         functions[state].run();
     }
 
@@ -76,7 +81,6 @@ public class TeleAuto extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false;
     }
 
@@ -93,11 +97,13 @@ public class TeleAuto extends CommandBase {
 
     }
 
-    public void lookAround() {}
+    public void lookAround() {
+        m_chassis.driveArcade(0, RobotMap.kSpinnySpeed, false);
+    }
 
-    public void lookingForBall() {}
+    public void goToBall() {
 
-    public void goToBall() {}
+    }
 
     public void driveToShoot() {
 
