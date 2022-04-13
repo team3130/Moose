@@ -130,4 +130,8 @@ public class BallManager {
             balls[i] = collection[i];
         }
     }
+
+    public boolean ballsExist() {
+        return highest <= 0;
+    }
 }

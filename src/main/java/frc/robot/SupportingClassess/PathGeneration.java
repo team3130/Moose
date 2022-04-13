@@ -31,16 +31,20 @@ public class PathGeneration {
         m_chooser = chooser;
     }
 
-    public Trajectory goToShoot(Pose2d startPose) {
+    public Trajectory getShootPath() {
+        return getShootPath(m_chassis.getPose());
+    }
+
+    public Trajectory getShootPath(Pose2d startPose) {
         double distanceToTarget = (m_limelight.hasTrack()) ?
                 m_limelight.getDistanceToTarget() :
                 startPose.relativeTo(RobotMap.kTargetPose).getTranslation().getNorm();
 
         // if we are not in range
-        if (!(distanceToTarget >= range[0] && distanceToTarget <= range[1])) {
+        if (!(distanceToTarget > range[0] && distanceToTarget < range[1])) {
             Rotation2d endingAngle = RobotMap.kTargetPose.relativeTo(startPose).getRotation();
             if (distanceToTarget > range[1]) {
-                TrajectoryGenerator.generateTrajectory(
+                return TrajectoryGenerator.generateTrajectory(
                         List.of(
                             startPose,
                             new Pose2d(new Translation2d(distanceToTarget - range[1], endingAngle), endingAngle)
@@ -48,9 +52,26 @@ public class PathGeneration {
                         m_chooser.getConfig()
                         );
             }
+            // is this optional? if (distanceToTarget < range[0])
+            else {
+                return TrajectoryGenerator.generateTrajectory(
+                        List.of(startPose,
+                                new Pose2d(new Translation2d(range[0] - distanceToTarget, endingAngle), endingAngle)
+                        ),
+                        m_chooser.getConfig()
+                );
+            }
         }
         else {
             return null;
         }
+    }
+
+    public Trajectory getPathToBall(Pose2d startPose, Pose2d ball) {
+        return TrajectoryGenerator.generateTrajectory(List.of(startPose, ball), m_chooser.getConfig());
+    }
+
+    public Trajectory getPathToBalls(Pose2d startPose, Pose2d ball1, Pose2d ball2) {
+        return TrajectoryGenerator.generateTrajectory(List.of(startPose, ball1, ball2), m_chooser.getConfig());
     }
 }

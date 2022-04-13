@@ -45,7 +45,7 @@ public class RobotContainer {
     NetworkTable JetsonNano = NetworkTableInstance.getDefault().getTable("Jetson nano");
 
     BallManager ballManager = new BallManager(m_chassis, JetsonNano);
-    PathGeneration pathGeneration = new PathGeneration(m_wheelSpeedCalculations, m_chassis);
+    PathGeneration pathGeneration = new PathGeneration(m_wheelSpeedCalculations, m_chassis, m_limelight, m_chooser);
     TeleAuto teleAuto = new TeleAuto(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, ballManager, m_chooser, JetsonNano);
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
