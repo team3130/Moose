@@ -92,6 +92,7 @@ public class BallManager {
                 for (int j = 0; j < highestToAddIndex; j++) {
                     if (toAdd[j].equals(balls[i])) {
                         contains = true;
+                        break;
                     }
                 }
                 if (!contains) {
