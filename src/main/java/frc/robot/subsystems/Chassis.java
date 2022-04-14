@@ -269,15 +269,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     /**
-     * Returns the heading of the robot.
-     *
-     * @return the robot's heading in degrees, from -180 to 180
-     */
-    public static double getHeading() {
-        return Navx.getAngle();
-    }
-
-    /**
      * Resets the drive encoders to currently read a position of 0.
      */
     private void resetEncoders() {
@@ -364,7 +355,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public double getAngle() {
         if (Navx.getNavxPresent()) {
-            return Navx.getRotation().getDegrees();
+            return Math.IEEEremainder(Navx.getAngle(), 360);
         } else {
             return 0;
         }
