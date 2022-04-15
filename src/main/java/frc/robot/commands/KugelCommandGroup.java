@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.BallManager;
 import frc.robot.SupportingClassess.Chooser;
@@ -15,7 +17,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
-public class TeleAuto extends CommandBase {
+public class KugelCommandGroup extends SequentialCommandGroup {
     protected final Chassis m_chassis;
     protected final Shooter m_shooter;
     protected final Intake m_intake;
@@ -29,19 +31,21 @@ public class TeleAuto extends CommandBase {
     protected final char LOOKING_AROUND = 0;
     protected final char GOING_TO_BALL = 1;
     protected final char GOING_TO_SHOOT = 2;
+    protected final char SHOOTING = 3;
 
     protected final Runnable[] functions;
 
     protected int state = 0;
 
+    protected CommandBase cmd;
+
     protected final NetworkTable JetsonNano;
     protected final NetworkTableEntry JetsonBalls;
 
-    protected Pose2d targetPos;
+    protected Command nextCommand;
+    protected final Timer timeSinceReset;
 
-    protected final Timer timeSinceLook;
-
-    public TeleAuto(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
+    public KugelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
         m_chassis = chassis;
         m_shooter = shooter;
         m_intake = intake;
@@ -56,14 +60,13 @@ public class TeleAuto extends CommandBase {
         m_requirements.add(intake);
         m_requirements.add(magazine);
 
-        functions = new Runnable[] {this::lookAround, this::goToBall, this::driveToShoot};
+        functions = new Runnable[] {this::lookAround, this::goingToBall, this::drivingToShoot, this::shooting};
 
         this.JetsonNano = JetsonNano;
         JetsonBalls = JetsonNano.getEntry("balls");
 
-        targetPos = new Pose2d();
+        timeSinceReset = new Timer();
 
-        timeSinceLook = new Timer();
     }
 
     /**
@@ -71,7 +74,7 @@ public class TeleAuto extends CommandBase {
      */
     @Override
     public void initialize() {
-        timeSinceLook.start();
+        timeSinceReset.start();
 
     }
 
@@ -119,34 +122,46 @@ public class TeleAuto extends CommandBase {
 
     /**
      * Periodic method to spin when we don't know what to do
+     * Profile should switch when we have something that we can do
+     * this is a last resort to be ran
      */
     public void lookAround() {
         m_chassis.driveArcade(0, RobotMap.kSpinnySpeed, false);
-        if (m_limelight.hasTrack() && timeSinceLook.hasElapsed(2)) {
+        resetOdometery();
+    }
+
+    public void resetOdometery() {
+        if (m_limelight.hasTrack() && timeSinceReset.hasElapsed(2)) {
             // current problem with this approach is that NAVX will eternally build up error forever, and we will eventually run into a wall
-            //
-            targetPos = new Pose2d(
-                    m_chassis.getPose().getTranslation().plus(
-                            // the vector between the target and the bot
+            m_chassis.resetOdometry(
+                    new Pose2d(
+                            // the vector between the target and the robot
                             new Translation2d(
-                                    m_limelight.getDistanceToTarget(), m_limelight.getHeading().plus(m_chassis.getPose().getRotation())
-                            )
-                    ),
-                    m_chassis.getPose().getRotation()
-            );
-            timeSinceLook.reset();
+                                    // this will get rotated about the rotation of the bot
+                                    m_limelight.getDistanceToTarget(), m_limelight.getHeading()
+                            ),
+                            m_chassis.getPose().getRotation()
+                    ));
+            timeSinceReset.reset();
         }
-        if (!m_ballManager.ballsExist()) {
+    }
+
+    public void goingToBall() {
+        // make sure we don't move on this tic
+        m_chassis.driveTank(0, 0 ,false);
+        if (m_ballManager.ballsExist()) {
 
         }
+        else {
+            state = LOOKING_AROUND;
+        }
+    }
+
+    public void drivingToShoot() {
 
     }
 
-    public void goToBall() {
-
-    }
-
-    public void driveToShoot() {
-
+    public void shooting() {
+        resetOdometery();
     }
 }

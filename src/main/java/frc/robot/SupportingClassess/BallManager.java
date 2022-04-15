@@ -3,10 +3,8 @@ package frc.robot.SupportingClassess;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Chassis;
-
-import java.util.Arrays;
 
 public class BallManager {
     // 22 is the buffer size (there should only be 11 on the field but meh)
@@ -68,9 +66,22 @@ public class BallManager {
         }
     }
 
-    public boolean withinFrame(double[] pose) {
+    public boolean withinFrame(Ball ball) {
         Pose2d botPos = m_chassis.getPose();
-
+        double[] balls = ballsNano.getDoubleArray(new double[0]);
+        if (Math.abs(Math.atan2(ball.getY() - botPos.getY(), ball.getX() - botPos.getX()) - botPos.getRotation().getRadians()) <= Math.toRadians(RobotMap.kCameraFOV / 2)) {
+            for (int i = 0; i < balls.length; i++) {
+                int x = i;
+                int y = i++;
+                if (ball.equals(balls[x], balls[y])) {
+                    // update ball positions to account for small error
+                    ball.getPose()[0] = balls[x];
+                    ball.getPose()[1] = balls[y];
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void addAvailable() {
@@ -81,13 +92,11 @@ public class BallManager {
      * If ball in frame and ball no exist, murder ball
      */
     public void destruct() {
-        //TODO: make ball in frame logic
-
         int[] toRemove = new int[5];
         int toRemoveSize = 0;
 
         for (int i = 0; i < balls.length; i++) {
-            if (withinFrame(balls[i].getPose())) {
+            if (withinFrame(balls[i])) {
                 boolean contains = false;
                 for (int j = 0; j < highestToAddIndex; j++) {
                     if (toAdd[j].equals(balls[i])) {

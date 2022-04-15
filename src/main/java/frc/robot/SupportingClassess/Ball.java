@@ -1,5 +1,7 @@
 package frc.robot.SupportingClassess;
 
+import frc.robot.RobotMap;
+
 public class Ball {
     protected final double[] pose;
 
@@ -25,5 +27,17 @@ public class Ball {
 
     public double[] getPose() {
         return pose;
+    }
+
+    public double getX() {
+        return pose[0];
+    }
+
+    public double getY() {
+        return pose[1];
+    }
+    
+    public boolean equals(double x, double y) {
+        return Math.sqrt(Math.pow(pose[0] - x, 2) + Math.pow(pose[1] - y, 2)) <= RobotMap.ballPositionError;
     }
 }
