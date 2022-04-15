@@ -7,7 +7,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.BallManager;
 import frc.robot.SupportingClassess.Chooser;
@@ -17,7 +17,9 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
-public class KugelCommandGroup extends SequentialCommandGroup {
+import java.util.ArrayDeque;
+
+public class KugelCommandGroup extends CommandGroupBase {
     protected final Chassis m_chassis;
     protected final Shooter m_shooter;
     protected final Intake m_intake;
@@ -26,6 +28,7 @@ public class KugelCommandGroup extends SequentialCommandGroup {
     protected final Limelight m_limelight;
     protected final BallManager m_ballManager;
     protected final Chooser m_chooser;
+
 
     // enums are too bulky for this, indices are superior
     protected final char LOOKING_AROUND = 0;
@@ -44,6 +47,13 @@ public class KugelCommandGroup extends SequentialCommandGroup {
 
     protected Command nextCommand;
     protected final Timer timeSinceReset;
+
+    // threading stuff
+    protected Thread thread;
+
+    // command group stuff
+    protected ArrayDeque<CommandBase> commands;
+    protected boolean ranOut = true;
 
     public KugelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
         m_chassis = chassis;
@@ -67,6 +77,9 @@ public class KugelCommandGroup extends SequentialCommandGroup {
 
         timeSinceReset = new Timer();
 
+        commands = new ArrayDeque<>();
+
+        thread = new Thread(this::manager);
     }
 
     /**
@@ -76,6 +89,9 @@ public class KugelCommandGroup extends SequentialCommandGroup {
     public void initialize() {
         timeSinceReset.start();
 
+        if (!commands.isEmpty()) {
+            commands.peekFirst().initialize();
+        }
     }
 
     /**
@@ -84,8 +100,20 @@ public class KugelCommandGroup extends SequentialCommandGroup {
      */
     @Override
     public void execute() {
-        // hashmaps are too slow...
-        functions[state].run();
+        if (!commands.isEmpty()) {
+            if (ranOut) {
+                commands.peekFirst().initialize();
+            }
+            commands.peekFirst().execute();
+            if (commands.peekFirst().isFinished()) {
+                commands.pop().end(false);
+                ranOut = true;
+            }
+        }
+        else {
+            ranOut = true;
+            lookAround();
+        }
     }
 
     /**
@@ -163,5 +191,16 @@ public class KugelCommandGroup extends SequentialCommandGroup {
 
     public void shooting() {
         resetOdometery();
+    }
+
+    @Override
+    public void addCommands(Command... commands) {
+
+    }
+
+    public void manager() {
+        while (true) {
+            functions[state].run();
+        }
     }
 }

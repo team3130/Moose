@@ -40,4 +40,12 @@ public class Ball {
     public boolean equals(double x, double y) {
         return Math.sqrt(Math.pow(pose[0] - x, 2) + Math.pow(pose[1] - y, 2)) <= RobotMap.ballPositionError;
     }
+
+    public boolean equals(Ball other) {
+        return Math.sqrt(Math.pow(pose[0] - other.pose[0], 2) + Math.pow(pose[1] - other.pose[1], 2)) <= RobotMap.ballPositionError;
+    }
+
+    public boolean equals(double[] pose) {
+        return Math.sqrt(Math.pow(this.pose[0] - pose[0], 2) + Math.pow(this.pose[1] - pose[1], 2)) <= RobotMap.ballPositionError;
+    }
 }
