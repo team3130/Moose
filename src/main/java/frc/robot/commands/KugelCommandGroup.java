@@ -112,8 +112,8 @@ public class KugelCommandGroup extends CommandGroupBase {
         }
         else {
             ranOut = true;
-            lookAround();
         }
+        functions[state].run();
     }
 
     /**
