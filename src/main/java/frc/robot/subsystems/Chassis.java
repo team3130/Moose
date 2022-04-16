@@ -375,7 +375,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      * 
      * @return The pose.
      */
-    public Pose2d getPose() {
+    public synchronized Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
 

@@ -1,5 +1,6 @@
 package frc.robot.SupportingClassess;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.RobotMap;
 
 public class Ball {
@@ -12,6 +13,10 @@ public class Ball {
 
     public double getDistance(double[] pose) {
         return getDistance(pose[0], pose[1]);
+    }
+
+    public double getDistance(Pose2d pose) {
+        return getDistance(pose.getX(), pose.getY());
     }
 
     /**

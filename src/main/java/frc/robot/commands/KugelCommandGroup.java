@@ -2,15 +2,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import frc.robot.RobotMap;
-import frc.robot.SupportingClassess.BallManager;
-import frc.robot.SupportingClassess.Chooser;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
@@ -18,6 +13,7 @@ import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 import java.util.ArrayDeque;
+import java.util.List;
 
 public class KugelCommandGroup extends CommandGroupBase {
     protected final Chassis m_chassis;
@@ -26,58 +22,29 @@ public class KugelCommandGroup extends CommandGroupBase {
     protected final Magazine m_magazine;
 
     protected final Limelight m_limelight;
-    protected final BallManager m_ballManager;
-    protected final Chooser m_chooser;
 
-
-    // enums are too bulky for this, indices are superior
-    protected final char LOOKING_AROUND = 0;
-    protected final char GOING_TO_BALL = 1;
-    protected final char GOING_TO_SHOOT = 2;
-    protected final char SHOOTING = 3;
-
-    protected final Runnable[] functions;
-
-    protected int state = 0;
-
-    protected CommandBase cmd;
-
-    protected final NetworkTable JetsonNano;
-    protected final NetworkTableEntry JetsonBalls;
     protected final Timer timeSinceReset;
 
-    // threading stuff
-    protected Thread thread;
-
     // command group stuff
-    protected final ArrayDeque<CommandBase> commands;
+    protected final ArrayDeque<Command> commands;
     protected boolean ranOut = true;
 
-    public KugelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
+    public KugelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight) {
         m_chassis = chassis;
         m_shooter = shooter;
         m_intake = intake;
         m_magazine = magazine;
-
-        m_limelight = limelight;
-        m_ballManager = ballManager;
-        m_chooser = chooser;
 
         m_requirements.add(chassis);
         m_requirements.add(shooter);
         m_requirements.add(intake);
         m_requirements.add(magazine);
 
-        functions = new Runnable[] {this::lookAround, this::goingToBall, this::drivingToShoot, this::shooting};
-
-        this.JetsonNano = JetsonNano;
-        JetsonBalls = JetsonNano.getEntry("balls");
+        m_limelight = limelight;
 
         timeSinceReset = new Timer();
 
         commands = new ArrayDeque<>();
-
-        thread = new Thread(this::manager);
     }
 
     /**
@@ -99,7 +66,7 @@ public class KugelCommandGroup extends CommandGroupBase {
     @Override
     public void execute() {
         if (!commands.isEmpty()) {
-            CommandBase cmd = commands.peekFirst();
+            Command cmd = commands.peekFirst();
             if (ranOut) {
                 cmd.initialize();
             }
@@ -110,9 +77,9 @@ public class KugelCommandGroup extends CommandGroupBase {
             }
         }
         else {
+            lookAround();
             ranOut = true;
         }
-        functions[state].run();
     }
 
     /**
@@ -173,31 +140,9 @@ public class KugelCommandGroup extends CommandGroupBase {
         }
     }
 
-    public void goingToBall() {
-        if ()
-    }
-
-    public void drivingToShoot() {
-
-    }
-
-    public void shooting() {
-        resetOdometery();
-    }
-
     @Override
     public void addCommands(Command... commands) {
-
+        this.commands.addAll(List.of(commands));
     }
 
-    @SuppressWarnings("InfiniteLoopStatement")
-    public void manager() {
-        while (true) {
-            functions[state].run();
-        }
-    }
-
-    protected synchronized CommandBase getFirst() {
-        return commands.peekFirst();
-    }
 }

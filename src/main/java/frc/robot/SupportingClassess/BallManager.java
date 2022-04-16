@@ -1,8 +1,10 @@
 package frc.robot.SupportingClassess;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.RobotMap;
+import frc.robot.commands.KugelCommandGroup;
 import frc.robot.subsystems.Chassis;
 
 import java.util.function.Predicate;
@@ -36,12 +38,23 @@ public class BallManager {
 
     protected final Predicate<Ball> withinFrame;
 
-    public BallManager(Chassis chassis, NetworkTable JetsonNano) {
+    protected final PathGeneration m_pathGeneration;
+    protected final KugelCommandGroup commandGroup;
+
+    protected Thread m_managerThread;
+
+    public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, KugelCommandGroup commandGroup) {
         m_chassis = chassis;
         this.JetsonNano = JetsonNano;
         ballsNano = JetsonNano.getEntry("balls");
 
+        // the arcTan of the vector between the ball and the bot - direction we are facing, within range of the FOV / 2
         withinFrame = (Ball ball) -> Math.abs(Math.atan2(ball.getY() - m_chassis.getPose().getY(), ball.getX() - m_chassis.getPose().getX()) - m_chassis.getPose().getRotation().getRadians()) <= Math.toRadians(RobotMap.kCameraFOV / 2);
+
+        m_managerThread = new Thread(this::manager, "manager");
+
+        m_pathGeneration = pathGeneration;
+        this.commandGroup = commandGroup;
     }
 
     public Ball getQuickestOne() {
@@ -71,9 +84,6 @@ public class BallManager {
             toAdd[highestToAddIndex++] = ball;
         }
     }
-    public void addAvailable() {
-
-    }
 
     /**
      * If ball in frame and ball no exist, murder ball
@@ -96,7 +106,7 @@ public class BallManager {
                         break;
                     }
                 }
-                if (safe) {
+                if (!safe) {
                     balls[i] = null;
                     toRemoveSize++;
                 }
@@ -111,30 +121,31 @@ public class BallManager {
 
     // This beafy mofo is gonna cause a threading issue, but unsafe memory operations are funny, so it's worth
     public void smartAdd() {
-        updateToAdd();
-        destruct();
+        // clean up all the arrays
+        clean();
 
-        Ball[] collection = new Ball[22];
-
-        int collectionHighest = 0;
-
-        for (int i = 0; i < highest; i++) {
-            if (balls[i] != null) {
-                collection[collectionHighest] = balls[i];
+        // destination for loop
+        for (int i = 0; i < highestToAddIndex; i++) {
+            if (toAdd[i] == null) {
+                continue;
+            }
+            boolean duped = false;
+            // check if ball already exists in the array
+            for (int j = 0; j < highest; j++) {
+                if (balls[j].equals(toAdd[i])) {
+                    duped = true;
+                    break;
+                }
+            }
+            if (duped) {
+                toAdd[i] = null;
+            }
+            else {
+                balls[highest++] = toAdd[i];
             }
         }
-
-        highest = collectionHighest;
-
-        if (highestToAddIndex != 0) {
-            System.arraycopy(toAdd, highest, collection, highest, highestToAddIndex);
-        }
-
-        highest += highestToAddIndex;
-
-        for (int i = 0; i < highest; i++) {
-            balls[i] = collection[i];
-        }
+        updateClosestOneBall();
+        updateTwoClosestBalls();
     }
 
     public boolean ballsExist() {
@@ -159,6 +170,55 @@ public class BallManager {
             double x = nanoBalls[nanoIndex++];
             double y = nanoBalls[nanoIndex++];
             toAdd[toAddIndex++ % toAdd.length] = new Ball(x, y);
+        }
+    }
+
+    public void updateClosestOneBall() {
+        int closest = 0;
+        // this method is extremely slow because it is synchronized
+        Pose2d botPose = m_chassis.getPose();
+        for (int i = 0; i < highest; i++) {
+            if (balls[closest].getDistance(botPose) > balls[i].getDistance(botPose)) {
+                closest = i;
+            }
+        }
+        quickestOneBall = closest;
+    }
+    public void updateTwoClosestBalls() {
+        Pose2d botPose = m_chassis.getPose();
+
+        double shortestDistance = Double.MAX_VALUE;
+
+        int firstFastest = 0;
+        int secondFastest = 0;
+
+        for (int first = 0; first < highest; first++) {
+            for (int second = 0; second < highest; second++) {
+                if (first == second) {
+                    continue;
+                }
+                double currDistance = balls[first].getDistance(botPose) + balls[first].getDistance(botPose);
+                if (currDistance < shortestDistance) {
+                    shortestDistance = currDistance;
+                    firstFastest = first;
+                    secondFastest = second;
+                }
+            }
+        }
+        quickestTwoBall[0] = firstFastest;
+        quickestTwoBall[1] = secondFastest;
+    }
+
+
+    public void decidePath() {
+        
+    }
+
+    @SuppressWarnings("InfiniteLoopStatement")
+    public void manager() {
+        while (true) {
+            smartAdd();
+            decidePath();
         }
     }
 }
