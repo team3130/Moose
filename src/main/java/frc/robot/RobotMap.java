@@ -103,6 +103,10 @@ public class RobotMap {
     public static final double kCameraFOV = 62.2;
     public static final double ballPositionError = 0.25; // start with a circle of 25cm radius of error at first
 
+    public static final String ballCommandName = "Go to ball";
+    public static final String goShootCommandName = "Go to shoot";
+    public static final String shootingCommandName = "Shooting";
+
     /**
      * Limelight
      */

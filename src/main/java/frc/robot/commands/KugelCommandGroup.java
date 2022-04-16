@@ -44,15 +44,13 @@ public class KugelCommandGroup extends CommandGroupBase {
 
     protected final NetworkTable JetsonNano;
     protected final NetworkTableEntry JetsonBalls;
-
-    protected Command nextCommand;
     protected final Timer timeSinceReset;
 
     // threading stuff
     protected Thread thread;
 
     // command group stuff
-    protected ArrayDeque<CommandBase> commands;
+    protected final ArrayDeque<CommandBase> commands;
     protected boolean ranOut = true;
 
     public KugelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, BallManager ballManager, Chooser chooser, NetworkTable JetsonNano) {
@@ -101,11 +99,12 @@ public class KugelCommandGroup extends CommandGroupBase {
     @Override
     public void execute() {
         if (!commands.isEmpty()) {
+            CommandBase cmd = commands.peekFirst();
             if (ranOut) {
-                commands.peekFirst().initialize();
+                cmd.initialize();
             }
-            commands.peekFirst().execute();
-            if (commands.peekFirst().isFinished()) {
+            cmd.execute();
+            if (cmd.isFinished()) {
                 commands.pop().end(false);
                 ranOut = true;
             }
@@ -175,14 +174,7 @@ public class KugelCommandGroup extends CommandGroupBase {
     }
 
     public void goingToBall() {
-        // make sure we don't move on this tic
-        m_chassis.driveTank(0, 0 ,false);
-        if (m_ballManager.ballsExist()) {
-
-        }
-        else {
-            state = LOOKING_AROUND;
-        }
+        if ()
     }
 
     public void drivingToShoot() {
@@ -198,9 +190,14 @@ public class KugelCommandGroup extends CommandGroupBase {
 
     }
 
+    @SuppressWarnings("InfiniteLoopStatement")
     public void manager() {
         while (true) {
             functions[state].run();
         }
+    }
+
+    protected synchronized CommandBase getFirst() {
+        return commands.peekFirst();
     }
 }
