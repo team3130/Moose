@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.BallManager;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
@@ -19,6 +20,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
     protected final Magazine m_magazine;
 
     protected final Limelight m_limelight;
+    protected BallManager ball_manager;
 
     protected final Timer timeSinceReset;
 
@@ -79,6 +81,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
             cmd.execute();
             if (cmd.isFinished()) {
                 commands[lowest++ & 15].end(false);
+                ball_manager.generatePath();
                 ranOut = true;
             }
         }
@@ -157,4 +160,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
         commands[highest++ & 15] = toAdd;
     }
 
+    public void setBallManager(BallManager ballManager) {
+        this.ball_manager = ballManager;
+    }
 }
