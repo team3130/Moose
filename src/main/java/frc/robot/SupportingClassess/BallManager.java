@@ -269,21 +269,49 @@ public class BallManager {
 
         Pose2d start = commandGroup.getCurr().getPoseGoingTo();
 
-        Trajectory twoBall = m_pathGeneration.getPathToBalls(start, balls[quickestTwoBall[0]].getPose2D(), balls[quickestTwoBall[1]].getPose2D());
-        RamseteCommand goToBalls = ramseteCommandFactory.apply(twoBall);
-        Pose2d twoBallEndPoint = twoBall.getStates().get(twoBall.getStates().size() - 1).poseMeters;
+        double firstBallX = balls[quickestTwoBall[0]].getX();
+        double firstBallY = balls[quickestTwoBall[0]].getY();
+
+        double secondBallX = balls[quickestTwoBall[1]].getX();
+        double secondBallY = balls[quickestTwoBall[1]].getY();
+
+        Rotation2d rotationBetweenBall1AndBall2 =
+                new Rotation2d(Math.atan2(secondBallY - firstBallY, secondBallX - firstBallX));
+
+        Pose2d firstBall = new Pose2d(
+                firstBallX,
+                firstBallY,
+                new Rotation2d((rotationBetweenBall1AndBall2.getRadians() + start.getRotation().getRadians()) / 2)
+        );
+
+
+        Rotation2d rotationBetweenSecondBallAndTarget =
+                new Rotation2d(Math.atan2(RobotMap.kTargetPose.getY() - secondBallY, RobotMap.kTargetPose.getX() - secondBallX));
+
+        Pose2d secondBall = new Pose2d(secondBallX, secondBallY, new Rotation2d((rotationBetweenSecondBallAndTarget.getRadians() + firstBall.getRotation().getRadians()) / 2.0));
+
 
         CommandBase deployAndSpintake = new DeployAndSpintake(m_intake, m_magazine, 1);
 
-        Trajectory toShootTrajectory = m_pathGeneration.getShootPath(twoBallEndPoint);
+        RamseteCommand goToBalls = ramseteCommandFactory.apply(
+                TrajectoryGenerator.generateTrajectory(
+                        List.of(
+                                start,
+                                firstBall,
+                                secondBall
+                        ),
+                        config
+                )
+        );
+
+        Trajectory toShootTrajectory = m_pathGeneration.getShootPath(secondBall);
         RamseteCommand goToShoot = ramseteCommandFactory.apply(toShootTrajectory);
-        Pose2d shootPoint = toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters;
 
         CommandBase shoot = new Shoot(m_shooter, m_magazine, m_chassis, m_limelight);
 
-        commandGroup.addCommand(new Event(twoBallEndPoint, new ParallelDeadlineGroup(goToBalls, deployAndSpintake), EventType.GOING_TO_TWO_BALLS));
-        commandGroup.addCommand(new Event(shootPoint, goToShoot, EventType.GOING_TO_SHOOT));
-        commandGroup.addCommand(new Event(shootPoint, shoot, EventType.SHOOTING));
+        commandGroup.addCommand(new Event(secondBall, new ParallelDeadlineGroup(goToBalls, deployAndSpintake), EventType.GOING_TO_TWO_BALLS));
+        commandGroup.addCommand(new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, goToShoot, EventType.GOING_TO_SHOOT));
+        commandGroup.addCommand(new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, shoot, EventType.SHOOTING));
 
         state = ADD_BALLS;
     }
