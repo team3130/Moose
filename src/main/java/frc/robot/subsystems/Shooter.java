@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +28,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
     private double hoodWheelSetSpeed = 0;
     private double indexerSetSpeed = 0.5; // default 50%
+
+    private DigitalInput breakbeam;
 
     private WheelSpeedCalculations shooterCurve;
 
@@ -49,7 +52,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public Shooter(Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
-
+        
         m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_HOOD_MOTOR);
 
         // restricting voltage for the flywheel
