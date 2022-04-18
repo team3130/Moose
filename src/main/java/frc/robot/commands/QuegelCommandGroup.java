@@ -12,10 +12,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
-import java.util.ArrayDeque;
-import java.util.List;
-
-public class KugelCommandGroup extends CommandGroupBase {
+public class QuegelCommandGroup extends CommandGroupBase {
     protected final Chassis m_chassis;
     protected final Shooter m_shooter;
     protected final Intake m_intake;
@@ -26,10 +23,21 @@ public class KugelCommandGroup extends CommandGroupBase {
     protected final Timer timeSinceReset;
 
     // command group stuff
-    protected final ArrayDeque<Command> commands;
+    protected final Command[] commands;
+    protected char highest = 0;
+    protected char lowest = 0;
+
     protected boolean ranOut = true;
 
-    public KugelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight) {
+    /**
+     * Quegle Command group is a sequential command group that uses a really fast queue
+     * @param chassis chassis subsystem
+     * @param shooter shooter subsystem
+     * @param intake intake subsystem
+     * @param magazine magazine subsystem
+     * @param limelight limelight singleton
+     */
+    public QuegelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight) {
         m_chassis = chassis;
         m_shooter = shooter;
         m_intake = intake;
@@ -44,7 +52,7 @@ public class KugelCommandGroup extends CommandGroupBase {
 
         timeSinceReset = new Timer();
 
-        commands = new ArrayDeque<>();
+        commands = new Command[16];
     }
 
     /**
@@ -54,9 +62,7 @@ public class KugelCommandGroup extends CommandGroupBase {
     public void initialize() {
         timeSinceReset.start();
 
-        if (!commands.isEmpty()) {
-            commands.peekFirst().initialize();
-        }
+        commands[lowest & 15].initialize();
     }
 
     /**
@@ -65,14 +71,14 @@ public class KugelCommandGroup extends CommandGroupBase {
      */
     @Override
     public void execute() {
-        if (!commands.isEmpty()) {
-            Command cmd = commands.peekFirst();
+        if (highest != lowest) {
+            Command cmd = commands[lowest & 15];
             if (ranOut) {
                 cmd.initialize();
             }
             cmd.execute();
             if (cmd.isFinished()) {
-                commands.pop().end(false);
+                commands[lowest++ & 15].end(false);
                 ranOut = true;
             }
         }
@@ -142,7 +148,13 @@ public class KugelCommandGroup extends CommandGroupBase {
 
     @Override
     public void addCommands(Command... commands) {
-        this.commands.addAll(List.of(commands));
+        for (Command toAdd : commands) {
+            addCommand(toAdd);
+        }
+    }
+
+    public void addCommand(Command toAdd) {
+        commands[highest++ & 15] = toAdd;
     }
 
 }

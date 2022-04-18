@@ -420,4 +420,8 @@ public class Chooser {
 
         m_autonChooser.addOption("Desperate 3 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
     }
+
+    public Function<Path, Trajectory> getTrajectoryFactory() {
+        return trajectoryFactory;
+    }
 }

@@ -1,12 +1,16 @@
 package frc.robot.SupportingClassess;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.RobotMap;
-import frc.robot.commands.KugelCommandGroup;
+import frc.robot.commands.QuegelCommandGroup;
 import frc.robot.subsystems.Chassis;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class BallManager {
@@ -39,11 +43,73 @@ public class BallManager {
     protected final Predicate<Ball> withinFrame;
 
     protected final PathGeneration m_pathGeneration;
-    protected final KugelCommandGroup commandGroup;
+    protected final QuegelCommandGroup commandGroup;
 
-    protected Thread m_managerThread;
+    protected final Function<Trajectory, RamseteCommand> ramseteCommandFactory;
+//    protected final Function<Pose2d[], Trajectory> trajectoryCommandFactory;
 
-    public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, KugelCommandGroup commandGroup) {
+    protected final TrajectoryConfig config;
+
+    protected final Thread m_managerThread;
+
+    protected CurrentEvent currentEvent;
+
+    // @Caleb fuck you for making this a thing
+    private class CurrentEvent {
+        // Pose2d we are currently going to
+        protected Pose2d onWayTo;
+
+        protected Pose2d[] future;
+        protected char highest = 0;
+        protected char lowest = 0;
+
+        // states
+        public static final char LOOKING_FOR_BALL = 0;
+        public static final char GOING_TO_BALL = 1;
+        public static final char GOING_TO_SHOOT = 2;
+        public static final char SHOOTING = 3;
+        public static final char WHAT_THE_FUCK = 4;
+        protected char state;
+
+        public CurrentEvent(char state) {
+            this.state = state;
+            future = new Pose2d[16];
+        }
+
+        public char getState() {
+            return state;
+        }
+
+        public void setState(char newState) {
+           state = newState;
+        }
+
+        public void setOnWayTo(Pose2d onWayTo) {
+            this.onWayTo = onWayTo;
+        }
+
+        public synchronized Pose2d getOnWayTo() {
+            return onWayTo;
+        }
+
+        public void updateOnWayTo() {
+            // unbox reference and hand to onWayTo
+            onWayTo = future[lowest & 15];
+            // delete the old object
+            future[lowest++ & 15] = null;
+        }
+
+        public void addToFuture(Pose2d addToFuture) {
+            future[highest++ & 15] = addToFuture;
+        }
+
+        public Pose2d peekLastQueued() {
+            return future[highest & 15];
+        }
+
+    }
+
+    public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, QuegelCommandGroup commandGroup, Chooser chooser) {
         m_chassis = chassis;
         this.JetsonNano = JetsonNano;
         ballsNano = JetsonNano.getEntry("balls");
@@ -51,10 +117,14 @@ public class BallManager {
         // the arcTan of the vector between the ball and the bot - direction we are facing, within range of the FOV / 2
         withinFrame = (Ball ball) -> Math.abs(Math.atan2(ball.getY() - m_chassis.getPose().getY(), ball.getX() - m_chassis.getPose().getX()) - m_chassis.getPose().getRotation().getRadians()) <= Math.toRadians(RobotMap.kCameraFOV / 2);
 
-        m_managerThread = new Thread(this::manager, "manager");
-
         m_pathGeneration = pathGeneration;
         this.commandGroup = commandGroup;
+
+        ramseteCommandFactory = chooser.getRamseteCommandFactory();
+
+        config = chooser.getConfig();
+
+        m_managerThread = new Thread(this::manager, "manager");
     }
 
     public Ball getQuickestOne() {
@@ -211,7 +281,22 @@ public class BallManager {
 
 
     public void decidePath() {
-        
+        /**
+         * if (Magazine.count() == 1) {
+         *     Generate one ball
+         * }
+         * else if (Magazine.count() == 2) {
+         *     Generate path to shoot
+         * }
+         * else {
+         *     Generate Two ball path
+         * }
+         */
+
+        commandGroup.addCommand(m_pathGeneration.getCircut(currentEvent.peekLastQueued(), balls[quickestTwoBall[0]], balls[quickestTwoBall[1]]));
+
+
+
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -221,4 +306,9 @@ public class BallManager {
             decidePath();
         }
     }
+
+/*    public Pose2d odometry() {
+        Pose2d botPose = m_chassis.getPose();
+        return botPose.relativeTo();
+    }*/
 }

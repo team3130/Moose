@@ -15,7 +15,7 @@ import frc.robot.commands.Shooter.BenShoot;
 import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
-import frc.robot.commands.KugelCommandGroup;
+import frc.robot.commands.QuegelCommandGroup;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
@@ -44,9 +44,10 @@ public class RobotContainer {
 
     NetworkTable JetsonNano = NetworkTableInstance.getDefault().getTable("Jetson nano");
 
-    BallManager ballManager = new BallManager(m_chassis, JetsonNano);
-    PathGeneration pathGeneration = new PathGeneration(m_wheelSpeedCalculations, m_chassis, m_limelight, m_chooser);
-    KugelCommandGroup kugelCommandGroup = new KugelCommandGroup(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, ballManager, m_chooser, JetsonNano);
+
+    PathGeneration pathGeneration = new PathGeneration(m_wheelSpeedCalculations, m_chassis, m_limelight, m_chooser, m_intake, m_magazine, m_shooter);
+    QuegelCommandGroup quegelCommandGroup = new QuegelCommandGroup(m_chassis, m_shooter, m_intake, m_magazine, m_limelight);
+    BallManager ballManager = new BallManager(m_chassis, JetsonNano, pathGeneration, quegelCommandGroup, m_chooser);
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
