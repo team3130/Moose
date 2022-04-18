@@ -1,12 +1,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.BallManager;
+import frc.robot.SupportingClassess.Event;
+import frc.robot.SupportingClassess.EventType;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
@@ -25,7 +28,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
     protected final Timer timeSinceReset;
 
     // command group stuff
-    protected final Command[] commands;
+    protected final Event[] commands;
     protected char highest = 0;
     protected char lowest = 0;
 
@@ -54,7 +57,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
 
         timeSinceReset = new Timer();
 
-        commands = new Command[16];
+        commands = new Event[16];
     }
 
     /**
@@ -64,7 +67,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
     public void initialize() {
         timeSinceReset.start();
 
-        commands[lowest & 15].initialize();
+        commands[lowest & 15].getCmd().initialize();
     }
 
     /**
@@ -74,13 +77,16 @@ public class QuegelCommandGroup extends CommandGroupBase {
     @Override
     public void execute() {
         if (highest != lowest) {
-            Command cmd = commands[lowest & 15];
+            Command cmd = commands[lowest & 15].getCmd();
             if (ranOut) {
+                if (commands[lowest & 15].getType().equals(EventType.SHOOTING)) {
+                    ball_manager.generatePath();
+                }
                 cmd.initialize();
             }
             cmd.execute();
             if (cmd.isFinished()) {
-                commands[lowest++ & 15].end(false);
+                commands[lowest++ & 15].getCmd().end(false);
                 ball_manager.generatePath();
                 ranOut = true;
             }
@@ -152,15 +158,23 @@ public class QuegelCommandGroup extends CommandGroupBase {
     @Override
     public void addCommands(Command... commands) {
         for (Command toAdd : commands) {
-            addCommand(toAdd);
+            addCommand(toAdd, new Pose2d(0, 0, new Rotation2d(0)), EventType.WHAT_THE_FUCK);
         }
     }
 
-    public void addCommand(Command toAdd) {
-        commands[highest++ & 15] = toAdd;
+    public void addCommand(Command toAdd, Pose2d endPoint, EventType type) {
+        commands[highest++ & 15] = new Event(endPoint, toAdd, type);
+    }
+
+    public void addCommand(Event event) {
+        commands[highest++ & 15] = event;
     }
 
     public void setBallManager(BallManager ballManager) {
         this.ball_manager = ballManager;
+    }
+
+    public Event getCurr() {
+        return commands[lowest & 15];
     }
 }

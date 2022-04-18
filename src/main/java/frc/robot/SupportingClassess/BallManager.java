@@ -75,11 +75,6 @@ public class BallManager {
     protected char state = 0;
 
 
-    // @Caleb fuck you for making this a thing
-    protected Event[] futureEvents;
-    protected char highestEvents, lowestEvents = 0;
-
-
     public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, QuegelCommandGroup commandGroup, Chooser chooser, Intake intake, Magazine magazine, Shooter shooter, Limelight limelight) {
         m_chassis = chassis;
         m_intake = intake;
@@ -100,9 +95,6 @@ public class BallManager {
 
         config = chooser.getConfig();
 
-        // all 2^x numbers are magic numbers for circular array queues
-        futureEvents = new Event[16];
-        futureEvents[highestEvents++] = new Event(m_chassis.getPose(), EventType.WHAT_THE_FUCK);
 
         StateMachine = new Runnable[] {this::smartAdd, this::decidePath};
 
@@ -275,7 +267,7 @@ public class BallManager {
          * }
          */
 
-        Pose2d start = futureEvents[lowestEvents & 15].getPoseGoingTo();
+        Pose2d start = commandGroup.getCurr().getPoseGoingTo();
 
         double firstBallX = balls[quickestTwoBall[0]].getX();
         double firstBallY = balls[quickestTwoBall[0]].getY();
@@ -317,13 +309,11 @@ public class BallManager {
 
         CommandBase shoot = new Shoot(m_shooter, m_magazine, m_chassis, m_limelight);
 
-        SequentialCommandGroup sequentialCommandGroup = new SequentialCommandGroup(
-                new ParallelDeadlineGroup(goToBalls, deployAndSpintake),
-                goToShoot,
-                shoot);
+        commandGroup.addCommand(new Event(secondBall, new ParallelDeadlineGroup(goToBalls, deployAndSpintake), EventType.GOING_TO_TWO_BALLS));
+        commandGroup.addCommand(new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, goToShoot, EventType.GOING_TO_SHOOT));
+        commandGroup.addCommand(new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, shoot, EventType.SHOOTING));
 
-        commandGroup.addCommand(sequentialCommandGroup);
-        futureEvents[highestEvents++ & 15] = new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, EventType.DOING_CIRCUIT);
+        state = ADD_BALLS;
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
