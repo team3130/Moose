@@ -83,6 +83,6 @@ public class PathGeneration {
     }
 
     public Trajectory getPathToBalls(Pose2d startPose, Pose2d ball1, Pose2d ball2) {
-        return TrajectoryGenerator.generateTrajectory(List.of(startPose, ball1, ball2), m_chooser.getConfig());
+        return TrajectoryGenerator.generateTrajectory(startPose, List.of(ball1.getTranslation(), ball2.getTranslation()), getShootPath(ball2).getInitialPose(), m_chooser.getConfig());
     }
 }

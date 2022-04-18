@@ -1,6 +1,7 @@
 package frc.robot.SupportingClassess;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotMap;
 
 public class Ball {
@@ -52,5 +53,9 @@ public class Ball {
 
     public boolean equals(double[] pose) {
         return Math.sqrt(Math.pow(this.pose[0] - pose[0], 2) + Math.pow(this.pose[1] - pose[1], 2)) <= RobotMap.ballPositionError;
+    }
+
+    public Pose2d getPose2D() {
+        return new Pose2d(pose[0], pose[1], new Rotation2d(0));
     }
 }
