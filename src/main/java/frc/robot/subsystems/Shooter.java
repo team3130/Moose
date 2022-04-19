@@ -194,7 +194,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
      * Runs indexer at indexerSetSpeed
      */
     public void feedIndexer() {
-        setIndexerPercent(indexerSetSpeed);
+        if (m_indexer.getMotorOutputPercent() != indexerSetSpeed) {
+            setIndexerPercent(indexerSetSpeed);
+        }
     }
 
     public boolean canShoot() {
@@ -203,10 +205,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public boolean canShootSetFlywheel(double point) {
         return Math.abs(getRPM() - point) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
-    }
-
-    public void feedHoodWheel() {
-        setHoodWheelTopSpeed(hoodWheelSetSpeed);
     }
 
     public WheelSpeedCalculations getShooterCurve(){

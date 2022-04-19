@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
@@ -55,7 +52,9 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     }
 
     public void feedCenter() {
-        m_magazineCenter.set(centerSpeed);
+        if (m_magazineCenter.getMotorOutputPercent() != centerSpeed) {
+            m_magazineCenter.set(centerSpeed);
+        }
     }
 
     public void updateSpeeds(double center, double side) {
@@ -84,8 +83,12 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
 
 
     public void feedSides() {
-        m_magazineLeft.set(sideSpeed);
-        m_magazineRight.set(sideSpeed);
+        if (m_magazineLeft.getMotorOutputPercent() != sideSpeed) {
+            m_magazineLeft.set(sideSpeed);
+        }
+        if (m_magazineRight.getMotorOutputPercent() != sideSpeed) {
+            m_magazineRight.set(sideSpeed);
+        }
     }
 }
 
