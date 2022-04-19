@@ -20,8 +20,7 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public void initialize() {
-        m_Climber.automateClimber(); // sorry caleb we tried hehe
-        m_climber_motor_follower.set(ControlMode.MotionMagic, 0);
+        m_Climber.zero();
     }
 
     /**
@@ -30,7 +29,9 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public void execute() {
-        check if hit limit swtich
+        if (m_Climber.broke()) {
+            m_Climber.setSpeed(0);
+        }
     }
 
     /**

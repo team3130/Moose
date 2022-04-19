@@ -20,6 +20,8 @@ public class Climber extends SubsystemBase {
     private WPI_TalonFX m_climber_motor_follower;
     private Solenoid m_solenoid;
 
+    private double ClimberOffset = 0;
+
     private DifferentialDrive drive;
 
     //Create and define all standard data types needed
@@ -41,6 +43,12 @@ public class Climber extends SubsystemBase {
 
     public void setSpeed(double speed) {
         m_climber_motor.set(speed);
+        m_climber_motor_follower.set(speed);
+    }
+
+    public void zero() {
+        m_climber_motor.set(ControlMode.PercentOutput, -0.5);
+        m_climber_motor_follower.set(ControlMode.PercentOutput, -0.5);
     }
 
     public boolean isDeployed() {
@@ -63,6 +71,14 @@ public class Climber extends SubsystemBase {
     public void automateClimber() {
         m_climber_motor.set(ControlMode.MotionMagic, 100069);
         m_climber_motor_follower.set(ControlMode.MotionMagic, 100069);
+    }
+
+    public boolean broke() {
+        return m_climber_motor.isFwdLimitSwitchClosed() != 0;
+    }
+
+    public void resetEncoders() {
+        ClimberOffset = m_climber_motor.getSelectedSensorPosition();
     }
 }
 
