@@ -94,6 +94,12 @@ public class RobotMap {
     public static double kHoodD = 0;
     public static double kHoodV = 0;
 
+
+    public static double kClimberP = 0.3;
+    public static double kClimberI = 0;
+    public static double kClimberD = 0;
+    public static double kClimberS = 0;
+
     /**
      * Limelight
      */
