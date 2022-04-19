@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_hoodWheel.follow(m_flywheel);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
-
+        breakbeam = new DigitalInput(1);
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
@@ -74,6 +74,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         shooterCurve = wheelSpeedCalculations;
 
         m_limelight = limelight;
+    }
+
+    public boolean hasBall() {
+        return breakbeam.get();
     }
 
     public double getRawSpeed() {
