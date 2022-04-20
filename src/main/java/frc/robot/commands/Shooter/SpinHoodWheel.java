@@ -25,7 +25,6 @@ public class SpinHoodWheel extends CommandBase {
     public void initialize() {
         m_shooter.updatePID();
         m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
-        m_shooter.feedHoodWheel();
         timer.reset();
     }
 
