@@ -29,8 +29,8 @@ public class QuegelCommandGroup extends CommandGroupBase {
 
     // command group stuff
     protected final Event[] commands;
-    protected byte last = 0;
-    protected byte first = 0;
+    protected byte back = 0;
+    protected byte front = 0;
 
     protected boolean executing = false;
 
@@ -67,7 +67,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
     public void initialize() {
         timeSinceReset.start();
 
-        commands[first & 15].getCmd().initialize();
+        commands[front & 15].getCmd().initialize();
     }
 
     /**
@@ -76,10 +76,10 @@ public class QuegelCommandGroup extends CommandGroupBase {
      */
     @Override
     public void execute() {
-        if (last != first) {
-            Command cmd = commands[first & 15].getCmd();
+        if (back != front) {
+            Command cmd = commands[front & 15].getCmd();
             if (!executing) {
-                if (commands[first & 15].getType().equals(EventType.SHOOTING)) {
+                if (commands[front & 15].getType().equals(EventType.SHOOTING)) {
                     ball_manager.generatePath();
                 }
                 cmd.initialize();
@@ -87,7 +87,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
             }
             cmd.execute();
             if (cmd.isFinished()) {
-                commands[first++ & 15].getCmd().end(false);
+                commands[front++ & 15].getCmd().end(false);
                 ball_manager.generatePath();
                 executing = false;
             }
@@ -164,11 +164,11 @@ public class QuegelCommandGroup extends CommandGroupBase {
     }
 
     public void addCommand(Pose2d endPoint, Command toAdd, EventType type) {
-        commands[last++ & 15] = new Event(endPoint, toAdd, type);
+        commands[back++ & 15] = new Event(endPoint, toAdd, type);
     }
 
     public void addCommand(Event event) {
-        commands[last++ & 15] = event;
+        commands[back++ & 15] = event;
     }
 
     public void setBallManager(BallManager ballManager) {
@@ -176,6 +176,6 @@ public class QuegelCommandGroup extends CommandGroupBase {
     }
 
     public Event getCurr() {
-        return commands[first & 15];
+        return commands[front & 15];
     }
 }
