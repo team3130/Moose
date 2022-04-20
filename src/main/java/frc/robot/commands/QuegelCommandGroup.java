@@ -29,10 +29,10 @@ public class QuegelCommandGroup extends CommandGroupBase {
 
     // command group stuff
     protected final Event[] commands;
-    protected char highest = 0;
-    protected char lowest = 0;
+    protected byte last = 0;
+    protected byte first = 0;
 
-    protected boolean ranOut = true;
+    protected boolean executing = false;
 
     /**
      * Quegle Command group is a sequential command group that uses a really fast queue
@@ -67,7 +67,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
     public void initialize() {
         timeSinceReset.start();
 
-        commands[lowest & 15].getCmd().initialize();
+        commands[first & 15].getCmd().initialize();
     }
 
     /**
@@ -76,24 +76,25 @@ public class QuegelCommandGroup extends CommandGroupBase {
      */
     @Override
     public void execute() {
-        if (highest != lowest) {
-            Command cmd = commands[lowest & 15].getCmd();
-            if (ranOut) {
-                if (commands[lowest & 15].getType().equals(EventType.SHOOTING)) {
+        if (last != first) {
+            Command cmd = commands[first & 15].getCmd();
+            if (!executing) {
+                if (commands[first & 15].getType().equals(EventType.SHOOTING)) {
                     ball_manager.generatePath();
                 }
                 cmd.initialize();
+                executing = true;
             }
             cmd.execute();
             if (cmd.isFinished()) {
-                commands[lowest++ & 15].getCmd().end(false);
+                commands[first++ & 15].getCmd().end(false);
                 ball_manager.generatePath();
-                ranOut = true;
+                executing = false;
             }
         }
         else {
             lookAround();
-            ranOut = true;
+            executing = false;
         }
     }
 
@@ -158,16 +159,16 @@ public class QuegelCommandGroup extends CommandGroupBase {
     @Override
     public void addCommands(Command... commands) {
         for (Command toAdd : commands) {
-            addCommand(toAdd, new Pose2d(0, 0, new Rotation2d(0)), EventType.WHAT_THE_FUCK);
+            addCommand(new Pose2d(0, 0, new Rotation2d(0)), toAdd, EventType.WHAT_THE_FUCK);
         }
     }
 
-    public void addCommand(Command toAdd, Pose2d endPoint, EventType type) {
-        commands[highest++ & 15] = new Event(endPoint, toAdd, type);
+    public void addCommand(Pose2d endPoint, Command toAdd, EventType type) {
+        commands[last++ & 15] = new Event(endPoint, toAdd, type);
     }
 
     public void addCommand(Event event) {
-        commands[highest++ & 15] = event;
+        commands[last++ & 15] = event;
     }
 
     public void setBallManager(BallManager ballManager) {
@@ -175,6 +176,6 @@ public class QuegelCommandGroup extends CommandGroupBase {
     }
 
     public Event getCurr() {
-        return commands[lowest & 15];
+        return commands[first & 15];
     }
 }
