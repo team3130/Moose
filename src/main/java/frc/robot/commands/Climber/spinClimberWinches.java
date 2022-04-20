@@ -62,6 +62,6 @@ public class spinClimberWinches extends CommandBase {
     @Override
     public void end(boolean interrupted) {
        // m_climber.setSpeed(0);
-        m_climber.setSpeed(0);
+        m_climber.setSpeedLeft(0);
     }
 }

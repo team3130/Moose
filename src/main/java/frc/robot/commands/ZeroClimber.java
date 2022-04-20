@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.ExampleSubsystem;
 
 public class ZeroClimber extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Climber m_Climber;
+    private boolean BrokeRight = false;
+    private boolean BrokeLeft = false;
 
     public ZeroClimber(Climber subsystem) {
         //mapping to object passed through parameter
@@ -29,8 +29,16 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_Climber.broke()) {
-            m_Climber.setSpeed(0);
+        if (m_Climber.brokeLeft()) {
+            m_Climber.setSpeedLeft(0);
+            m_Climber.resetEncodersLeft();
+            BrokeLeft = true;
+        }
+
+        if (m_Climber.brokeRight()) {
+            m_Climber.setSpeedRight(0);
+            m_Climber.resetEncodersRight();
+            BrokeRight = true;
         }
     }
 
@@ -50,8 +58,7 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        return BrokeLeft && BrokeRight;
     }
 
     /**
@@ -64,6 +71,7 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_Climber.setSpeedLeft(0);
+        m_Climber.setSpeedRight(0);
     }
 }

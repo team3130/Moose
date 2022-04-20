@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -16,8 +14,8 @@ public class Climber extends SubsystemBase {
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
     //Create necessary objects
-    private WPI_TalonFX m_climber_motor;
-    private WPI_TalonFX m_climber_motor_follower;
+    private WPI_TalonFX m_left_motor;
+    private WPI_TalonFX m_right_motor;
     private Solenoid m_solenoid;
 
     private double ClimberOffset = 0;
@@ -26,29 +24,32 @@ public class Climber extends SubsystemBase {
 
     //Create and define all standard data types needed
     public Climber() {
-        m_climber_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
-        m_climber_motor_follower = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
+        m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
+        m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
 
-        m_climber_motor_follower.setInverted(true);
-        m_climber_motor.setInverted(true);
+        m_right_motor.setInverted(true);
+        m_left_motor.setInverted(true);
        // m_climber_motor_follower.follow(m_climber_motor);
 
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);
 
-        drive = new DifferentialDrive(m_climber_motor, m_climber_motor_follower);
+        drive = new DifferentialDrive(m_left_motor, m_right_motor);
 
-        Utils.configPIDF(m_climber_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
-        Utils.configPIDF(m_climber_motor_follower, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
+        Utils.configPIDF(m_left_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
+        Utils.configPIDF(m_right_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
     }
 
-    public void setSpeed(double speed) {
-        m_climber_motor.set(speed);
-        m_climber_motor_follower.set(speed);
+    public void setSpeedLeft(double speed) {
+        m_left_motor.set(speed);
+    }
+
+    public void setSpeedRight(double speed) {
+        m_right_motor.set(speed);
     }
 
     public void zero() {
-        m_climber_motor.set(ControlMode.PercentOutput, -0.5);
-        m_climber_motor_follower.set(ControlMode.PercentOutput, -0.5);
+        m_left_motor.set(ControlMode.PercentOutput, -0.5);
+        m_right_motor.set(ControlMode.PercentOutput, -0.5);
     }
 
     public boolean isDeployed() {
@@ -64,21 +65,29 @@ public class Climber extends SubsystemBase {
     }
 
     public void configRampRate(double rampSeconds){
-        m_climber_motor.configOpenloopRamp(rampSeconds);
-        m_climber_motor_follower.configOpenloopRamp(rampSeconds);
+        m_left_motor.configOpenloopRamp(rampSeconds);
+        m_right_motor.configOpenloopRamp(rampSeconds);
     }
 
     public void automateClimber() {
-        m_climber_motor.set(ControlMode.MotionMagic, 100069);
-        m_climber_motor_follower.set(ControlMode.MotionMagic, 100069);
+        m_left_motor.set(ControlMode.MotionMagic, 100069);
+        m_right_motor.set(ControlMode.MotionMagic, 100069);
     }
 
-    public boolean broke() {
-        return m_climber_motor.isFwdLimitSwitchClosed() != 0;
+    public boolean brokeLeft() {
+        return m_left_motor.isFwdLimitSwitchClosed() != 0;
     }
 
-    public void resetEncoders() {
-        ClimberOffset = m_climber_motor.getSelectedSensorPosition();
+    public boolean brokeRight() {
+        return m_right_motor.isFwdLimitSwitchClosed() != 0;
+    }
+
+    public void resetEncodersLeft() {
+        m_left_motor.setSelectedSensorPosition(0);
+    }
+
+    public void resetEncodersRight() {
+        m_right_motor.setSelectedSensorPosition(0);
     }
 }
 

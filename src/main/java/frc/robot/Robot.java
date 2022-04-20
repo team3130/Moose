@@ -14,6 +14,7 @@ import frc.robot.SupportingClassess.Chooser;
 import frc.robot.commands.Chassis.AutonDrive;
 import frc.robot.commands.Shooter.AutonShoot;
 import frc.robot.commands.Shooter.Shoot;
+import frc.robot.commands.ZeroClimber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -114,6 +115,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
     m_robotContainer.teleopInit();
     m_scheduler.cancelAll();
+    m_scheduler.schedule(new ZeroClimber(m_robotContainer.getClimber()));
   }
 
   /** This function is called periodically during operator control. */
