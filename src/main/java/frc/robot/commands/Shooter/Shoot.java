@@ -17,11 +17,17 @@ public class Shoot extends CommandBase {
     private WheelSpeedCalculations shooterCurve;
     private Chassis m_chassis;
 
-    private Timer timerShoot;
-    private double timeShoot = 2;
+    private final Timer timerShoot;
+    private final double timeShoot = 2;
 
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
+
+    private final Timer timerIndexer = new Timer();
+    private final double timeIndexer = 0.1;
+
+    private final Timer timerMagazine = new Timer();
+    private final double timeMagazine = 0.1;
 
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
@@ -60,6 +66,10 @@ public class Shoot extends CommandBase {
 
         timerSpin.reset();
         timerSpin.start();
+
+        timerIndexer.reset();
+
+        timerMagazine.reset();
     }
 
     /**
@@ -75,15 +85,33 @@ public class Shoot extends CommandBase {
                 m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(x));
             }
         }
-       if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-            if (!m_shooter.hasBall()) {
-                m_shooter.setIndexerPercent(0);
-                m_magazine.setCenterSpeed(0.6);
-                m_magazine.setSideSpeeds(0.4);
+        if (limelight.hasTrack() ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
+            if (m_shooter.hasBall()) {
+                if (timerMagazine.hasElapsed(timeMagazine)) {
+                    timerIndexer.start();
+
+                    if (timerIndexer.hasElapsed(timeIndexer)) {
+                        m_shooter.setIndexerPercent(0.5);
+                        m_magazine.setCenterSpeed(0);
+                        m_magazine.setSideSpeeds(0);
+                    }
+                } else {
+                    m_shooter.setIndexerPercent(0.5);
+                    m_magazine.setCenterSpeed(0);
+                    m_magazine.setSideSpeeds(0);
+                }
             } else {
-                m_shooter.setIndexerPercent(0.5);
-                m_magazine.setCenterSpeed(0);
-                m_magazine.setSideSpeeds(0);
+                m_shooter.setIndexerPercent(0);
+
+                timerMagazine.start();
+
+                if (m_magazine.hasBall() && timerMagazine.hasElapsed(timeMagazine)) {
+                    m_magazine.setCenterSpeed(0.6);
+                    m_magazine.setSideSpeeds(0.4);
+                } else {
+                    m_magazine.setCenterSpeed(0);
+                    m_magazine.setSideSpeeds(0);
+                }
             }
         }
     }
@@ -122,5 +150,7 @@ public class Shoot extends CommandBase {
         m_chassis.configRampRate(0);
         timerShoot.stop();
         timerSpin.stop();
+        timerMagazine.stop();
+        timerIndexer.stop();
     }
 }
