@@ -8,12 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
-import frc.robot.commands.Chassis.AutonDrive;
-import frc.robot.commands.Shooter.AutonShoot;
-import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.ZeroClimber;
 
 /**
@@ -28,7 +24,6 @@ public class Robot extends TimedRobot {
   private final SendableChooser<AutonCommand> m_autonChooser = new SendableChooser<>();
 
   private final SendableChooser<String> m_chooser_driver = new SendableChooser<>();
-  private final SendableChooser<String> m_chooser_weapons = new SendableChooser<>();
 
   private RobotContainer m_robotContainer;
   private Chooser m_chooser;
@@ -46,11 +41,7 @@ public class Robot extends TimedRobot {
     m_chooser_driver.addOption("Maddie", "Maddie");
     m_chooser_driver.setDefaultOption("Cody", "Cody");
     SmartDashboard.putData("Driver", m_chooser_driver);
-    // weapon options
-    m_chooser_weapons.setDefaultOption("Ben", "Ben");
-    m_chooser_weapons.addOption("Parker", "Parker");
-    m_chooser_weapons.addOption("Test", "Test");
-    SmartDashboard.putData("Weapons", m_chooser_weapons);
+
     m_robotContainer = new RobotContainer(m_autonChooser);
     m_chooser = m_robotContainer.getChooser();
 //    m_chooser.addAllCommands();
@@ -112,7 +103,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+    m_robotContainer.defineButtonBindings(m_chooser_driver);
     m_robotContainer.teleopInit();
     m_scheduler.cancelAll();
     m_scheduler.schedule(new ZeroClimber(m_robotContainer.getClimber()));
@@ -140,7 +131,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+    m_robotContainer.defineButtonBindings(m_chooser_driver);
   }
 
   /** This function is called periodically during test mode. */
@@ -149,7 +140,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled */
   public void simulationInit() {
-    m_robotContainer.defineButtonBindings(m_chooser_driver, m_chooser_weapons);
+    m_robotContainer.defineButtonBindings(m_chooser_driver);
   }
 
   /** This Function is called periodically in simulations such as glass */
