@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.GeneralUtils;
@@ -18,6 +19,8 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
     private double centerSpeed = 0.6;
     private double sideSpeed = 0.4;
 
+    private DigitalInput breakbeamMag;
+
     //Create and define all standard data types needed
     public Magazine() {
         m_magazineCenter = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_CENTER_MOTOR);
@@ -28,6 +31,12 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
         m_magazineCenter.setInverted(false);
         m_magazineLeft.setInverted(true);
         m_magazineRight.setInverted(false);
+
+        breakbeamMag = new DigitalInput(1);
+    }
+
+    public boolean hasNards() {
+        return breakbeamMag.get();
     }
 
 

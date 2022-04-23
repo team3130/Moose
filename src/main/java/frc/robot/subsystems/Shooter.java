@@ -66,7 +66,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_hoodWheel.follow(m_flywheel);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
-        breakbeam = new DigitalInput(1);
+        breakbeam = new DigitalInput(0);
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
@@ -76,7 +76,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_limelight = limelight;
     }
 
-    public boolean hasBall() {
+    public boolean hasNards() {
         return breakbeam.get();
     }
 

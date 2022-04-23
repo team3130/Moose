@@ -22,6 +22,9 @@ public class Shoot extends CommandBase {
 
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
+    private boolean twoNards; // 1 is flase 2 blasl ture - Kalleb Gwilleah Quegle (ignore this)
+    private boolean ballLeftIndexer; //if a ball left the shooter indexer
+
 
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
@@ -55,11 +58,10 @@ public class Shoot extends CommandBase {
         m_chassis.setSpinnySetPoint(angle);
         m_chassis.resetPIDLoop();
 
-        timerShoot.reset();
-        timerShoot.start();
+        timerSpin.reset(); // caleb think this isn't important but can't remember why
+        timerSpin.start(); // idk just keep it?
 
-        timerSpin.reset();
-        timerSpin.start();
+        twoNards = m_magazine.hasNards() && m_shooter.hasNards();
     }
 
     /**
@@ -76,14 +78,22 @@ public class Shoot extends CommandBase {
             }
         }
        if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-            if (!m_shooter.hasBall()) {
-                m_shooter.setIndexerPercent(0);
-                m_magazine.setCenterSpeed(0.6);
-                m_magazine.setSideSpeeds(0.4);
+           if (ballLeftIndexer && m_shooter.hasNards() && m_magazine.hasNards() && twoNards) {
+               m_shooter.setIndexerPercent(0);
+               m_magazine.setCenterSpeed(0.6);
+               m_magazine.setSideSpeeds(0.4);
+           }
+           else if (m_shooter.hasNards()) {
+               m_shooter.setIndexerPercent(0.5);
+               m_magazine.setCenterSpeed(0);
+               m_magazine.setSideSpeeds(0);
             } else {
-                m_shooter.setIndexerPercent(0.5);
-                m_magazine.setCenterSpeed(0);
-                m_magazine.setSideSpeeds(0);
+                ballLeftIndexer = true;
+                if (m_magazine.hasNards() && twoNards) {
+                   m_shooter.setIndexerPercent(0);
+                   m_magazine.setCenterSpeed(0.6);
+                   m_magazine.setSideSpeeds(0.4);
+                }
             }
         }
     }
@@ -104,7 +114,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return timerShoot.hasElapsed(timeShoot);
+        return !m_shooter.hasNards() && !m_magazine.hasNards();
     }
 
     /**
@@ -120,7 +130,5 @@ public class Shoot extends CommandBase {
         m_shooter.stopAll();
         m_magazine.stopAll();
         m_chassis.configRampRate(0);
-        timerShoot.stop();
-        timerSpin.stop();
     }
 }
