@@ -27,6 +27,7 @@ import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.sensors.Navx;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class Chassis extends SubsystemBase implements GeneralUtils {
 
@@ -60,6 +61,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     private final PIDController m_spinnyPID;
     private final PIDController m_LaterallPID;
+
+    private final Consumer<Double[]> circleFixer;
+    private boolean clockwise = false;
 
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
@@ -151,6 +155,14 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_LaterallPID = new PIDController(RobotMap.ChassisLateralP, RobotMap.ChassisLateralI, RobotMap.ChassisLateralD);
 
         tuneTolerance();
+
+        // if the angle passed in is greater than 180, flip it and put things in terms of negatives
+        circleFixer = (Double[] angle) -> {
+            if (angle[0] > 180) {
+                angle[0] -= 360;
+                clockwise = true;
+            }
+        };
     }
 
     public void driveTank(double moveL, double moveR, boolean squaredInputs) {
@@ -355,7 +367,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public double getAngle() {
         if (Navx.getNavxPresent()) {
-            return Math.IEEEremainder(Navx.getAngle(), 360);
+            return Navx.getAngle() % 360;
         } else {
             return 0;
         }
@@ -496,6 +508,13 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         driveArcade(0, -m_spinnyPID.calculate(angle), false);
     }
 
+    public double getSpinnyAngle() {
+        if (clockwise) {
+            return getAngle() - 360;
+        }
+        return getAngle();
+    }
+
     public void faceTarget(double angle, double translationPos) {
         driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
     }
@@ -506,7 +525,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     public void setSpinnySetPoint(double setpoint) {
         System.out.println("Set point: " + setpoint);
-        m_spinnyPID.setSetpoint(setpoint);
+        Double[] angle = new Double[] {setpoint};
+        circleFixer.accept(angle);
+        m_spinnyPID.setSetpoint(angle[0]);
     }
 
     public void setLateralSetPoint(double setpoint) {

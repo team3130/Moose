@@ -107,6 +107,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putBoolean("Can Shoot?", canShootSetFlywheel(getSpeedFromShuffleboard()));
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
         // pidFlywheel.setPID(P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD));
+//        SmartDashboard.putBoolean("break beam", breakbeam.get());
     }
 
     public void setIndexerPercent(double percent){
