@@ -20,7 +20,7 @@ import frc.robot.utils.Utils;
 
 public class Shooter extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_flywheel;
-    private WPI_TalonFX m_hoodWheel;
+    private WPI_TalonFX m_flywheelFollower;
     private WPI_TalonSRX m_indexer;
 
     private Limelight m_limelight;
@@ -53,17 +53,17 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
         
-        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_HOOD_MOTOR);
+        m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_HOOD_MOTOR);
 
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);
         m_flywheel.enableVoltageCompensation(true);
 
         // restricting voltage for the hood wheel
-        m_hoodWheel.configVoltageCompSaturation(9);
-        m_hoodWheel.enableVoltageCompensation(true);
+        m_flywheelFollower.configVoltageCompSaturation(9);
+        m_flywheelFollower.enableVoltageCompensation(true);
 
-        m_hoodWheel.follow(m_flywheel);
+        m_flywheelFollower.follow(m_flywheel);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
         breakbeam = new DigitalInput(0);
@@ -89,7 +89,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public double getRPMHoodWheel() {
-        return Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) m_hoodWheel.getSelectedSensorVelocity());
+        return Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) m_flywheelFollower.getSelectedSensorVelocity());
     }
 
     public double getSpeedFromShuffleboard() {
@@ -149,11 +149,11 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
 
     public void setHoodWheelTopSpeed(double rpm) {
-        m_hoodWheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
+        m_flywheelFollower.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
     }
 
     public void spinHoodWheel() {
-        m_hoodWheel.set(ControlMode.PercentOutput, 0.3);
+        m_flywheelFollower.set(ControlMode.PercentOutput, 0.3);
     }
 
     /**

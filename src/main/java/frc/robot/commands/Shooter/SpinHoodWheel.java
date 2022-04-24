@@ -2,8 +2,6 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.sensors.vision.Limelight;
-import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class SpinHoodWheel extends CommandBase {
@@ -24,7 +22,6 @@ public class SpinHoodWheel extends CommandBase {
     @Override
     public void initialize() {
         m_shooter.updatePID();
-        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
         timer.reset();
     }
 

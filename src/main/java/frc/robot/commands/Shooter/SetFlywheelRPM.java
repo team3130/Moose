@@ -31,7 +31,6 @@ public class SetFlywheelRPM extends CommandBase {
     public void initialize() {
         m_shooter.updatePID();
 
-        m_shooter.setHoodWheelTopSpeed(m_shooter.getHoodWheelSpeedFromShuffleboard());
         m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
 
         m_magazine.setCenterSpeed(0.3);

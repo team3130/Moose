@@ -6,7 +6,6 @@ import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class BenShoot extends CommandBase {
