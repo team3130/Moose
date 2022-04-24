@@ -53,7 +53,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
         
-        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_HOOD_MOTOR);
+        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
 
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);

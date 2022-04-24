@@ -18,7 +18,6 @@ import frc.robot.commands.Shooter.BenShoot;
 import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
-import frc.robot.commands.ZeroClimber;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
@@ -115,7 +114,7 @@ public class RobotContainer {
             // new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new Spinzine(m_magazine, 1));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1)).whenReleased(new TimedSpintake(m_intake, m_magazine));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
-            new JoystickButton(m_driverGamepad, RobotMap. LST_BTN_X).whenHeld(new CoolerCommand(m_chassiscooler, m_chassis));
+            new JoystickButton(m_driverGamepad, RobotMap. LST_BTN_X).whenHeld(new SpinChassisToAngle(m_chassis, 180));
         }
 
         // weapons controls
@@ -134,7 +133,7 @@ public class RobotContainer {
 //            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(false));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(true));
-        new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(getClimber()));
+        // new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(getClimber()));
     }
 
     public void outputToShuffleBoard() {

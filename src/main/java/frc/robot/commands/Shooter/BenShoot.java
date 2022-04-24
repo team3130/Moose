@@ -6,7 +6,6 @@ import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 public class BenShoot extends CommandBase {
@@ -50,7 +49,7 @@ public class BenShoot extends CommandBase {
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         m_chassis.updatePIDValues();
-        double angle = m_chassis.getAngle() - limelight.getHeading().getDegrees();
+        double angle = m_chassis.getSpinnyAngle() - limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);
         m_chassis.resetPIDLoop();
 

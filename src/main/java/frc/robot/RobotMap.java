@@ -37,7 +37,7 @@ public class RobotMap {
     public static final int CAN_PNMMODULE = 8;
 
     // Shooter
-    public static final char CAN_SHOOTER_MOTOR = 7;
+    public static final int CAN_SHOOTER_MOTOR = 7;
     public static final int CAN_SHOOTER_UPPER_MOTOR = 13;
     public static final int CAN_HOOD_MOTOR = 14;
 
@@ -45,8 +45,8 @@ public class RobotMap {
     public static final int CAN_INTAKE_MOTOR = 10;
 
     // Climber
-    public static final int CAN_CLIMBER_LEFT = 16;
-    public static final int CAN_CLIMBER_RIGHT = 11;
+    public static final int CAN_CLIMBER_LEFT = 17;
+    public static final int CAN_CLIMBER_RIGHT = 29;
 
     /**
      * Intake
@@ -125,7 +125,7 @@ public class RobotMap {
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = Units.inchesToMeters(3.79);//taken 3/20/22 COMP
+    public static final double kWheelDiameter = Units.inchesToMeters(3.955);//taken 3/20/22 COMP
     public static double kMaxTurnThrottle = 0.8;
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static final double kDriveDeadband = 0.02;
@@ -152,17 +152,17 @@ public class RobotMap {
      * PID for Chassis
      */
             // solution found, cry harder
-    public static double LChassiskP = 3.3347; //Practice bot 3/10/22
+    public static double LChassiskP = 3.0591; //MURA
     public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 3.2113;
+    public static double RChassiskP = 2.8415;
     public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.68513;
-    public static double ChassiskV = 2.2654;
-    public static double ChassiskA = 0.49134;
+    public static double ChassiskS = 0.60256;
+    public static double ChassiskV = 1.9864;
+    public static double ChassiskA = 1.0177;
 
 
     /**
