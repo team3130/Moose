@@ -2,7 +2,6 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
@@ -31,7 +30,6 @@ public class ChooseFlywheelRPM extends CommandBase {
     public void initialize() {
         m_shooter.updatePID();
 
-        m_shooter.setHoodWheelTopSpeed(0);
         m_shooter.setFlywheelSpeed(setPoint);
         m_shooter.setIndexerPercent(1);
         

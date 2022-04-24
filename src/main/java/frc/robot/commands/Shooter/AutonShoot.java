@@ -35,7 +35,6 @@ public class AutonShoot extends CommandBase {
         m_shooter.updatePID();
 
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
-        m_shooter.setHoodWheelTopSpeed(0);
 
         timer.reset();
         timer.start();
