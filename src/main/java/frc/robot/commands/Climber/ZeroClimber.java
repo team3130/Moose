@@ -1,23 +1,18 @@
-package frc.robot.commands.Hood;
+package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.sensors.vision.Limelight;
-import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Climber;
 
-public class SpinHood extends CommandBase {
+public class ZeroClimber extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
-    private final Hood m_hood;
-    private final int direction;
-    private Limelight limelight;
-//    private WheelSpeedCalculations hoodCurve;
+    private final Climber m_Climber;
+    private boolean BrokeRight = false;
+    private boolean BrokeLeft = false;
 
-    public SpinHood(Hood subsystem, Limelight limelight, int direction) {
+    public ZeroClimber(Climber subsystem) {
         //mapping to object passed through parameter
-        m_hood = subsystem;
+        m_Climber = subsystem;
         m_requirements.add(subsystem);
-        this.direction = direction;
-        this.limelight = limelight;
-        /*hoodCurve = m_hood.getWinchCurve();*/
     }
 
     /**
@@ -25,18 +20,7 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public void initialize() {
-
-        double x = limelight.getDistanceToTarget();
-
-        if (!limelight.hasTrack()) {
-            m_hood.setSpeed(0.4 * direction);
-        }
-
-        else {
-            if (x >= 5) {
-//                m_hood.toPos(hoodCurve.getSpeed(x));
-            }
-        }
+        m_Climber.zero();
     }
 
     /**
@@ -45,7 +29,17 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public void execute() {
+        if (m_Climber.brokeLeft()) {
+            m_Climber.setSpeedLeft(0);
+            m_Climber.resetEncodersLeft();
+            BrokeLeft = true;
+        }
 
+        if (m_Climber.brokeRight()) {
+            m_Climber.setSpeedRight(0);
+            m_Climber.resetEncodersRight();
+            BrokeRight = true;
+        }
     }
 
     /**
@@ -64,7 +58,7 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return false;
+        return BrokeLeft && BrokeRight;
     }
 
     /**
@@ -77,6 +71,7 @@ public class SpinHood extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_hood.setSpeed(0);
+        m_Climber.setSpeedLeft(0);
+        m_Climber.setSpeedRight(0);
     }
 }

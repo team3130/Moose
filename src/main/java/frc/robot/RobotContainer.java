@@ -41,7 +41,6 @@ public class RobotContainer {
     Intake m_intake = new Intake();
     Magazine m_magazine = new Magazine();
     Climber m_climber = new Climber();
-    ChassisCooler m_chassiscooler = new ChassisCooler();
     protected Chooser m_chooser;
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
@@ -71,10 +70,6 @@ public class RobotContainer {
         return m_magazine;
     }
 
-    public ChassisCooler getChassisCooler() {
-        return m_chassiscooler;
-    }
-
     public Chooser getChooser() {
         return m_chooser;
     }
@@ -87,7 +82,6 @@ public class RobotContainer {
         m_chooser = new Chooser(autonChooser, this);
 
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
-        // m_chassiscooler.setDefaultCommand(new CoolerCommand(m_chassiscooler, m_chassis));
     }
 
     // Joysticks

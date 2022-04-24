@@ -36,7 +36,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     // so that they are initialized before the constructor is called.
 
     // Create necessary objects
-    private Navx m_navx = Navx.GetInstance();
+    private final Navx m_navx = Navx.GetInstance();
 
     private final WPI_TalonFX m_rightMotorFront;
     private final WPI_TalonFX m_rightMotorBack;
@@ -151,7 +151,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         circleFixer = (Double[] angle) -> {
             if (angle[0] - getAngle() > 180) {
                 angle[0] -= 360;
-                clockwise = true;
+                clockwise = false;
             }
             else {clockwise = false;}
         };

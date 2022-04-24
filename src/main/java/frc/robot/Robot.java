@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
-import frc.robot.commands.ZeroClimber;
+import frc.robot.commands.Climber.ZeroClimber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

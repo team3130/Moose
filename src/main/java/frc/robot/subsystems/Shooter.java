@@ -19,33 +19,31 @@ import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.utils.Utils;
 
 public class Shooter extends SubsystemBase implements GeneralUtils {
-    private WPI_TalonFX m_flywheel;
-    private WPI_TalonFX m_flywheelFollower;
-    private WPI_TalonSRX m_indexer;
+    private final WPI_TalonFX m_flywheel;
+    private final WPI_TalonFX m_flywheelFollower;
+    private final WPI_TalonSRX m_indexer;
 
-    private Limelight m_limelight;
+    private final Limelight m_limelight;
 
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
     private double hoodWheelSetSpeed = 0;
     private double indexerSetSpeed = 0.5; // default 50%
 
-    private DigitalInput breakbeam;
+    private final DigitalInput breakbeam;
 
-    private WheelSpeedCalculations shooterCurve;
+    private final WheelSpeedCalculations shooterCurve;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+    private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
-    private NetworkTableEntry sped = tab.add("Shooter Set RPM", flywheelSetSpeed).getEntry();
-    private NetworkTableEntry RPM = tab.add("Shooter Current RPM", 0).getEntry();
-    private NetworkTableEntry shooterVoltageOut = tab.add("Shooter Voltage", 0).getEntry();
+    private final NetworkTableEntry sped = tab.add("Shooter Set RPM", flywheelSetSpeed).getEntry();
+    private final NetworkTableEntry RPM = tab.add("Shooter Current RPM", 0).getEntry();
 
-    private NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
-    private NetworkTableEntry RPMHoodWheel = tab.add("Shooter Top Current RPM", 0).getEntry();
+    private final NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
 
-    private NetworkTableEntry P = tab.add("Top Flywheel P", RobotMap.kFlywheelP).getEntry();
-    private NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelI).getEntry();
-    private NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelD).getEntry();
-    private NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.flyWheelkV).getEntry();
+    private final NetworkTableEntry P = tab.add("Top Flywheel P", RobotMap.kFlywheelP).getEntry();
+    private final NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelI).getEntry();
+    private final NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelD).getEntry();
+    private final NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.flyWheelkV).getEntry();
 
 
     //Create and define all standard data types needed
@@ -53,7 +51,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
         m_flywheel.setInverted(false);
         
-        m_hoodWheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
+        m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
 
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);
@@ -145,15 +143,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     public void stopAll() {
         m_indexer.set(ControlMode.PercentOutput, 0);
         m_flywheel.set(ControlMode.PercentOutput, 0);
-    }
-
-
-    public void setHoodWheelTopSpeed(double rpm) {
-        m_flywheelFollower.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kTopShooterRPMToNativeUnitsScalar, rpm));
-    }
-
-    public void spinHoodWheel() {
-        m_flywheelFollower.set(ControlMode.PercentOutput, 0.3);
     }
 
     /**
