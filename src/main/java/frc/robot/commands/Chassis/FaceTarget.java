@@ -38,7 +38,7 @@ public class FaceTarget extends CommandBase {
 
     @Override
     public void execute() {
-        m_chassis.faceTarget(m_chassis.getAngle());
+        m_chassis.spinOutput();
     }
 
     @Override

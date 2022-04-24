@@ -496,8 +496,12 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         return sliderTurn.getDouble(10);
     }
 
-    public void faceTarget(double angle) {
+    public void spinOutput(double angle) {
         driveArcade(0, -m_spinnyPID.calculate(angle), false);
+    }
+
+    public void spinOutput() {
+        driveArcade(0, -m_spinnyPID.calculate(getSpinnyAngle()), false);
     }
 
     public double getSpinnyAngle() {
@@ -507,7 +511,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         return getAngle();
     }
 
-    public void faceTarget(double angle, double translationPos) {
+    public void spinOutput(double angle, double translationPos) {
         driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
     }
 

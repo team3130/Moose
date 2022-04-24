@@ -66,7 +66,7 @@ public class BenShoot extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.faceTarget(m_chassis.getAngle());
+        m_chassis.spinOutput(m_chassis.getAngle());
         if (limelight.hasTrack()) {
             double x = limelight.getDistanceToTarget();
             if (5 <= x) {
