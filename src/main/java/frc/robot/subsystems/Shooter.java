@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -52,6 +51,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel.setInverted(false);
         
         m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
+        m_flywheelFollower.setInverted(true);
 
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);
