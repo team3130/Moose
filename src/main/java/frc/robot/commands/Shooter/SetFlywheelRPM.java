@@ -13,6 +13,7 @@ public class SetFlywheelRPM extends CommandBase {
     private final Limelight m_limelight;
     private final double time = 2;
     private final Timer timer;
+    private final Timer PIDFTest;
 
     public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
         // mapping to object passed through parameter
@@ -22,6 +23,7 @@ public class SetFlywheelRPM extends CommandBase {
         m_requirements.add(magazine);
         this.m_limelight = m_limelight;
         timer = new Timer();
+        PIDFTest = new Timer();
     }
 
     /**
@@ -39,6 +41,9 @@ public class SetFlywheelRPM extends CommandBase {
 
         timer.reset();
         timer.start();
+
+        PIDFTest.reset();
+        PIDFTest.start();
     }
 
     /**
@@ -47,7 +52,11 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
+        m_shooter.setAccelTime(PIDFTest.get());
         if (m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard())) {
+
+            m_shooter.setAccelTime(PIDFTest.get());
+            PIDFTest.stop();
             m_shooter.setIndexerPercent(0.5);
             m_magazine.feedAll();
         }
@@ -69,7 +78,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-            return timer.get() >= time;
+            return false; //timer.get() >= time;
     }
 
     /**

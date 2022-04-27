@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private final Limelight m_limelight;
 
     private double flywheelSetSpeed = 3200; // default 3200 (3500 temp for Ben/Cody)
-    private double hoodWheelSetSpeed = 0;
+   // private double hoodWheelSetSpeed = 0;
     private double indexerSetSpeed = 0.5; // default 50%
 
     private final DigitalInput breakbeam;
@@ -35,14 +35,20 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
     private final NetworkTableEntry sped = tab.add("Shooter Set RPM", flywheelSetSpeed).getEntry();
+    private final NetworkTableEntry followRPM = tab.add("Follower RPM", 0).getEntry();
     private final NetworkTableEntry RPM = tab.add("Shooter Current RPM", 0).getEntry();
 
-    private final NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
+    //private final NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
 
     private final NetworkTableEntry P = tab.add("Top Flywheel P", RobotMap.kFlywheelP).getEntry();
     private final NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelI).getEntry();
     private final NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelD).getEntry();
     private final NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.flyWheelkV).getEntry();
+
+    private final NetworkTableEntry time = tab.add("Time until Speed", 0).getEntry();
+    private final NetworkTableEntry canShootManual = tab.add("Setpoint difference", 0).getEntry();
+
+    private double accelTime = 0;
 
 
     //Create and define all standard data types needed
@@ -74,6 +80,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_limelight = limelight;
     }
 
+    public void setAccelTime(double in){
+        accelTime = in;
+    }
     public boolean hasNards() {
         return breakbeam.get();
     }
@@ -86,7 +95,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
-    public double getRPMHoodWheel() {
+    public double getRPMFollowerWheel() {
         return Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) m_flywheelFollower.getSelectedSensorVelocity());
     }
 
@@ -94,12 +103,15 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return sped.getDouble(flywheelSetSpeed);
     }
 
-    public double getHoodWheelSpeedFromShuffleboard() {
+   /* public double getHoodWheelSpeedFromShuffleboard() {
         return spedHoodWheel.getDouble(hoodWheelSetSpeed);
-    }
+    }*/
 
     public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
+        followRPM.setNumber(getRPMFollowerWheel());
+        time.setNumber(accelTime);
+        canShootManual.setNumber( Math.abs(getRPM() - getSpeedFromShuffleboard()));
 //        RPMHoodWheel.setNumber(getRPMHoodWheel());
 //        shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
         SmartDashboard.putBoolean("Can Shoot?", canShootSetFlywheel(getSpeedFromShuffleboard()));
@@ -161,9 +173,9 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         flywheelSetSpeed = speed;
     }
 
-    public void setHoodWheelSetSpeed(double speed) {
+    /*public void setHoodWheelSetSpeed(double speed) {
         hoodWheelSetSpeed = speed;
-    }
+    }*/
 
     /**
      * Runs flywheel at flywheelSetSpeed
@@ -190,11 +202,12 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
+        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50;  //&& Math.abs(getRPMFollowerWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
     }
 
     public boolean canShootSetFlywheel(double point) {
-        return Math.abs(getRPM() - point) <= 50  && Math.abs(getRPMHoodWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
+        return Math.abs(getRPM() - point) <= 50;
+                //&& Math.abs(getRPMFollowerWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 50 is the range
     }
 
     public WheelSpeedCalculations getShooterCurve(){

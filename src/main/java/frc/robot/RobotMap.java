@@ -60,7 +60,7 @@ public class RobotMap {
     //
     public static final double kFalconTicksPerRevolution = 2048; // Checked 2/11
     public static final double kFlywheelGearRatio = 1.0;
-    public static final double kTopShooterGearRatio = (double) 1/2;
+    public static final double kTopShooterGearRatio = 1;
     public static final double kFlywheelRPMtoNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10.0 * 60.0))/kFlywheelGearRatio;
     public static final double kTopShooterRPMToNativeUnitsScalar = (RobotMap.kFalconTicksPerRevolution / (10 * 60)) / kTopShooterGearRatio;
 
@@ -71,15 +71,15 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
-    public static double kFlywheelP = 0.02;
+    public static double kFlywheelP = 0.0090; // 0.02;
     public static double kFlywheelI = 0;
-    public static double kFlywheelD = 0;
+    public static double kFlywheelD = 1.15; //0
 
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
-    public static double flyWheelkS = 0.5816;
-    public static double flyWheelkV = 0.0655;
-    public static double flyWheelkA = 0.0082804;
+    public static double flyWheelkS = 0 ;//0.5816;
+    public static double flyWheelkV = 0.070; //0.0655;
+    public static double flyWheelkA = 0; //0.0082804;
 
     public static double kFlywheelHoodP = 0.0007;
     public static double kFlywheelHoodI = 0.000000075;
