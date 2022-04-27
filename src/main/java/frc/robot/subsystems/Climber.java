@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
 import frc.robot.utils.Utils;
@@ -17,7 +20,8 @@ public class Climber extends SubsystemBase {
     private WPI_TalonFX m_left_motor;
     private WPI_TalonFX m_right_motor;
     private Solenoid m_solenoid;
-
+    private DigitalInput m_rightlimitswitch;
+    private DigitalInput m_leftlimitswitch;
     private double ClimberOffset = 0;
 
     private DifferentialDrive drive;
@@ -26,6 +30,8 @@ public class Climber extends SubsystemBase {
     public Climber() {
         m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
         m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
+        m_rightlimitswitch = new DigitalInput(RobotMap.CAN_RIGHT_LIMITSWITCH);
+        m_leftlimitswitch = new DigitalInput(RobotMap.CAN_LEFT_LIMITSWITCH);
 
         m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);
@@ -75,11 +81,11 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean brokeLeft() {
-        return m_left_motor.isFwdLimitSwitchClosed() != 0;
+        return m_leftlimitswitch.get();
     }
 
     public boolean brokeRight() {
-        return m_right_motor.isFwdLimitSwitchClosed() != 0;
+        return m_rightlimitswitch.get();
     }
 
     public void resetEncodersLeft() {
@@ -88,6 +94,10 @@ public class Climber extends SubsystemBase {
 
     public void resetEncodersRight() {
         m_right_motor.setSelectedSensorPosition(0);
+    }
+
+    public void outputToShuffleboard() {
+        SmartDashboard.putBoolean("limit switch right:", brokeRight());
     }
 }
 
