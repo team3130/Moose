@@ -1,5 +1,7 @@
 package frc.robot.SupportingClassess;
 
+import edu.wpi.first.math.util.Units;
+
 public class CoordinateTransform {
     // field coords (EVERYTHING IS IN INCHES CUZ IM CRINGE)
     private double xPos;
@@ -7,7 +9,7 @@ public class CoordinateTransform {
     private double zPos;
 
     // Camera and Field Specs
-    private static final double BALL_RADIUS = 4.75; // inches
+    private static final double BALL_RADIUS = Units.inchesToMeters(4.75); // Jerry fuck you
     private static final double CAMERA_X = 3280; // pixels
     private static final double CAMERA_Y = 2464; // pixels
     private static final double CAMERA_HORIZONTAL_FOV = 62.2; // degrees
@@ -18,10 +20,10 @@ public class CoordinateTransform {
     private static final double Y_CONSTANT = 2 * BALL_RADIUS; 
     private static final double Z_CONSTANT = BALL_RADIUS * Math.tan(Math.toRadians(90 - CAMERA_HORIZONTAL_FOV / 2)) * CAMERA_X;
     private static final double Z_CONSTANT2 = BALL_RADIUS * Math.tan(Math.toRadians(90 - CAMERA_VERTICAL_FOV / 2)) * CAMERA_Y; //This should be extremely close to the first one
-    private static final double BALL_SAC_PITCH = 0; // TODO: idk what this is
+    private static final double CAMERA_PITCH = 0; //TODO: get values
 
     public CoordinateTransform(int xCam, int yCam, double ballRad, double botYaw) {
-        double[] coords = rotation(dilation(xCam, yCam, ballRad), botYaw, BALL_SAC_PITCH);
+        double[] coords = rotation(dilation(xCam, yCam, ballRad), botYaw, CAMERA_PITCH);
         xPos = coords[0];
         yPos = coords[1];
         zPos = coords[2];
