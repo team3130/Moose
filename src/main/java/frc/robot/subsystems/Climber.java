@@ -54,4 +54,3 @@ public class Climber extends SubsystemBase {
         m_climber_motor_follower.configOpenloopRamp(rampSeconds);
     }
 }
-

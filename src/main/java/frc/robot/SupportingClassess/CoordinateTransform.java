@@ -3,7 +3,6 @@ package frc.robot.SupportingClassess;
 import edu.wpi.first.math.util.Units;
 
 public class CoordinateTransform {
-    // field coords (EVERYTHING IS IN INCHES CUZ IM CRINGE)
     private double xPos;
     private double yPos;
     private double zPos;
@@ -35,12 +34,11 @@ public class CoordinateTransform {
      * assume (0,0) is at the center of the camera image.
      */
     private static double[] dilation(double xCam, double yCam, double ballRad) {
-        double[] coords = {
+        return new double[]{
                 xCam * X_CONSTANT / ballRad,
                 yCam * Y_CONSTANT / ballRad,
                 Z_CONSTANT / ballRad,
         };
-        return coords;
     }
 
     /**
