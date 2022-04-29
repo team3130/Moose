@@ -197,12 +197,11 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50;  //&& Math.abs(getRPMFollowerWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 25 is the range
+        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50 && hasNards();
     }
 
     public boolean canShootSetFlywheel(double point) {
-        return Math.abs(getRPM() - point) <= 50;
-                //&& Math.abs(getRPMFollowerWheel() - getHoodWheelSpeedFromShuffleboard()) <= 50; // 50 is the range
+        return Math.abs(getRPM() - point) <= 50  && hasNards();
     }
 
     public WheelSpeedCalculations getShooterCurve(){
