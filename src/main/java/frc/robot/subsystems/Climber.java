@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.GeneralUtils;
 import frc.robot.utils.Utils;
 
-public class Climber extends SubsystemBase {
+public class Climber extends SubsystemBase implements GeneralUtils {
 
 // Any variables/fields used in the constructor must appear before the "INSTANCE" variable
 // so that they are initialized before the constructor is called.
@@ -21,8 +22,7 @@ public class Climber extends SubsystemBase {
     private WPI_TalonFX m_right_motor;
     private Solenoid m_solenoid;
     private DigitalInput m_rightlimitswitch;
-    private DigitalInput m_leftlimitswitch;
-    private double ClimberOffset = 0;
+//    private DigitalInput m_leftlimitswitch;
 
     private DifferentialDrive drive;
 
@@ -30,11 +30,14 @@ public class Climber extends SubsystemBase {
     public Climber() {
         m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
         m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
-        m_rightlimitswitch = new DigitalInput(RobotMap.CAN_RIGHT_LIMITSWITCH);
-        m_leftlimitswitch = new DigitalInput(RobotMap.CAN_LEFT_LIMITSWITCH);
+        m_rightlimitswitch = new DigitalInput(RobotMap.RIGHT_LIMITSWITCH);
+//        m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
 
         m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);
+
+        m_right_motor.setNeutralMode(NeutralMode.Brake);
+        m_left_motor.setNeutralMode(NeutralMode.Brake);
        // m_climber_motor_follower.follow(m_climber_motor);
 
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);
@@ -54,8 +57,8 @@ public class Climber extends SubsystemBase {
     }
 
     public void zero() {
-        m_left_motor.set(ControlMode.PercentOutput, -0.5);
-        m_right_motor.set(ControlMode.PercentOutput, -0.5);
+        m_left_motor.set(ControlMode.PercentOutput, -0.25);
+        m_right_motor.set(ControlMode.PercentOutput, -0.25);
     }
 
     public boolean isDeployed() {
@@ -81,11 +84,11 @@ public class Climber extends SubsystemBase {
     }
 
     public boolean brokeLeft() {
-        return m_leftlimitswitch.get();
+        return false;
     }
 
     public boolean brokeRight() {
-        return m_rightlimitswitch.get();
+        return !m_rightlimitswitch.get();
     }
 
     public void resetEncodersLeft() {
@@ -98,6 +101,16 @@ public class Climber extends SubsystemBase {
 
     public void outputToShuffleboard() {
         SmartDashboard.putBoolean("limit switch right:", brokeRight());
+    }
+
+    @Override
+    public void teleopInit() {
+
+    }
+
+    @Override
+    public void disable() {
+
     }
 }
 

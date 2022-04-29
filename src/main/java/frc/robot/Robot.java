@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
-import frc.robot.commands.Climber.ZeroClimber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -38,7 +37,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
     m_chooser_driver.addOption("Test", "Test");
-    m_chooser_driver.addOption("Maddie", "Maddie");
     m_chooser_driver.setDefaultOption("Cody", "Cody");
     SmartDashboard.putData("Driver", m_chooser_driver);
 
@@ -106,7 +104,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.defineButtonBindings(m_chooser_driver);
     m_robotContainer.teleopInit();
     m_scheduler.cancelAll();
-    m_scheduler.schedule(new ZeroClimber(m_robotContainer.getClimber()));
   }
 
   /** This function is called periodically during operator control. */

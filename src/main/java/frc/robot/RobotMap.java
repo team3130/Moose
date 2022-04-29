@@ -47,8 +47,8 @@ public class RobotMap {
     // Climber
     public static final int CAN_CLIMBER_LEFT = 17;
     public static final int CAN_CLIMBER_RIGHT = 29;
-    public static final int CAN_RIGHT_LIMITSWITCH = 2;
-    public static final int CAN_LEFT_LIMITSWITCH = 3;
+    public static final int RIGHT_LIMITSWITCH = 2;
+    public static final int LEFT_LIMITSWITCH = 1;
 
     /**
      * Intake
@@ -82,14 +82,6 @@ public class RobotMap {
     public static double flyWheelkS = 0 ;//0.5816;
     public static double flyWheelkV = 0.070; //0.0655;
     public static double flyWheelkA = 0; //0.0082804;
-
-    public static double kFlywheelHoodP = 0.0007;
-    public static double kFlywheelHoodI = 0.000000075;
-    public static double kFlywheelHoodD = 0;
-
-    public static double kTopShooterKS = 1.151;
-    public static double kTopShooterKV = 0.0775;
-    public static double kTopShooterKA = 4.9668E-06;
 
     public static double kHoodP = 0.125;
     public static double kHoodI = 0.0;
@@ -135,8 +127,8 @@ public class RobotMap {
     public static double kMaxRampRate = 0.7;
 
     public static double ChassisSpinKP = 0.013;
-    public static double ChassisSpinKI = 0.005;
-    public static double ChassisSpinKD = 0.0025;
+    public static double ChassisSpinKI = 0;
+    public static double ChassisSpinKD = 0.0053;
 
     public static double ChassisLateralP = 2;
     public static double ChassisLateralI = 0;
@@ -154,17 +146,17 @@ public class RobotMap {
      * PID for Chassis
      */
             // solution found, cry harder
-    public static double LChassiskP = 3.0591; //MURA
+    public static double LChassiskP = 2.7278; //MURA
     public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2.8415;
+    public static double RChassiskP = 2.6834;
     public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.60256;
-    public static double ChassiskV = 1.9864;
-    public static double ChassiskA = 1.0177;
+    public static double ChassiskS = 0.67321;
+    public static double ChassiskV = 1.924;
+    public static double ChassiskA = 0.60662;
 
 
     /**

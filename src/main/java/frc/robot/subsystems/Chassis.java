@@ -63,7 +63,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     private final PIDController m_LaterallPID;
 
     private final Consumer<Double[]> circleFixer;
-    private boolean clockwise = false;
 
     // Network table pid stuff
     private ShuffleboardTab tab = Shuffleboard.getTab("Chassis");
@@ -89,6 +88,10 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
+    private NetworkTableEntry Ps = tab.add("Chassis P",  RobotMap.ChassisSpinKP).getEntry();
+    private NetworkTableEntry Is = tab.add("Chassis I", RobotMap.ChassisSpinKI).getEntry();
+    private NetworkTableEntry Ds = tab.add("Chassis D", RobotMap.ChassisSpinKD).getEntry();
+
     // Create and define all standard data types needed
     public Chassis() {
         // Making the motors
@@ -102,7 +105,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_leftMotorFront.configFactoryDefault();
         m_rightMotorBack.configFactoryDefault();
         m_leftMotorBack.configFactoryDefault();
-
 
         m_rightMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
         m_leftMotorFront.configVoltageCompSaturation(RobotMap.kChassisMaxVoltage);
@@ -151,9 +153,10 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         circleFixer = (Double[] angle) -> {
             if (angle[0] - getAngle() > 180) {
                 angle[0] -= 360;
-                clockwise = false;
             }
-            else {clockwise = false;}
+            else if (angle[0] - getAngle() < -180) {
+                angle[0] += 360;
+            }
         };
     }
 
@@ -501,14 +504,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void spinOutput() {
-        driveArcade(0, -m_spinnyPID.calculate(getSpinnyAngle()), false);
-    }
-
-    public double getSpinnyAngle() {
-        if (clockwise) {
-            return getAngle() - 360;
-        }
-        return getAngle();
+        driveArcade(0, -m_spinnyPID.calculate(getAngle()), false);
     }
 
     public void spinOutput(double angle, double translationPos) {
@@ -531,9 +527,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void updatePIDValues() {
-        /*m_spinnyPID.setPID(Ps.getDouble(RobotMap.ChassisSpinKP), Is.getDouble(RobotMap.ChassisSpinKI), Ds.getDouble(RobotMap.ChassisSpinKD));
-        m_LaterallPID.setPID(Pl.getDouble(RobotMap.ChassisSpinKP), Il.getDouble(RobotMap.ChassisSpinKI), Dl.getDouble(RobotMap.ChassisSpinKD));
-    */}
+        m_spinnyPID.setPID(Ps.getDouble(RobotMap.ChassisSpinKP), Is.getDouble(RobotMap.ChassisSpinKI), Ds.getDouble(RobotMap.ChassisSpinKD));
+    }
 
     public void tuneTolerance() {
         m_spinnyPID.setTolerance(3.5, 0.02);

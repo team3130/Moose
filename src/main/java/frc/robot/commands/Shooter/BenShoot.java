@@ -29,8 +29,6 @@ public class BenShoot extends CommandBase {
         m_chassis = chassis;
         m_requirements.add(chassis);
 
-
-
         this.limelight = limelight;
 
         shooterCurve = m_shooter.getShooterCurve();
@@ -49,7 +47,7 @@ public class BenShoot extends CommandBase {
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         m_chassis.updatePIDValues();
-        double angle = m_chassis.getSpinnyAngle() - limelight.getHeading().getDegrees();
+        double angle = m_chassis.getAngle() - limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);
         m_chassis.resetPIDLoop();
 
@@ -109,7 +107,6 @@ public class BenShoot extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_shooter.stopAll();
-       // m_magazine.stopAll();
         m_chassis.configRampRate(0);
         timerShoot.stop();
         timerSpin.stop();

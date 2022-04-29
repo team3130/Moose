@@ -34,12 +34,22 @@ public class ZeroClimber extends CommandBase {
             m_Climber.resetEncodersLeft();
             BrokeLeft = true;
         }
+        else {
+            m_Climber.setSpeedLeft(-0.25);
+            BrokeLeft = false;
+        }
 
         if (m_Climber.brokeRight()) {
             m_Climber.setSpeedRight(0);
             m_Climber.resetEncodersRight();
             BrokeRight = true;
         }
+        else {
+            m_Climber.setSpeedRight(-0.25);
+            BrokeRight = false;
+        }
+
+        System.out.println("KHJSDHKhkjDFHKJDHSHJDSFHKJHKJDFS");
     }
 
     /**
@@ -58,7 +68,7 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return BrokeLeft && BrokeRight;
+        return BrokeRight;
     }
 
     /**

@@ -1,16 +1,17 @@
 package frc.robot.sensors;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 public class Navx {
     //Instance Handling
     private static Navx m_pInstance;
+
+    private double angle = 0d;
 
     public static Navx GetInstance() {
         if (m_pInstance == null) m_pInstance = new Navx();
@@ -48,7 +49,9 @@ public class Navx {
      * @return angle in degrees
      */
     public static double getAngle() {
-        if (m_bNavXPresent) return m_navX.getAngle() * (RobotMap.kNavxReversed ? -1.0 : 1.0);
+        if (m_bNavXPresent) {
+            return Math.IEEEremainder((m_navX.getAngle() + 360) * (RobotMap.kNavxReversed ? -1.0 : 1.0), 720);
+        }
         return -1;
     }
 

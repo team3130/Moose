@@ -6,8 +6,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
 import frc.robot.SupportingClassess.GeneralUtils;
-import frc.robot.commands.Chassis.*;
-import frc.robot.commands.Climber.ToggleClimber;
+import frc.robot.commands.Chassis.DefaultDrive;
+import frc.robot.commands.Chassis.FaceTarget;
+import frc.robot.commands.Chassis.Shift;
+import frc.robot.commands.Chassis.SpinChassisToAngle;
+import frc.robot.commands.Climber.ZeroClimber;
 import frc.robot.commands.Climber.spinClimberWinches;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.DeployAndSpintakeMagazineBack;
@@ -76,7 +79,7 @@ public class RobotContainer {
 
     public RobotContainer(SendableChooser<AutonCommand> autonChooser) {
         m_generalUtils = new ArrayList<>();
-        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_wheelSpeedCalculations));
+        m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_climber, m_wheelSpeedCalculations));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
         m_chooser = new Chooser(autonChooser, this);
@@ -96,7 +99,7 @@ public class RobotContainer {
 
         }
         else if (m_chooser_driver.getSelected().equals("Test")) {
-            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinChassisToAngle(m_chassis, 45));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinChassisToAngle(m_chassis, 180));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
             new TriggerButton(m_driverGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, 1));
@@ -119,11 +122,12 @@ public class RobotContainer {
 //            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RBUMPER).whenHeld(new ChooseFlywheelRPM(m_shooter, m_magazine, 3300));
 //            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LBUMPER).whenHeld(new ChooseFlywheelRPM(m_shooter, m_magazine, 3500));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
+        // new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
+        // new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new Spinzine(m_magazine, 1));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new DeployAndSpintakeMagazineBack(m_intake, m_magazine, 1));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
+        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenHeld(new ZeroClimber(m_climber));
 //            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_limelight));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(false));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(true));

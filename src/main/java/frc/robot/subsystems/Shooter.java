@@ -95,10 +95,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         return Util.scaleNativeUnitsToRpm(RobotMap.kFlywheelRPMtoNativeUnitsScalar, (long) getRawSpeed());
     }
 
-    public double getRPMFollowerWheel() {
-        return Util.scaleNativeUnitsToRpm(RobotMap.kTopShooterRPMToNativeUnitsScalar, (long) m_flywheelFollower.getSelectedSensorVelocity());
-    }
-
     public double getSpeedFromShuffleboard() {
         return sped.getDouble(flywheelSetSpeed);
     }
@@ -109,7 +105,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
-        followRPM.setNumber(getRPMFollowerWheel());
         time.setNumber(accelTime);
         canShootManual.setNumber( Math.abs(getRPM() - getSpeedFromShuffleboard()));
 //        RPMHoodWheel.setNumber(getRPMHoodWheel());
