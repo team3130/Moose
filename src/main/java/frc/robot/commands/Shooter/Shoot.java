@@ -83,25 +83,6 @@ public class Shoot extends CommandBase {
             timerShoot.stop();
             timerShoot.reset();
         }
-       if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-           if (ballLeftIndexer && m_shooter.hasNards() && m_magazine.hasNards() && twoNards) {
-               m_shooter.setIndexerPercent(0);
-               m_magazine.setCenterSpeed(0.6);
-               m_magazine.setSideSpeeds(0.4);
-           }
-           else if (m_shooter.hasNards()) {
-               m_shooter.setIndexerPercent(0.5);
-               m_magazine.setCenterSpeed(0);
-               m_magazine.setSideSpeeds(0);
-            } else {
-                ballLeftIndexer = true;
-                if (m_magazine.hasNards() && twoNards) {
-                   m_shooter.setIndexerPercent(0);
-                   m_magazine.setCenterSpeed(0.6);
-                   m_magazine.setSideSpeeds(0.4);
-                }
-            }
-        }
     }
 
 
