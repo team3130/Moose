@@ -46,17 +46,14 @@ public class CoordinateTransform {
      * Rotates the axis by @param botAngle radians
      */
     private static double[] rotation(double[] coords, double yaw, double pitch) {
-        double xPos = coords[0];
-        double yPos = coords[1];
-        double zPos = coords[2];
 
         // Correct for pitch
-        coords[1] = Math.cos(pitch) * yPos - Math.sin(pitch) * zPos;
-        coords[2] = Math.sin(pitch) * yPos + Math.cos(pitch) * zPos;
+        coords[1] = Math.cos(pitch) * coords[1] - Math.sin(pitch) * coords[2];
+        coords[2] = Math.sin(pitch) * coords[1] + Math.cos(pitch) * coords[2];
 
         // Correct for yaw
-        coords[0] = Math.cos(yaw) * xPos - Math.sin(yaw) * yPos;
-        coords[2] = Math.sin(yaw) * xPos + Math.cos(yaw) * yPos;
+        coords[0] = Math.cos(yaw) * coords[0] - Math.sin(yaw) * coords[2];
+        coords[2] = Math.sin(yaw) * coords[0] + Math.cos(yaw) * coords[2];
 
         return coords;
     }
