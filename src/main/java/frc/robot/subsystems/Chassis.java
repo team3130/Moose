@@ -357,12 +357,23 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     /**
      * gets the angle from navx and returns it unless navx is unplugged in which
      * case it just returns
+     * Returns a wrapped value, -180 to 180
      * 
      * @return the angle that navx reads
      */
     public double getAngle() {
         if (Navx.getNavxPresent()) {
             return Navx.getAngle() % 360;
+        } else {
+            return 0;
+        }
+    }
+
+    public double getSpinnyAngle() {
+        if (Navx.getNavxPresent()) {
+            // normalize to positive 360
+            double angle = ((Navx.getAngle() % 360) + 360) % 360;
+            return (angle + ((angle > 180) ? -360 : 0));
         } else {
             return 0;
         }
@@ -504,7 +515,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void spinOutput() {
-        driveArcade(0, -m_spinnyPID.calculate(getAngle()), false);
+        driveArcade(0, -m_spinnyPID.calculate(getSpinnyAngle()), false);
     }
 
     public void spinOutput(double angle, double translationPos) {

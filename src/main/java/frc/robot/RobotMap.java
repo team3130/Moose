@@ -135,9 +135,6 @@ public class RobotMap {
     public static double ChassisLateralD = 0;
 
 
-    public static double MaxMotorTemp = 90;
-
-
     // max velocity of chassis in meters per second
     public static final double kMaxVelocityMPS = 1.5;
     public static final double kMaxAccelerationMPS = 1;

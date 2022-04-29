@@ -6,8 +6,8 @@ import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Magazine;
 
 public class Shoot extends CommandBase {
 
@@ -68,7 +68,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.faceTarget(m_chassis.getAngle());
+        m_chassis.spinOutput(m_chassis.getSpinnyAngle());
         if (reloading) {
             if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
                 reloading = false;
