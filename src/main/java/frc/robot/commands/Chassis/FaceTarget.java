@@ -28,7 +28,6 @@ public class FaceTarget extends CommandBase {
     public void initialize() {
         pose = m_chassis.getPose();
         m_chassis.configRampRate(2);
-        m_chassis.updatePIDValues();
 /*        m_chassis.resetOdometry(new Pose2d());*/
         angle = m_chassis.getAngle() - m_limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);
