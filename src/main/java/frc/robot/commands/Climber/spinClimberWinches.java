@@ -29,9 +29,15 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void execute() {
-        m_climber.driveTank(RobotContainer.m_weaponsGamepad.getRawAxis(1) * -0.85, RobotContainer.m_weaponsGamepad.getRawAxis(5) * -0.85, true);
+        double left = RobotContainer.m_weaponsGamepad.getRawAxis(1) * -0.85;
+        double right = RobotContainer.m_weaponsGamepad.getRawAxis(5) * -0.85;
+        if (m_climber.brokeLeft() && left <= 0) {
+            left = 0;
+        } if (m_climber.brokeRight() && right <= 0) {
+            right = 0;
+        }
+        m_climber.driveTank(left, right, true);
     }
-
     /**
      * <p>
      * Returns whether this command has finished. Once a command finishes -- indicated by

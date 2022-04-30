@@ -32,7 +32,7 @@ public class Magazine extends SubsystemBase implements GeneralUtils {
         m_magazineLeft.setInverted(true);
         m_magazineRight.setInverted(false);
 
-        breakbeamMag = new DigitalInput(1);
+        breakbeamMag = new DigitalInput(0);
     }
 
     public boolean hasNards() {

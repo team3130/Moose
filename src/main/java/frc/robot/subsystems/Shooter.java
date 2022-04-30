@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheelFollower.follow(m_flywheel);
 
         Utils.configPIDF(m_flywheel, RobotMap.kFlywheelP, RobotMap.kFlywheelI, RobotMap.kFlywheelD, RobotMap.flyWheelkV);
-        breakbeam = new DigitalInput(0);
+        breakbeam = new DigitalInput(1);
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
@@ -84,7 +84,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         accelTime = in;
     }
     public boolean hasNards() {
-        return breakbeam.get();
+        return !breakbeam.get();
     }
 
     public double getRawSpeed() {
@@ -201,7 +201,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShootSetFlywheel(double point) {
-        return Math.abs(getRPM() - point) <= 50  && hasNards();
+        return Math.abs(getRPM() - point) <= 50 && hasNards();
     }
 
     public WheelSpeedCalculations getShooterCurve(){

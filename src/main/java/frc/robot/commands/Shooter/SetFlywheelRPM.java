@@ -2,28 +2,44 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
-import frc.robot.subsystems.Magazine;
+import frc.robot.sensors.vision.WheelSpeedCalculations;
+import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Magazine;
 
 public class SetFlywheelRPM extends CommandBase {
+
+    private boolean reloading = false;
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
-    private final Magazine m_magazine;
-    private final Limelight m_limelight;
-    private final double time = 2;
-    private final Timer timer;
-    private final Timer PIDFTest;
+    private Limelight limelight;
+    private Magazine m_magazine;
+    private WheelSpeedCalculations shooterCurve;
+    private Chassis m_chassis;
 
-    public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Limelight m_limelight) {
-        // mapping to object passed through parameter
+    private Timer timerShoot;
+    private double timeShoot = 0.2;
+
+    private final Timer timerSpin = new Timer();
+    private final double timeSpin = 0.5;
+
+    public SetFlywheelRPM(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
+        //mapping to object passed through parameter
         m_shooter = subsystem;
-        m_magazine = magazine;
         m_requirements.add(subsystem);
+        m_chassis = chassis;
+        m_requirements.add(chassis);
+
+        m_magazine = magazine;
         m_requirements.add(magazine);
-        this.m_limelight = m_limelight;
-        timer = new Timer();
-        PIDFTest = new Timer();
+
+        this.limelight = limelight;
+
+        shooterCurve = m_shooter.getShooterCurve();
+
+        timerShoot = new Timer();
     }
 
     /**
@@ -31,19 +47,13 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
+        reloading = true;
+        limelight.setLedState(true);
         m_shooter.updatePID();
-
         m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
 
-        m_magazine.setCenterSpeed(0.3);
-
-        m_limelight.setLedState(true);
-
-        timer.reset();
-        timer.start();
-
-        PIDFTest.reset();
-        PIDFTest.start();
+        timerSpin.reset();
+        timerSpin.start();
     }
 
     /**
@@ -52,15 +62,22 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        m_shooter.setAccelTime(PIDFTest.get());
-        if (m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard())) {
-
-            m_shooter.setAccelTime(PIDFTest.get());
-            PIDFTest.stop();
-            m_shooter.setIndexerPercent(0.5);
-            m_magazine.feedAll();
+        if (reloading) {
+            if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
+                reloading = false;
+                m_shooter.setIndexerPercent(.5);
+                timerShoot.reset();
+                timerShoot.start();
+            }
+        } else if (timerShoot.hasElapsed(timeShoot)) {
+            reloading = true;
+            m_shooter.setIndexerPercent(0);
+            m_magazine.setCenterSpeed(0.6);
+            timerShoot.stop();
+            timerShoot.reset();
         }
     }
+
 
     /**
      * <p>
@@ -78,7 +95,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-            return false; //timer.get() >= time;
+        return !m_shooter.hasNards() && timerShoot.hasElapsed(timeShoot + 0.04);
     }
 
     /**
@@ -93,7 +110,7 @@ public class SetFlywheelRPM extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.stopAll();
         m_magazine.stopAll();
-        m_limelight.setLedState(false);
-        timer.stop();
+        timerShoot.stop();
+        timerSpin.stop();
     }
 }

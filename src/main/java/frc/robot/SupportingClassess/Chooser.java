@@ -209,7 +209,7 @@ public class Chooser {
 
         ParallelCommandGroup shoot = new ParallelCommandGroup(
                 new FaceTarget(container.getChassis(), container.getLimelight()),
-                new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getLimelight())
+                new SetFlywheelRPM(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight())
         );
 
         SequentialCommandGroup commandGroup =
