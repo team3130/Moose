@@ -25,7 +25,7 @@ public class SpinChassisToAbsoluteAngle extends CommandBase {
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         m_chassis.resetPIDLoop();
-        m_chassis.setSpinnySetPoint(angle);
+        m_chassis.setSpinnySetPoint(angle - 180);
         timer.reset();
         timer.start();
     }

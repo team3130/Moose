@@ -25,7 +25,7 @@ public class SpinChassisToAngle extends CommandBase {
     @Override
     public void initialize() {
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
-        m_chassis.setSpinnySetPoint(angle + m_chassis.getAngle());
+        m_chassis.setSpinnySetPoint(angle + m_chassis.getSpinnyAngle());
         m_chassis.resetPIDLoop();
 
         timer.reset();

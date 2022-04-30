@@ -17,6 +17,8 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
 import frc.robot.commands.Chassis.*;
 import frc.robot.commands.Intake.DeployAndSpintake;
+import frc.robot.commands.Intake.DeployAndSpintakeMagazineBack;
+import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.doNothing;
@@ -328,6 +330,26 @@ public class Chooser {
         SmartDashboard.putData(m_autonChooser);
     }
 
+    public void addSpitOut() {
+        AutonCommand goToFirstBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/2BallEject/GoToFirst2BallEject.wpilib.json")));
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+        AutonCommand GoShoot = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/2BallEject/GoShoot2BallEject.wpilib.json")));
+        CommandBase shoot = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
+        AutonCommand GoToSecondBall = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/2BallEject/GoToSecondEjectBall2BallEject.wpilib.json")));
+        CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1);
+        CommandBase shootIntoHanger = new DeployAndSpintake(container.getIntake(), container.getMagazine(), -1);
+
+        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake),
+                GoShoot.getCmd(),
+                shoot,
+                new ParallelDeadlineGroup(GoToSecondBall.getCmd(), deployIntake2),
+                shootIntoHanger
+        );
+
+        m_autonChooser.addOption("2 Ball Into Hanger", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
+    }
+
 
     /**
      * this should be an S curve
@@ -401,9 +423,8 @@ public class Chooser {
                 new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake),
                 ReverseToShoot.getCmd(),
                 shoot,
-                spin,
                 new ParallelDeadlineGroup(GoToLastBall.getCmd(), deployIntake2),
-                spin2,
+                GoToShootLast.getCmd(),
                 shoot2
         );
 

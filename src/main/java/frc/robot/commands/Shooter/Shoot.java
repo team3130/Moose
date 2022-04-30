@@ -25,6 +25,14 @@ public class Shoot extends CommandBase {
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
 
+    private final Timer timerShoot2 = new Timer();
+    private final double timeShoot2 = 0.4;
+
+    private final Timer timerBig = new Timer();
+    private final double timeBig = 3;
+
+    private int amountShot = 0;
+
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
         m_shooter = subsystem;
@@ -53,12 +61,21 @@ public class Shoot extends CommandBase {
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
-        double angle = m_chassis.getAngle() - limelight.getHeading().getDegrees();
-        m_chassis.setSpinnySetPoint(angle);
+        double angle = m_chassis.getSpinnyAngle() - limelight.getHeading().getDegrees();
         m_chassis.resetPIDLoop();
+        m_chassis.setSpinnySetPoint(angle);
+
+        timerShoot.reset();
+        timerShoot.stop();
 
         timerSpin.reset();
         timerSpin.start();
+
+        timerShoot2.reset();
+        timerShoot2.stop();
+
+        timerBig.reset();
+        timerBig.start();
     }
 
     /**
@@ -67,13 +84,14 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void execute() {
-        m_chassis.spinOutput(m_chassis.getSpinnyAngle());
+        m_chassis.spinOutput();
         if (reloading) {
             if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
                 reloading = false;
                 m_shooter.setIndexerPercent(.5);
                 timerShoot.reset();
                 timerShoot.start();
+                amountShot++;
             }
         } else if (timerShoot.hasElapsed(timeShoot)) {
             reloading = true;
@@ -81,6 +99,13 @@ public class Shoot extends CommandBase {
             m_magazine.setCenterSpeed(0.6);
             timerShoot.stop();
             timerShoot.reset();
+        }
+        else if (!m_shooter.hasNards()) {
+            m_shooter.setIndexerPercent(0);
+            m_magazine.setCenterSpeed(0.6);
+        }
+        if(amountShot == 1) {
+            timerShoot2.start();
         }
     }
 
@@ -101,7 +126,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return !m_shooter.hasNards() && reloading;
+        return (!m_shooter.hasNards() && reloading && amountShot > 1 && timerShoot2.hasElapsed(timeShoot2)) || timerBig.hasElapsed(timeBig);
     }
 
     /**

@@ -138,12 +138,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
         // if the angle passed in is greater than 180, flip it and put things in terms of negatives
         circleFixer = (Double[] angle) -> {
-            if (angle[0] - getAngle() > 180) {
-                angle[0] -= 360;
-            }
-            else if (angle[0] - getAngle() < -180) {
-                angle[0] += 360;
-            }
+            angle[0] = ((angle[0] % 360) + 360) % 360;
+            angle[0] += ((angle[0] > 180) ? -360 : 0);
         };
     }
 
@@ -439,6 +435,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putNumber("Chassis Lateral Position Error", m_LaterallPID.getPositionError());
         SmartDashboard.putNumber("Chassis Lateral Velocity Error", m_LaterallPID.getVelocityError());
 
+        SmartDashboard.putNumber("Chassis measurement", getSpinnyAngle());
+
 //        LBTemp.setNumber(m_leftMotorBack.getTemperature());
 //        RBTemp.setNumber(m_rightMotorBack.getTemperature());
 //        LFTemp.setNumber(m_leftMotorFront.getTemperature());
@@ -480,7 +478,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     }
 
     public void setSpinnySetPoint(double setpoint) {
-        System.out.println("Set point: " + setpoint);
         Double[] angle = new Double[] {setpoint};
         circleFixer.accept(angle);
         m_spinnyPID.setSetpoint(angle[0]);
@@ -502,6 +499,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
     public void resetPIDLoop() {
         m_spinnyPID.reset();
+        m_spinnyPID.enableContinuousInput(-180, 180);
         m_LaterallPID.reset();
     }
 
