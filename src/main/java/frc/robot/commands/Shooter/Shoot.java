@@ -53,7 +53,6 @@ public class Shoot extends CommandBase {
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
-        m_chassis.updatePIDValues();
         double angle = m_chassis.getAngle() - limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);
         m_chassis.resetPIDLoop();

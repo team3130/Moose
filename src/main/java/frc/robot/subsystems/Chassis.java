@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -57,7 +56,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     private final PIDController m_leftPIDController;
     private final PIDController m_rightPIDConttroller;
 
-    private final Field2d m_fieldPos;
 
     private final PIDController m_spinnyPID;
     private final PIDController m_LaterallPID;
@@ -71,16 +69,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             .add("Move Speed Sensitivity", 10)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 10))
-            .getEntry();
-
-    private NetworkTableEntry sliderRampRate = tab.add("Max ramp rate", RobotMap.kMaxRampRate)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0.1, "max", 3))
-            .getEntry();
-
-    private NetworkTableEntry sliderForwardVelocity = tab.add("Max forward velocity", RobotMap.kMaxHighGearDriveSpeed)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
     private NetworkTableEntry sliderTurn = tab.add("Max turn speed", RobotMap.kMaxTurnThrottle)
@@ -142,7 +130,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
 /*        m_leftMotorBack.follow(m_leftMotorFront);
         m_rightMotorBack.follow(m_rightMotorFront);*/
-        m_fieldPos = new Field2d();
 
         m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
         m_LaterallPID = new PIDController(RobotMap.ChassisLateralP, RobotMap.ChassisLateralI, RobotMap.ChassisLateralD);
@@ -183,30 +170,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
             m_rightMotorFront.setNeutralMode(NeutralMode.Coast);
             m_leftMotorBack.setNeutralMode(NeutralMode.Coast);
             m_rightMotorBack.setNeutralMode(NeutralMode.Coast);
-        }
-    }
-
-    public double motorTemp() {
-        double temp ;
-        double temp2;
-        if (m_leftMotorFront.getTemperature() >= m_leftMotorBack.getTemperature()) {
-             temp = m_leftMotorFront.getTemperature();
-        }
-        else {
-             temp = m_leftMotorBack.getTemperature();
-        }
-        if (m_rightMotorFront.getTemperature() >= m_rightMotorBack.getTemperature()) {
-             temp2 = m_rightMotorFront.getTemperature();
-        }
-        else {
-             temp2 = m_rightMotorBack.getTemperature();
-        }
-
-        if (temp >= temp2) {
-            return temp;
-        }
-        else {
-            return temp2;
         }
     }
 
@@ -303,13 +266,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     public double getSpeed() {
         return 0.5 * (getSpeedL() + getSpeedR());
-    }
-
-    public void updateRampThings() {
-        RobotMap.kMaxRampRate = sliderRampRate.getDouble(RobotMap.kMaxRampRate);
-        RobotMap.kMaxTurnThrottle = sliderTurn.getDouble(RobotMap.kMaxTurnThrottle);
-        RobotMap.kMaxHighGearDriveSpeed = sliderForwardVelocity.getDouble(RobotMap.kMaxHighGearDriveSpeed);
-        // configRampRate(RobotMap.kMaxRampRate);
     }
 
     /**
@@ -487,9 +443,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 //        RBTemp.setNumber(m_rightMotorBack.getTemperature());
 //        LFTemp.setNumber(m_leftMotorFront.getTemperature());
 //        RFTemp.setNumber(m_rightMotorFront.getTemperature());
-
-        m_fieldPos.setRobotPose(this.getPose());
-        SmartDashboard.putData("Field position", m_fieldPos);
     }
 
     @Override
@@ -555,5 +508,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public double getCurrentVectorDist() {
         return getPose().getX();
     }
+
 
 }
