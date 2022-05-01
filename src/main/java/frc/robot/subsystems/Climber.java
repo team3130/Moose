@@ -22,7 +22,7 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_right_motor;
     private Solenoid m_solenoid;
     private DigitalInput m_rightlimitswitch;
-//    private DigitalInput m_leftlimitswitch;
+    private DigitalInput m_leftlimitswitch;
 
     private DifferentialDrive drive;
 
@@ -31,7 +31,7 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
         m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
         m_rightlimitswitch = new DigitalInput(RobotMap.RIGHT_LIMITSWITCH);
-//        m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
+        m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
 
         m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);
@@ -57,8 +57,7 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     }
 
     public void zero() {
-        m_left_motor.set(ControlMode.PercentOutput, -0.25);
-        m_right_motor.set(ControlMode.PercentOutput, -0.25);
+        drive.tankDrive(-0.25, 0.25);
     }
 
     public boolean isDeployed() {
@@ -84,7 +83,7 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean brokeLeft() {
-        return false;
+        return !m_leftlimitswitch.get();
     }
 
     public boolean brokeRight() {
@@ -101,6 +100,9 @@ public class Climber extends SubsystemBase implements GeneralUtils {
 
     public void outputToShuffleboard() {
         SmartDashboard.putBoolean("limit switch right:", brokeRight());
+        SmartDashboard.putBoolean("limit switch left", brokeLeft());
+        SmartDashboard.putNumber("left encoder reading", m_left_motor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("right encoder reading", m_right_motor.getSelectedSensorPosition());
     }
 
     @Override

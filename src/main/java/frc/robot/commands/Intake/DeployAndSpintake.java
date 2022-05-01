@@ -1,25 +1,27 @@
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.Shooter;
 
 public class DeployAndSpintake extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Intake m_intake;
     private final Magazine m_magazine;
+
+    private final Shooter m_shooter;
     private final int direction;
 
     /**
      * Meant to be run in a sequential command group with {@link TimedSpintake}
      * @param intake {@link Intake}
      */
-    public DeployAndSpintake(Intake intake, Magazine magazine, int direction) {
+    public DeployAndSpintake(Intake intake, Magazine magazine, int direction, Shooter shooter) {
         //mapping to object passed through parameter
         m_intake = intake;
         m_magazine = magazine;
+        m_shooter = shooter;
         m_requirements.add(m_intake);
         m_requirements.add(m_magazine);
         this.direction = direction;
@@ -43,7 +45,9 @@ public class DeployAndSpintake extends CommandBase {
      */
     @Override
     public void execute() {
-
+    if (m_shooter.hasNards()) {
+        m_magazine.setCenterSpeed(0);
+    }
     }
 
     /**

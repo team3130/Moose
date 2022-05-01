@@ -9,6 +9,9 @@ public class ZeroClimber extends CommandBase {
     private boolean BrokeRight = false;
     private boolean BrokeLeft = false;
 
+    private double RightOutput = 0;
+    private double LeftOutput = 0;
+
     public ZeroClimber(Climber subsystem) {
         //mapping to object passed through parameter
         m_Climber = subsystem;
@@ -21,6 +24,10 @@ public class ZeroClimber extends CommandBase {
     @Override
     public void initialize() {
         m_Climber.zero();
+        BrokeLeft = false;
+        BrokeRight = false;
+        RightOutput = -0.25;
+        LeftOutput = -0.25;
     }
 
     /**
@@ -30,26 +37,17 @@ public class ZeroClimber extends CommandBase {
     @Override
     public void execute() {
         if (m_Climber.brokeLeft()) {
-            m_Climber.setSpeedLeft(0);
+            LeftOutput = 0;
             m_Climber.resetEncodersLeft();
             BrokeLeft = true;
         }
-        else {
-            m_Climber.setSpeedLeft(-0.25);
-            BrokeLeft = false;
-        }
 
         if (m_Climber.brokeRight()) {
-            m_Climber.setSpeedRight(0);
+            RightOutput = 0;
             m_Climber.resetEncodersRight();
             BrokeRight = true;
         }
-        else {
-            m_Climber.setSpeedRight(-0.25);
-            BrokeRight = false;
-        }
-
-        System.out.println("KHJSDHKhkjDFHKJDHSHJDSFHKJHKJDFS");
+        m_Climber.driveTank(LeftOutput, RightOutput, false);
     }
 
     /**
@@ -68,7 +66,7 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return BrokeRight;
+        return BrokeRight && BrokeLeft;
     }
 
     /**
@@ -81,7 +79,6 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_Climber.setSpeedLeft(0);
-        m_Climber.setSpeedRight(0);
+        m_Climber.driveTank(0, 0, false);
     }
 }
