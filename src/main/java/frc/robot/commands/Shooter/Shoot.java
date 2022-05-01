@@ -21,7 +21,7 @@ public class Shoot extends CommandBase {
 
     private Timer timerShoot;
     private Timer timerDone;
-    private Timer timerMagazine;
+    private Timer timerIndexer;
     private double timeShoot = 0.2;
 
     private final Timer timerSpin = new Timer();
@@ -46,7 +46,7 @@ public class Shoot extends CommandBase {
 
         timerShoot = new Timer();
         timerDone = new Timer();
-        timerMagazine = new Timer();
+        timerIndexer = new Timer();
     }
 
     /**
@@ -86,20 +86,21 @@ public class Shoot extends CommandBase {
                 timerShoot.start();
             }
         }
-        if (timerShoot.hasElapsed(timeShoot)) {
+        else if (State == StateMachine.INBETWEEN && timerShoot.hasElapsed(timeShoot)) {
             State = StateMachine.MAGAZINE;
             m_shooter.setIndexerPercent(0);
             timerShoot.stop();
             timerShoot.reset();
-            timerMagazine.reset();
-            timerMagazine.start();
+            timerIndexer.reset();
+            timerIndexer.start();
         }
-        if (timerMagazine.hasElapsed(0.5)) {
+        else if (State == StateMachine.SHOOTING && timerIndexer.hasElapsed(0.4)) {
             State = StateMachine.SHOOTING;
             m_magazine.setCenterSpeed(0.4);
-            timerMagazine.stop();
-            timerMagazine.reset();
+            timerIndexer.stop();
+            timerIndexer.reset();
         }
+
         if (!m_shooter.hasNards() && (State == StateMachine.SHOOTING)) {
             timerDone.start();
         }
@@ -126,7 +127,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-    return timerDone.hasElapsed(0.5);
+    return timerDone.hasElapsed(0.3);
     }
 
     /**

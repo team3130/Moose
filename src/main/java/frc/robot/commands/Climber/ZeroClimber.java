@@ -47,7 +47,8 @@ public class ZeroClimber extends CommandBase {
             m_Climber.resetEncodersRight();
             BrokeRight = true;
         }
-        m_Climber.driveTank(LeftOutput, RightOutput, false);
+        m_Climber.setSpeedLeft(LeftOutput);
+        m_Climber.setSpeedRight(RightOutput);
     }
 
     /**
@@ -79,6 +80,6 @@ public class ZeroClimber extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_Climber.driveTank(0, 0, false);
+        m_Climber.stop();
     }
 }
