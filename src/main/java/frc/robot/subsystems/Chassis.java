@@ -58,7 +58,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 
 
     private final PIDController m_spinnyPID;
-    private final PIDController m_LaterallPID;
 
     private final Consumer<Double[]> circleFixer;
 
@@ -132,7 +131,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_rightMotorBack.follow(m_rightMotorFront);*/
 
         m_spinnyPID = new PIDController(RobotMap.ChassisSpinKP, RobotMap.ChassisSpinKI, RobotMap.ChassisSpinKD);
-        m_LaterallPID = new PIDController(RobotMap.ChassisLateralP, RobotMap.ChassisLateralI, RobotMap.ChassisLateralD);
 
         tuneTolerance();
 
@@ -432,10 +430,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putNumber("Chassis Spinny Position Error", m_spinnyPID.getPositionError());
         SmartDashboard.putNumber("Chassis Spinny Velocity Error", m_spinnyPID.getVelocityError());
 
-        SmartDashboard.putNumber("Chassis Lateral Position Error", m_LaterallPID.getPositionError());
-        SmartDashboard.putNumber("Chassis Lateral Velocity Error", m_LaterallPID.getVelocityError());
-
-        SmartDashboard.putNumber("Chassis measurement", getSpinnyAngle());
+//        SmartDashboard.putNumber("Chassis measurement", getSpinnyAngle());
 
 //        LBTemp.setNumber(m_leftMotorBack.getTemperature());
 //        RBTemp.setNumber(m_rightMotorBack.getTemperature());
@@ -469,10 +464,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         driveArcade(0, -m_spinnyPID.calculate(getSpinnyAngle()), false);
     }
 
-    public void spinOutput(double angle, double translationPos) {
-        driveArcade(m_LaterallPID.calculate(translationPos), -m_spinnyPID.calculate(angle), false);
-    }
-
     public boolean getAtSetpoint() {
         return m_spinnyPID.atSetpoint();
     }
@@ -483,10 +474,6 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         m_spinnyPID.setSetpoint(angle[0]);
     }
 
-    public void setLateralSetPoint(double setpoint) {
-        m_LaterallPID.setSetpoint(setpoint);
-    }
-
     public void updatePIDValues() {
         m_spinnyPID.setPID(Ps.getDouble(RobotMap.ChassisSpinKP), Is.getDouble(RobotMap.ChassisSpinKI), Ds.getDouble(RobotMap.ChassisSpinKD));
     }
@@ -494,13 +481,12 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
     public void tuneTolerance() {
         m_spinnyPID.setTolerance(3.5, 0.02);
         m_spinnyPID.setIntegratorRange(-0.1, 0.1);
-        m_LaterallPID.setTolerance(0.25, 0.25);
     }
 
     public void resetPIDLoop() {
         m_spinnyPID.reset();
+        tuneTolerance();
         m_spinnyPID.enableContinuousInput(-180, 180);
-        m_LaterallPID.reset();
     }
 
     public double getCurrentVectorDist() {
