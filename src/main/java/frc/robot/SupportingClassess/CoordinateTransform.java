@@ -17,8 +17,8 @@ public class CoordinateTransform {
     // Calculation Constants
     private static final double X_CONSTANT = 2 * BALL_RADIUS; 
     private static final double Y_CONSTANT = 2 * BALL_RADIUS; 
-    private static final double Z_CONSTANT = BALL_RADIUS * Math.tan(Math.toRadians(90 - CAMERA_HORIZONTAL_FOV / 2)) * CAMERA_X;
-    private static final double Z_CONSTANT2 = BALL_RADIUS * Math.tan(Math.toRadians(90 - CAMERA_VERTICAL_FOV / 2)) * CAMERA_Y; //This should be extremely close to the first one
+    private static final double Z_CONSTANT_X = BALL_RADIUS * Math.tan(Math.toRadians(90 - CAMERA_HORIZONTAL_FOV / 2)) * CAMERA_X;
+    private static final double Z_CONSTANT_Y = BALL_RADIUS * Math.tan(Math.toRadians(90 - CAMERA_VERTICAL_FOV / 2)) * CAMERA_Y; //This should be extremely close to the first one
     private static final double CAMERA_PITCH = 0; //TODO: get values
 
     public CoordinateTransform(int xCam, int yCam, double ballRad, double botYaw) {
@@ -32,12 +32,14 @@ public class CoordinateTransform {
      * Finds the ball's distance from the camera and creates (X,Y,Z) coords
      * with the camera position at the origin.
      * assume (0,0) is at the center of the camera image.
+     * 
+     * ballRad = horizontal radius
      */
     private static double[] dilation(double xCam, double yCam, double ballRad) {
-        return new double[]{
+        return new double[] {
                 xCam * X_CONSTANT / ballRad,
                 yCam * Y_CONSTANT / ballRad,
-                Z_CONSTANT / ballRad,
+                Z_CONSTANT_X / ballRad,
         };
     }
 
