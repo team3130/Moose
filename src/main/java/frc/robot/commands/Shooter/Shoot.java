@@ -20,18 +20,15 @@ public class Shoot extends CommandBase {
     private Chassis m_chassis;
 
     private Timer timerShoot;
+    private Timer timerDone;
+    private Timer timerIndexer;
     private double timeShoot = 0.2;
 
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
 
-    private final Timer timerShoot2 = new Timer();
-    private final double timeShoot2 = 0.4;
-
-    private final Timer timerBig = new Timer();
-    private final double timeBig = 3;
-
-    private int amountShot = 0;
+    private enum StateMachine {SHOOTING, INBETWEEN, MAGAZINE};
+    private StateMachine State;
 
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
         //mapping to object passed through parameter
@@ -48,6 +45,8 @@ public class Shoot extends CommandBase {
         shooterCurve = m_shooter.getShooterCurve();
 
         timerShoot = new Timer();
+        timerDone = new Timer();
+        timerIndexer = new Timer();
     }
 
     /**
@@ -55,7 +54,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public void initialize() {
-        reloading = true;
+        State = StateMachine.SHOOTING;
         limelight.setLedState(true);
 //        m_shooter.updatePID();
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
@@ -70,12 +69,6 @@ public class Shoot extends CommandBase {
 
         timerSpin.reset();
         timerSpin.start();
-
-        timerShoot2.reset();
-        timerShoot2.stop();
-
-        timerBig.reset();
-        timerBig.start();
     }
 
     /**
@@ -85,27 +78,35 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         m_chassis.spinOutput();
-        if (reloading) {
+        if (State == StateMachine.SHOOTING) {
             if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-                reloading = false;
+                State = StateMachine.INBETWEEN;
                 m_shooter.setIndexerPercent(.5);
                 timerShoot.reset();
                 timerShoot.start();
-                amountShot++;
             }
-        } else if (timerShoot.hasElapsed(timeShoot)) {
-            reloading = true;
+        }
+        else if (State == StateMachine.INBETWEEN && timerShoot.hasElapsed(timeShoot)) {
+            State = StateMachine.MAGAZINE;
             m_shooter.setIndexerPercent(0);
-            m_magazine.setCenterSpeed(0.6);
             timerShoot.stop();
             timerShoot.reset();
+            timerIndexer.reset();
+            timerIndexer.start();
         }
-        else if (!m_shooter.hasNards()) {
-            m_shooter.setIndexerPercent(0);
-            m_magazine.setCenterSpeed(0.6);
+        else if (State == StateMachine.SHOOTING && timerIndexer.hasElapsed(0.4)) {
+            State = StateMachine.SHOOTING;
+            m_magazine.setCenterSpeed(0.4);
+            timerIndexer.stop();
+            timerIndexer.reset();
         }
-        if(amountShot == 1) {
-            timerShoot2.start();
+
+        if (!m_shooter.hasNards() && (State == StateMachine.SHOOTING)) {
+            timerDone.start();
+        }
+        else {
+            timerDone.stop();
+            timerDone.reset();
         }
     }
 
@@ -126,7 +127,7 @@ public class Shoot extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return (!m_shooter.hasNards() && reloading && amountShot > 1 && timerShoot2.hasElapsed(timeShoot2)) || timerBig.hasElapsed(timeBig);
+    return timerDone.hasElapsed(0.3);
     }
 
     /**

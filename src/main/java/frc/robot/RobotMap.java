@@ -48,7 +48,7 @@ public class RobotMap {
     public static final int CAN_CLIMBER_LEFT = 17;
     public static final int CAN_CLIMBER_RIGHT = 29;
     public static final int RIGHT_LIMITSWITCH = 2;
-    public static final int LEFT_LIMITSWITCH = 1;
+    public static final int LEFT_LIMITSWITCH = 3;
 
     /**
      * Intake

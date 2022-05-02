@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
@@ -22,27 +21,22 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     private WPI_TalonFX m_right_motor;
     private Solenoid m_solenoid;
     private DigitalInput m_rightlimitswitch;
-//    private DigitalInput m_leftlimitswitch;
-
-    private DifferentialDrive drive;
+    private DigitalInput m_leftlimitswitch;
 
     //Create and define all standard data types needed
     public Climber() {
         m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
         m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
         m_rightlimitswitch = new DigitalInput(RobotMap.RIGHT_LIMITSWITCH);
-//        m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
+        m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
 
         m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);
 
         m_right_motor.setNeutralMode(NeutralMode.Brake);
         m_left_motor.setNeutralMode(NeutralMode.Brake);
-       // m_climber_motor_follower.follow(m_climber_motor);
 
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);
-
-        drive = new DifferentialDrive(m_left_motor, m_right_motor);
 
         Utils.configPIDF(m_left_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
         Utils.configPIDF(m_right_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
@@ -69,10 +63,6 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         m_solenoid.toggle();
     }
 
-    public void driveTank(double left, double right, boolean squared) {
-        drive.tankDrive(left, right, squared);
-    }
-
     public void configRampRate(double rampSeconds){
         m_left_motor.configOpenloopRamp(rampSeconds);
         m_right_motor.configOpenloopRamp(rampSeconds);
@@ -84,7 +74,7 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean brokeLeft() {
-        return false;
+        return !m_leftlimitswitch.get();
     }
 
     public boolean brokeRight() {
@@ -101,6 +91,9 @@ public class Climber extends SubsystemBase implements GeneralUtils {
 
     public void outputToShuffleboard() {
         SmartDashboard.putBoolean("limit switch right:", brokeRight());
+        SmartDashboard.putBoolean("limit switch left", brokeLeft());
+        SmartDashboard.putNumber("left encoder reading", m_left_motor.getSelectedSensorPosition());
+        SmartDashboard.putNumber("right encoder reading", m_right_motor.getSelectedSensorPosition());
     }
 
     @Override
@@ -111,6 +104,11 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     @Override
     public void disable() {
 
+    }
+
+    public void stop() {
+        setSpeedLeft(0);
+        setSpeedRight(0);
     }
 }
 

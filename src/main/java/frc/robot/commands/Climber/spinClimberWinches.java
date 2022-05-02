@@ -36,7 +36,8 @@ public class spinClimberWinches extends CommandBase {
         } if (m_climber.brokeRight() && right <= 0) {
             right = 0;
         }
-        m_climber.driveTank(left, right, true);
+        m_climber.setSpeedLeft(left);
+        m_climber.setSpeedRight(right);
     }
     /**
      * <p>
