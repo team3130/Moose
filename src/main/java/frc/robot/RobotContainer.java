@@ -21,6 +21,7 @@ import frc.robot.commands.Intake.TimedSpintake;
 import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
+import frc.robot.controls.PivotTrigger;
 import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
@@ -132,7 +133,7 @@ public class RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(false));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(true));
         // new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(getClimber()));
-        new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_N).whenHeld(new ExtendArmsIGuess(m_climber));
+        new PivotTrigger(m_weaponsGamepad, RobotMap.LST_POV_N).whenHeld(new ExtendArmsIGuess(m_climber));
     }
 
     public void outputToShuffleBoard() {

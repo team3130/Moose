@@ -86,7 +86,7 @@ public class Shoot extends CommandBase {
                 timerShoot.start();
             }
         }
-        else if (State == StateMachine.INBETWEEN && timerShoot.hasElapsed(timeShoot)) {
+        if (timerShoot.hasElapsed(timeShoot)) {
             State = StateMachine.MAGAZINE;
             m_shooter.setIndexerPercent(0);
             timerShoot.stop();
@@ -94,7 +94,7 @@ public class Shoot extends CommandBase {
             timerIndexer.reset();
             timerIndexer.start();
         }
-        else if (State == StateMachine.SHOOTING && timerIndexer.hasElapsed(0.4)) {
+        if (timerIndexer.hasElapsed(0.4)) {
             State = StateMachine.SHOOTING;
             m_magazine.setCenterSpeed(0.4);
             timerIndexer.stop();

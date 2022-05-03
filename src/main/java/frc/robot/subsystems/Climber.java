@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -32,6 +33,12 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
         m_rightlimitswitch = new DigitalInput(RobotMap.RIGHT_LIMITSWITCH);
         m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
+
+        m_left_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        m_right_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+
+        m_right_motor.configFactoryDefault();
+        m_left_motor.configFactoryDefault();
 
         m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);

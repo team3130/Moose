@@ -59,5 +59,6 @@ public class ExtendArmsIGuess extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_Climber.stop();
+        System.out.println("DONE");
     }
 }
