@@ -7,15 +7,16 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotMap;
 import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.QuegelCommandGroup;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.sensors.vision.Limelight;
+import frc.robot.sensors.vision.Nano;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
@@ -74,6 +75,10 @@ public class BallManager {
     protected final char GENERATE_PATH = 1;
     protected char state = 0;
 
+    protected final Thread ballUpdater;
+
+    protected final Nano nano;
+
 
     public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, QuegelCommandGroup commandGroup, Chooser chooser, Intake intake, Magazine magazine, Shooter shooter, Limelight limelight) {
         m_chassis = chassis;
@@ -95,10 +100,19 @@ public class BallManager {
 
         config = chooser.getConfig();
 
-
         StateMachine = new Runnable[] {this::smartAdd, this::decidePath};
 
+        if (NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("isRedAlliance").getBoolean(true)) {
+            nano = new Nano("red");
+        }
+        else {
+            nano = new Nano("blue");
+        }
+
         m_managerThread = new Thread(this::manager, "manager");
+
+        ballUpdater = new Thread(this::updateBalls, "Ball updater");
+
     }
 
     public Ball getQuickestOne() {
@@ -328,6 +342,12 @@ public class BallManager {
      */
     public void generatePath() {
         state = GENERATE_PATH;
+    }
+
+    public void updateBalls() {
+        if (nano.isNotBlocking()) {
+            addBall(nano.updateAll());
+        }
     }
 
 }

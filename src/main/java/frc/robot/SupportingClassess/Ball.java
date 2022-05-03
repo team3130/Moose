@@ -1,6 +1,9 @@
 package frc.robot.SupportingClassess;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import frc.robot.RobotMap;
 
 public class Ball {
@@ -8,6 +11,10 @@ public class Ball {
 
     public Ball(double x, double y) {
         pose = new double[] {x, y};
+    }
+
+    public Ball(Matrix<N3, N1> mat) {
+        pose = new double[] {mat.get(0, 0), mat.get(2, 0)};
     }
 
 

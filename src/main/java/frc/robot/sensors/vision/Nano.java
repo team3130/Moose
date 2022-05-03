@@ -1,109 +1,63 @@
 package frc.robot.sensors.vision;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.SupportingClassess.Ball;
 import frc.robot.SupportingClassess.GeneralUtils;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Nano implements GeneralUtils {
 
-    public static final Double[] filler = new Double[0];
+    protected static final Double[] filler = new Double[0];
 
-    NetworkTable visionTable;
+    protected static NetworkTable visionTable;
 
-    private NetworkTableEntry netx; // x angles
+    protected final NetworkTableEntry netx; // x angles
 
-    private NetworkTableEntry nety; // y angles
+    protected final NetworkTableEntry nety; // y angles
 
-    private double x_targetOffsetAngle;
-    private double y_targetOffsetAngle;
-    private double area;
-    private double skew;
+    protected final AtomicBoolean blocking = new AtomicBoolean(false);
 
-    private Matrix<N3, N3> rotation;      // Own rotation
-    private Matrix<N3, N1> translation;   // Own translation
-    private Matrix<N3, N1> realVector;
-    private Matrix<N3, N1> sideVector;
+    private static final Matrix<N3, N3> rotation = Algebra.Rodrigues(
+            Algebra.buildVector(
+            Math.toRadians(RobotMap.kLimelightPitch),
+            Math.toRadians(RobotMap.kLimelightYaw),
+            Math.toRadians(RobotMap.kLimelightRoll)
+            )
+    );      // Own rotation
+    private static final Matrix<N3, N1> translation = Algebra.buildVector(
+            RobotMap.kLimelightOffset,
+            RobotMap.kLimelightHeight,
+            RobotMap.kLimelightLength + RobotMap.targetDistanceOffset
+    );
 
-    public Nano() {
-        visionTable = NetworkTableInstance.getDefault().getTable("limelight");
-        tv = visionTable.getEntry("tv");
-        tx = visionTable.getEntry("tx");
-        ty = visionTable.getEntry("ty");
-        ta = visionTable.getEntry("ta");
-        ts = visionTable.getEntry("ts");
 
-        txFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
-        tyFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
-        tsFilter = new MedianFilter(RobotMap.kLimelightFilterBufferSize);
-        x_targetOffsetAngle = 0.0;
-        y_targetOffsetAngle = 0.0;
-        area = 0.0;
-        skew = 0.0;
-
-        Matrix<N3, N1> rVec = Algebra.buildVector(
-                Math.toRadians(RobotMap.kLimelightPitch),
-                Math.toRadians(RobotMap.kLimelightYaw),
-                Math.toRadians(RobotMap.kLimelightRoll)
-        );
-        rotation = Algebra.Rodrigues(rVec);
-        translation = Algebra.buildVector(
-                RobotMap.kLimelightOffset,
-                RobotMap.kLimelightHeight,
-                RobotMap.kLimelightLength + RobotMap.targetDistanceOffset
-        );
-        realVector = Algebra.buildVector(0, 0, 0);
-        sideVector = Algebra.buildVector(0, 0, 0);
-    }
-
-    public double getTx() {
-        return tx.getDouble(0.0);
-    }
-
-    public double getTy() {
-        return ty.getDouble(0.0);
-    }
-
-    public double getArea() {
-        return ta.getDouble(0.0);
-    }
-
-    public double getSkew() {
-        return ts.getDouble(0.0);
+    public Nano(String color) {
+        visionTable = NetworkTableInstance.getDefault().getTable("Nano");
+        netx = visionTable.getEntry(color + "-x");
+        nety = visionTable.getEntry(color + "-y");
     }
 
     /**
      * Limelight vision tracking pipeline latency.
      * @return Latency in milliseconds
      */
-    public double getLatency(){
+    public double getLatency() {
         return visionTable.getEntry("tl").getDouble(0) + RobotMap.kLimelightLatencyMs;
     }
 
     /**
      * Read data from the Limelight and update local values
      */
-    public void updateData() {
-        x_targetOffsetAngle = txFilter.calculate(getTx());
-        y_targetOffsetAngle = tyFilter.calculate(getTy());
-        area = getArea();
-        skew = tsFilter.calculate(getSkew());
-        realVector = calcPosition(x_targetOffsetAngle, y_targetOffsetAngle);
-
-        // A side vector is a point somewhere on the line that connects
-        // the two top corners of the target, i.e. the top edge.
-        // Doesn't have to be a corner necessarily.
-        double realSkew = Math.toRadians(skew < -45 ? skew + 90 : skew);
-        double side_x = x_targetOffsetAngle + Math.cos(realSkew);
-        double side_y = y_targetOffsetAngle + Math.sin(realSkew);
-        sideVector = calcPosition(side_x, side_y);
+    public Matrix<N3, N1> updateData() {
+        return calcPosition(netx.getDoubleArray(filler)[0], nety.getDoubleArray(filler)[0]);
     }
 
 
@@ -126,9 +80,9 @@ public class Nano implements GeneralUtils {
     /**
      * Calculate a position vector based on angles from vision
      *
-     * @param ax Horizontal Offset From Crosshair To Target
-     * @param ay Vertical Offset From Crosshair To Target
-     * @return resulting vector from the Turret's origin to the target
+     * @param ax x value from net tables
+     * @param ay y value from net tables
+     * @return Resulting vector from the bot
      */
     public Matrix<N3, N1> calcPosition(double ax, double ay) {
 
@@ -147,68 +101,65 @@ public class Nano implements GeneralUtils {
         return a;
     }
 
-    public double getTargetRotationTan() {
-        Matrix<N3,N1> edge = sideVector.minus(realVector);
-        return -edge.get(2, 0) / edge.get(0, 0);
+    public Ball[] updateAll() {
+        if (blocking.get()) {
+            return new Ball[0];
+        }
+        blocking.set(true);
+
+        Double[] x = getX();
+        Double[] y = getY();
+
+        if (x.length > y.length) {
+            Double[] temp = new Double[y.length];
+            System.arraycopy(x, 0, temp, 0, temp.length);
+            x = temp;
+
+        }
+        else if (x.length < y.length) {
+            Double[] temp = new Double[x.length];
+            System.arraycopy(y, 0, temp, 0, temp.length);
+            y = temp;
+        }
+
+        Ball[] toReturn = new Ball[x.length];
+        int toReturnCounter = 0;
+
+        for (int i = 0; i < x.length; i++) {
+            Matrix<N3, N1> result = calcPosition(x[i], y[i]);
+            toReturn[toReturnCounter++] = new Ball(result);
+        }
+
+        blocking.set(false);
+
+        return toReturn;
     }
 
+    public Double[] getX() {
+        return netx.getDoubleArray(filler);
+    }
+
+    public Double[] getY() {
+        return nety.getDoubleArray(filler);
+    }
 
     public boolean hasBalls() {
         return netx.getDoubleArray(filler).length != 0;
     }
 
-    public Rotation2d getHeading() {
-        return (hasTrack()) ? new Rotation2d(Math.atan(sideVector.get(0, 0) / sideVector.get(2, 0))) : new Rotation2d(0);
+    public Rotation2d getHeading(Matrix<N3, N1> vector) {
+        return new Rotation2d(Math.atan(vector.get(0, 0) / vector.get(2, 0)));
     }
 
-    public Matrix<N3,N1> getInnerTarget() {
-        double depth = 29.25;
-        double alpha = Math.atan(getTargetRotationTan());
-        return Algebra.buildVector(
-            depth * Math.sin(alpha),
-            0,
-            depth * Math.cos(alpha));
-    }
-
-    /**
-     * Get the horizontal angle error to target
-     *
-     * @return angle in degrees
-     */
-    public double getDegHorizontalError() {
-        // realVector is calculated in updateData that should be called before doing this
-        // The horizontal error is an angle between the vector's projection on the XZ plane
-        // and the Z-axis which is where the turret is always facing.
-        double alpha = Math.toDegrees(Math.atan2(realVector.get(0, 0), realVector.get(2, 0)));
-        Matrix<N3,N1> inner = getInnerTarget();
-        double yawAdj = 0; // GetInstance().getYawAdjustment();
-        System.out.println("Yaw Adjustment: " + yawAdj);
-
-//        System.out.println("Inner Goal offset: " + Math.toDegrees(Math.atan2(inner.get(0, 0), inner.get(2, 0))));
-
-        // If rotation of the target is greater than this many inches along the edge
-        // of the outer goal (approx) forget about the inner goal
-        if (Math.abs(inner.get(0, 0)) > 5) return -1.0 * alpha + yawAdj;
-
-        // Otherwise add the inner goal's vector to the target vector
-        // to obtain a new aiming angle
-        Matrix<N3,N1> adjustedVec = realVector.minus(inner);
-        return -1.0 * Math.toDegrees(Math.atan2(adjustedVec.get(0, 0), adjustedVec.get(2, 0))) + yawAdj;
-    }
 
     /**
      * Get the ground distance to the target
      *
      * @return distance in inches
      */
-    public double getDistanceToTarget() {
-        if (hasTrack()) {
-            Matrix<N3, N1> projection = realVector.copy();
-            projection.set(1, 0, 0.0);
-            return projection.normF();
-        } else {
-            return 0.0;
-        }
+    public double getDistanceToBall(Matrix<N3, N1> projection) {
+        projection.set(1, 0, 0.0);
+        return projection.normF();
     }
 
 
@@ -216,35 +167,12 @@ public class Nano implements GeneralUtils {
      * Calibrate the tilt angle of the Limelight
      */
     public double calibrate() {
-        updateData();
+        Matrix<N3, N1> curr = updateData();
 
         double height = RobotMap.kLimelightHeight;
         double distance = RobotMap.kBallCallibrationDistance;
 
-        return Math.toDegrees(Math.atan2(-height, distance)) - y_targetOffsetAngle;
-    }
-
-    /**
-     * Set the current vision tracking pipeline of the Limelight
-     *
-     * @param pipelineNumber the id of the pipeline
-     */
-    public void setPipeline(double pipelineNumber) {
-        visionTable.getEntry("pipeline").setNumber(pipelineNumber);
-        /*
-        How to set a parameter value:
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("<PUT VARIABLE NAME HERE>").setNumber(<TO SET VALUE>);
-        */
-    }
-
-    public double getYawAdjustment(){
-        double distance = getDistanceToTarget();
-        double yawCalc = 0.0;
-        if(distance >= 220){
-        yawCalc = RobotMap.kLimelightYaw *
-                Math.min(1.0, Math.max(0.0, (distance - 190)) / (290 - 190));
-        }
-        return yawCalc;
+        return Math.toDegrees(Math.atan2(-height, distance)) - curr.get(2, 0);
     }
 
 
@@ -252,4 +180,8 @@ public class Nano implements GeneralUtils {
     public void teleopInit() {}
     public void autonInit() {}
     public void disable() {}
+
+    public boolean isNotBlocking() {
+        return !blocking.get();
+    }
 }
