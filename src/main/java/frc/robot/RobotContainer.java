@@ -10,6 +10,7 @@ import frc.robot.commands.Chassis.DefaultDrive;
 import frc.robot.commands.Chassis.FaceTarget;
 import frc.robot.commands.Chassis.Shift;
 import frc.robot.commands.Chassis.SpinChassisToAngle;
+import frc.robot.commands.Climber.ExtendArmsIGuess;
 import frc.robot.commands.Climber.ToggleClimber;
 import frc.robot.commands.Climber.ZeroClimber;
 import frc.robot.commands.Climber.spinClimberWinches;
@@ -17,8 +18,6 @@ import frc.robot.commands.Intake.DeployAndSpintake;
 import frc.robot.commands.Intake.DeployAndSpintakeMagazineBack;
 import frc.robot.commands.Intake.DeployIntake;
 import frc.robot.commands.Intake.TimedSpintake;
-import frc.robot.commands.Magazine.Spinzine;
-import frc.robot.commands.Shooter.BenShoot;
 import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
@@ -133,6 +132,7 @@ public class RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(false));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(true));
         // new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(getClimber()));
+        new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_N).whenHeld(new ExtendArmsIGuess(m_climber));
     }
 
     public void outputToShuffleBoard() {

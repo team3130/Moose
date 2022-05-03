@@ -23,6 +23,9 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     private DigitalInput m_rightlimitswitch;
     private DigitalInput m_leftlimitswitch;
 
+    private int LeftFullExtension = 226893;
+    private int RightFullExtension = 220302;
+
     //Create and define all standard data types needed
     public Climber() {
         m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
@@ -69,8 +72,12 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     }
 
     public void automateClimber() {
-        m_left_motor.set(ControlMode.MotionMagic, 100069);
-        m_right_motor.set(ControlMode.MotionMagic, 100069);
+        m_left_motor.set(ControlMode.MotionMagic, LeftFullExtension);
+        m_right_motor.set(ControlMode.MotionMagic, RightFullExtension);
+    }
+
+    public boolean checkExtendFin() {
+        return m_left_motor.isMotionProfileFinished() && m_right_motor.isMotionProfileFinished();
     }
 
     public boolean brokeLeft() {
