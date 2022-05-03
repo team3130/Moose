@@ -125,6 +125,12 @@ public class RobotMap {
     public static final double VISIONTARGETHEIGHT = 2.64; // IN METERS
 
     /**
+     * Nano
+     */
+    public static final double kLimelightMountHeight = 2.3;
+    public final static double kBallCallibrationDistance = -20;
+
+    /**
      * Chassis
      */
     public static final double kChassisMaxVoltage = 10.0;
