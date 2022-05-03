@@ -110,5 +110,13 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         setSpeedLeft(0);
         setSpeedRight(0);
     }
+
+    public double getPosL() {
+        return m_left_motor.getSelectedSensorPosition();
+    }
+
+    public double getPosR() {
+        return m_right_motor.getSelectedSensorPosition();
+    }
 }
 
