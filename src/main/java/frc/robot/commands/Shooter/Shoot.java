@@ -27,6 +27,8 @@ public class Shoot extends CommandBase {
     private final Timer timerSpin = new Timer();
     private final double timeSpin = 0.5;
 
+    private final Timer timerSpeedUp;
+
     private enum StateMachine {SHOOTING, INBETWEEN, MAGAZINE};
     private StateMachine State;
 
@@ -47,6 +49,7 @@ public class Shoot extends CommandBase {
         timerShoot = new Timer();
         timerDone = new Timer();
         timerIndexer = new Timer();
+        timerSpeedUp = new Timer();
     }
 
     /**
@@ -56,7 +59,7 @@ public class Shoot extends CommandBase {
     public void initialize() {
         State = StateMachine.SHOOTING;
         limelight.setLedState(true);
-//        m_shooter.updatePID();
+        m_shooter.updatePID();
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
@@ -69,6 +72,9 @@ public class Shoot extends CommandBase {
 
         timerSpin.reset();
         timerSpin.start();
+
+        timerSpeedUp.reset();
+        timerSpeedUp.start();
     }
 
     /**
@@ -78,7 +84,7 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         m_chassis.spinOutput();
-        if (State == StateMachine.SHOOTING) {
+        if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.1)) {
             if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
                 State = StateMachine.INBETWEEN;
                 m_shooter.setIndexerPercent(.5);
@@ -86,7 +92,8 @@ public class Shoot extends CommandBase {
                 timerShoot.start();
             }
         }
-        if (timerShoot.hasElapsed(timeShoot)) {
+        else if (timerShoot.hasElapsed(timeShoot)) {
+            System.out.println("State: " + State + " MODE 2");
             State = StateMachine.MAGAZINE;
             m_shooter.setIndexerPercent(0);
             timerShoot.stop();
@@ -94,7 +101,8 @@ public class Shoot extends CommandBase {
             timerIndexer.reset();
             timerIndexer.start();
         }
-        if (timerIndexer.hasElapsed(0.4)) {
+        else if (timerIndexer.hasElapsed(0.4)) {
+            System.out.println("State: " + State + " MODE 3");
             State = StateMachine.SHOOTING;
             m_magazine.setCenterSpeed(0.4);
             timerIndexer.stop();

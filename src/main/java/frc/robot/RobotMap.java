@@ -73,7 +73,7 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
-    public static double kFlywheelP = 0.0090; // 0.02;
+    public static double kFlywheelP = 0.01; // 0.02;
     public static double kFlywheelI = 0;
     public static double kFlywheelD = 1.15; //0
 
@@ -100,7 +100,7 @@ public class RobotMap {
     public static final int kLimelightFilterBufferSize = 5; // Number of samples in input filtering window
     public static final double kLimelightLatencyMs = 11.0; // Image capture latency
 
-    public static final double kLimelightPitch =  -38.24;   // Facing up is negative, in degrees Checked: 2/17
+    public static final double kLimelightPitch =  -37.9;   // Facing up is negative, in degrees Checked: 2/17
     public static final double kLimelightYaw = 0;        // Aiming bias, facing left is positive
     public static final double kLimelightRoll = 0;       // If any, drooping to right is positive
     public static final double kLimelightHeight = 0.8255;     // Height of camera aperture from the ground

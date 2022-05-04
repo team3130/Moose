@@ -2,12 +2,11 @@ package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.Shooter;
 
 public class SetFlywheelRPM extends CommandBase {
 
@@ -62,20 +61,12 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if (reloading) {
-            if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-                reloading = false;
-                m_shooter.setIndexerPercent(.5);
-                timerShoot.reset();
-                timerShoot.start();
-            }
-        } else if (timerShoot.hasElapsed(timeShoot)) {
-            reloading = true;
-            m_shooter.setIndexerPercent(0);
-            m_magazine.setCenterSpeed(0.6);
-            timerShoot.stop();
+        if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
+            reloading = false;
+            m_shooter.setIndexerPercent(.5);
             timerShoot.reset();
-        }
+            timerShoot.start();
+            }
     }
 
 
