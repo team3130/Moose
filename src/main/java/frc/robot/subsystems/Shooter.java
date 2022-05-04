@@ -145,7 +145,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void setFlywheelSpeed(double rpm) {
-        m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        if (rpm != flywheelSetSpeed) {
+            flywheelSetSpeed = rpm;
+            m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        }
     }
 
     public void stopAll() {
@@ -198,7 +201,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50 && hasNards();
+        return Math.abs(getRPM() - flywheelSetSpeed) <= 50 && hasNards();
     }
 
     public boolean canShootSetFlywheel(double point) {
