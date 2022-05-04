@@ -11,8 +11,6 @@ import frc.robot.RobotMap;
 import frc.robot.SupportingClassess.Ball;
 import frc.robot.SupportingClassess.GeneralUtils;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class Nano implements GeneralUtils {
 
     protected static final Double[] filler = new Double[0];
@@ -22,8 +20,6 @@ public class Nano implements GeneralUtils {
     protected final NetworkTableEntry netx; // x angles
 
     protected final NetworkTableEntry nety; // y angles
-
-    protected final AtomicBoolean blocking = new AtomicBoolean(false);
 
     private static final Matrix<N3, N3> rotation = Algebra.Rodrigues(
             Algebra.buildVector(
@@ -102,11 +98,6 @@ public class Nano implements GeneralUtils {
     }
 
     public Ball[] updateAll() {
-        if (blocking.get()) {
-            return new Ball[0];
-        }
-        blocking.set(true);
-
         Double[] x = getX();
         Double[] y = getY();
 
@@ -129,8 +120,6 @@ public class Nano implements GeneralUtils {
             Matrix<N3, N1> result = calcPosition(x[i], y[i]);
             toReturn[toReturnCounter++] = new Ball(result);
         }
-
-        blocking.set(false);
 
         return toReturn;
     }
@@ -180,8 +169,4 @@ public class Nano implements GeneralUtils {
     public void teleopInit() {}
     public void autonInit() {}
     public void disable() {}
-
-    public boolean isNotBlocking() {
-        return !blocking.get();
-    }
 }

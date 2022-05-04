@@ -22,6 +22,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -37,14 +38,15 @@ public class BallManager {
      *
      * This system is designed in this way so that a single async method can handle all the logic
      */
-    protected final Ball[] balls = new Ball[22];
+    protected final Ball[] balls = new Ball[16];
     protected int highest = 0;
+    protected int lowest = 0;
 
     protected int quickestOneBall = 0;
     protected int[] quickestTwoBall = new int[] {0, 0};
 
     // buffer of size 20 for balls to add
-    protected final Ball[] toAdd = new Ball[20];
+    protected final Ball[] toAdd = new Ball[16];
     protected int highestToAddIndex = 0;
     protected int lowestToAddIndex = 0;
 
@@ -73,9 +75,10 @@ public class BallManager {
     protected final Runnable[] StateMachine;
     protected final char ADD_BALLS = 0;
     protected final char GENERATE_PATH = 1;
+    protected final char UPDATE_BALLS = 2;
     protected char state = 0;
 
-    protected final Thread ballUpdater;
+    protected int updateCounter = 0;
 
     protected final Nano nano;
 
@@ -100,7 +103,7 @@ public class BallManager {
 
         config = chooser.getConfig();
 
-        StateMachine = new Runnable[] {this::smartAdd, this::decidePath};
+        StateMachine = new Runnable[] {this::smartAdd, this::decidePath, this::updateBalls};
 
         if (NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("isRedAlliance").getBoolean(true)) {
             nano = new Nano("red");
@@ -110,8 +113,6 @@ public class BallManager {
         }
 
         m_managerThread = new Thread(this::manager, "manager");
-
-        ballUpdater = new Thread(this::updateBalls, "Ball updater");
 
     }
 
@@ -129,17 +130,14 @@ public class BallManager {
     }
 
     public void clear() {
-        // when you're making a destructor in Java
-        for (Ball ball : balls) {
-            ball = null;
-        }
+        Arrays.fill(balls, null);
     }
 
     // this is synced with rio, so it merely queues the addition of balls
     public void addBall(Ball... balls) {
         // the slowest thing that gets ran on the main rio thread, but is also pretty unavoidable
         for (Ball ball : balls) {
-            toAdd[highestToAddIndex++] = ball;
+            toAdd[highestToAddIndex++ & 15] = ball;
         }
     }
 
@@ -150,7 +148,7 @@ public class BallManager {
     public void destruct() {
         int toRemoveSize = 0;
 
-        for (int i = 0; i < highest; i++) {
+        for (int i = (lowest & 15); i < (highest & 15); i++) {
             if (toRemoveSize > 0) {
                 balls[i - toRemoveSize] = balls[i];
             }
@@ -158,7 +156,7 @@ public class BallManager {
             if (withinFrame.test(balls[i])) {
                 // see if nano can read it
                 boolean safe = false;
-                for (int j = 0; j < toAdd.length; j++) {
+                for (int j = lowestToAddIndex & 15; j < (highestToAddIndex & 15); j++) {
                     if (balls[i].equals(toAdd[j])) {
                         safe = true;
                         break;
@@ -183,13 +181,13 @@ public class BallManager {
         clean();
 
         // destination for loop
-        for (int i = 0; i < highestToAddIndex; i++) {
+        for (int i = (lowestToAddIndex & 15); i < (highestToAddIndex & 15); i++) {
             if (toAdd[i] == null) {
                 continue;
             }
             boolean duped = false;
             // check if ball already exists in the array
-            for (int j = 0; j < highest; j++) {
+            for (int j = (lowest & 15); j < (highest & 15); j++) {
                 if (balls[j].equals(toAdd[i])) {
                     duped = true;
                     break;
@@ -199,7 +197,7 @@ public class BallManager {
                 toAdd[i] = null;
             }
             else {
-                balls[highest++] = toAdd[i];
+                balls[(highest++ & 15)] = toAdd[i];
             }
         }
         updateClosestOneBall();
@@ -207,27 +205,15 @@ public class BallManager {
     }
 
     public boolean ballsExist() {
-        return highest <= 0;
+        return (highest & 15) != (lowest & 15);
     }
 
     public void clean() {
-        updateToAdd();
         destruct();
 
         // murder all balls past the length (basically a garbage collector)
-        for (int i = highest; i < balls.length; i++) {
+        for (int i = (highest & 15); i < balls.length; i++) {
             balls[i] = null;
-        }
-    }
-
-    public void updateToAdd() {
-        double[] nanoBalls = ballsNano.getDoubleArray(new double[0]);
-        int nanoIndex = 0;
-        int toAddIndex = highestToAddIndex;
-        while (nanoIndex < nanoBalls.length) {
-            double x = nanoBalls[nanoIndex++];
-            double y = nanoBalls[nanoIndex++];
-            toAdd[toAddIndex++ % toAdd.length] = new Ball(x, y);
         }
     }
 
@@ -235,7 +221,7 @@ public class BallManager {
         int closest = 0;
         // this method is extremely slow because it is synchronized
         Pose2d botPose = m_chassis.getPose();
-        for (int i = 0; i < highest; i++) {
+        for (int i = (lowest & 15); i < (highest & 15); i++) {
             if (balls[closest].getDistance(botPose) > balls[i].getDistance(botPose)) {
                 closest = i;
             }
@@ -250,8 +236,8 @@ public class BallManager {
         int firstFastest = 0;
         int secondFastest = 0;
 
-        for (int first = 0; first < highest; first++) {
-            for (int second = 0; second < highest; second++) {
+        for (int first = (lowest & 15); first < (highest & 15); first++) {
+            for (int second = (lowest & 15); second < (highest & 15); second++) {
                 if (first == second) {
                     continue;
                 }
@@ -265,22 +251,12 @@ public class BallManager {
         }
         quickestTwoBall[0] = firstFastest;
         quickestTwoBall[1] = secondFastest;
+
+        state = UPDATE_BALLS;
     }
 
 
     public void decidePath() {
-        /**
-         * if (Magazine.count() == 1) {
-         *     Generate one ball
-         * }
-         * else if (Magazine.count() == 2) {
-         *     Generate path to shoot
-         * }
-         * else {
-         *     Generate Two ball path
-         * }
-         */
-
         Pose2d start = commandGroup.getCurr().getPoseGoingTo();
 
         double firstBallX = balls[quickestTwoBall[0]].getX();
@@ -327,7 +303,7 @@ public class BallManager {
         commandGroup.addCommand(new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, goToShoot, EventType.GOING_TO_SHOOT));
         commandGroup.addCommand(new Event(toShootTrajectory.getStates().get(toShootTrajectory.getStates().size() - 1).poseMeters, shoot, EventType.SHOOTING));
 
-        state = ADD_BALLS;
+        state = UPDATE_BALLS;
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -345,8 +321,9 @@ public class BallManager {
     }
 
     public void updateBalls() {
-        if (nano.isNotBlocking()) {
-            addBall(nano.updateAll());
+        addBall(nano.updateAll());
+        if ((updateCounter++ & 3) == 3) {
+            state = ADD_BALLS;
         }
     }
 

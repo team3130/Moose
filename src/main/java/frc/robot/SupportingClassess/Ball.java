@@ -17,7 +17,6 @@ public class Ball {
         pose = new double[] {mat.get(0, 0), mat.get(2, 0)};
     }
 
-
     public double getDistance(double[] pose) {
         return getDistance(pose[0], pose[1]);
     }
