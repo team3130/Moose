@@ -36,9 +36,9 @@ public class Nano implements GeneralUtils {
 
 
     public Nano(String color) {
-        visionTable = NetworkTableInstance.getDefault().getTable("Nano");
-        netx = visionTable.getEntry(color + "-x");
-        nety = visionTable.getEntry(color + "-y");
+        visionTable = NetworkTableInstance.getDefault().getTable("Jetson Nano").getSubTable(color + " balls");
+        netx = visionTable.getEntry("x");
+        nety = visionTable.getEntry("y");
     }
 
     /**
