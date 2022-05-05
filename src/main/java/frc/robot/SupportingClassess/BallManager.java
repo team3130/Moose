@@ -46,7 +46,7 @@ public class BallManager {
     protected int[] quickestTwoBall = new int[] {0, 0};
 
     // buffer of size 20 for balls to add
-    protected final Ball[] toAdd = new Ball[16];
+    protected final Ball[] toAdd = new Ball[128];
     protected int highestToAddIndex = 0;
     protected int lowestToAddIndex = 0;
 
@@ -76,14 +76,17 @@ public class BallManager {
     protected final char ADD_BALLS = 0;
     protected final char GENERATE_PATH = 1;
     protected final char UPDATE_BALLS = 2;
+    protected final char UPDATE_NETWORK_TABLES = 3;
     protected char state = 0;
 
-    protected int updateCounter = 0;
+    protected char updateCounter = 0;
+
+    protected final MagicBox m_magicBox;
 
     protected final Nano nano;
 
 
-    public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, QuegelCommandGroup commandGroup, Chooser chooser, Intake intake, Magazine magazine, Shooter shooter, Limelight limelight) {
+    public BallManager(Chassis chassis, NetworkTable JetsonNano, PathGeneration pathGeneration, QuegelCommandGroup commandGroup, Chooser chooser, Intake intake, Magazine magazine, Shooter shooter, Limelight limelight, MagicBox magicBox) {
         m_chassis = chassis;
         m_intake = intake;
         m_magazine = magazine;
@@ -103,7 +106,7 @@ public class BallManager {
 
         config = chooser.getConfig();
 
-        StateMachine = new Runnable[] {this::smartAdd, this::decidePath, this::updateBalls};
+        StateMachine = new Runnable[] {this::smartAdd, this::decidePath, this::updateBalls, this::updateNetTables};
 
         if (NetworkTableInstance.getDefault().getTable("FMSInfo").getEntry("isRedAlliance").getBoolean(true)) {
             nano = new Nano("red");
@@ -113,6 +116,8 @@ public class BallManager {
         }
 
         m_managerThread = new Thread(this::manager, "manager");
+
+        this.m_magicBox = magicBox;
 
     }
 
@@ -137,7 +142,7 @@ public class BallManager {
     public void addBall(Ball... balls) {
         // the slowest thing that gets ran on the main rio thread, but is also pretty unavoidable
         for (Ball ball : balls) {
-            toAdd[highestToAddIndex++ & 15] = ball;
+            toAdd[highestToAddIndex++ & 127] = ball;
         }
     }
 
@@ -156,7 +161,7 @@ public class BallManager {
             if (withinFrame.test(balls[i])) {
                 // see if nano can read it
                 boolean safe = false;
-                for (int j = lowestToAddIndex & 15; j < (highestToAddIndex & 15); j++) {
+                for (int j = lowestToAddIndex & 127; j < (highestToAddIndex & 127); j++) {
                     if (balls[i].equals(toAdd[j])) {
                         safe = true;
                         break;
@@ -181,7 +186,7 @@ public class BallManager {
         clean();
 
         // destination for loop
-        for (int i = (lowestToAddIndex & 15); i < (highestToAddIndex & 15); i++) {
+        for (int i = (lowestToAddIndex & 127); i < (highestToAddIndex & 127); i++) {
             if (toAdd[i] == null) {
                 continue;
             }
@@ -321,9 +326,35 @@ public class BallManager {
     }
 
     public void updateBalls() {
-        addBall(nano.updateAll());
-        if ((updateCounter++ & 3) == 3) {
+        Pose2d chassisPos = m_chassis.getPose();
+        double[] pos = new double[] {chassisPos.getX(), chassisPos.getY()};
+        Ball[] ballArr = nano.updateAll();
+
+        for (int i = 0; i < ballArr.length; i++) {
+            ballArr[i].transformTo(pos);
+        }
+
+        addBall(ballArr);
+
+        updateCounter++;
+
+        if ((updateCounter & 1) == 1) {
             state = ADD_BALLS;
+        }
+        if ((updateCounter & 3) == 3) {
+            state = UPDATE_NETWORK_TABLES;
+        }
+    }
+
+    public void updateNetTables() {
+        double[] x = new double[balls.length];
+        double[] y = new double[balls.length];
+        for (int i = (lowest & 15); i < (highest & 15); i++) {
+            x[i] = balls[i].getX();
+            y[i] = balls[i].getY();
+        }
+        if (m_magicBox.updateBalls(x, y)) {
+            state = UPDATE_BALLS;
         }
     }
 

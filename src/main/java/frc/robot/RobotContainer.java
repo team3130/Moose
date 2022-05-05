@@ -44,10 +44,11 @@ public class RobotContainer {
 
     NetworkTable JetsonNano = NetworkTableInstance.getDefault().getTable("Jetson nano");
 
+    protected MagicBox magicBox = new MagicBox(JetsonNano.getEntry("Rio Balls X"), JetsonNano.getEntry("Rio Balls Y"));
 
     PathGeneration pathGeneration = new PathGeneration(m_wheelSpeedCalculations, m_chassis, m_limelight, m_chooser);
-    QuegelCommandGroup quegelCommandGroup = new QuegelCommandGroup(m_chassis, m_shooter, m_intake, m_magazine, m_limelight);
-    BallManager ballManager = new BallManager(m_chassis, JetsonNano, pathGeneration, quegelCommandGroup, m_chooser, m_intake, m_magazine, m_shooter, m_limelight);
+    QuegelCommandGroup quegelCommandGroup = new QuegelCommandGroup(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, magicBox);
+    BallManager ballManager = new BallManager(m_chassis, JetsonNano, pathGeneration, quegelCommandGroup, m_chooser, m_intake, m_magazine, m_shooter, m_limelight, magicBox);
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();

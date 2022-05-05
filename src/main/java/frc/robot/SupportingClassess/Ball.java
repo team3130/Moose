@@ -59,4 +59,9 @@ public class Ball {
     public boolean equals(double[] pose) {
         return Math.sqrt(Math.pow(this.pose[0] - pose[0], 2) + Math.pow(this.pose[1] - pose[1], 2)) <= RobotMap.ballPositionError;
     }
+
+    public void transformTo(double[] otherPose) {
+        pose[0] += otherPose[0];
+        pose[1] += otherPose[1];
+    }
 }

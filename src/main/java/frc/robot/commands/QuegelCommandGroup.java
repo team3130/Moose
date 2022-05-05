@@ -7,16 +7,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import frc.robot.RobotMap;
-import frc.robot.SupportingClassess.BallManager;
-import frc.robot.SupportingClassess.Event;
-import frc.robot.SupportingClassess.EventType;
+import frc.robot.SupportingClassess.*;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
-public class QuegelCommandGroup extends CommandGroupBase {
+public class QuegelCommandGroup extends CommandGroupBase implements GeneralUtils {
     protected final Chassis m_chassis;
     protected final Shooter m_shooter;
     protected final Intake m_intake;
@@ -26,6 +24,8 @@ public class QuegelCommandGroup extends CommandGroupBase {
     protected BallManager ball_manager;
 
     protected final Timer timeSinceReset;
+
+    protected MagicBox magicBox;
 
     // command group stuff
     protected final Event[] commands;
@@ -42,7 +42,7 @@ public class QuegelCommandGroup extends CommandGroupBase {
      * @param magazine magazine subsystem
      * @param limelight limelight singleton
      */
-    public QuegelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight) {
+    public QuegelCommandGroup(Chassis chassis, Shooter shooter, Intake intake, Magazine magazine, Limelight limelight, MagicBox magicBox) {
         m_chassis = chassis;
         m_shooter = shooter;
         m_intake = intake;
@@ -58,6 +58,8 @@ public class QuegelCommandGroup extends CommandGroupBase {
         timeSinceReset = new Timer();
 
         commands = new Event[16];
+
+        this.magicBox = magicBox;
     }
 
     /**
@@ -180,5 +182,20 @@ public class QuegelCommandGroup extends CommandGroupBase {
 
     public Event getCurr() {
         return commands[front & 15];
+    }
+
+    @Override
+    public void outputToShuffleboard() {
+        magicBox.writeOutput();
+    }
+
+    @Override
+    public void teleopInit() {
+
+    }
+
+    @Override
+    public void disable() {
+
     }
 }

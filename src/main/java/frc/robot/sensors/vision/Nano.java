@@ -111,11 +111,10 @@ public class Nano implements GeneralUtils {
         }
 
         Ball[] toReturn = new Ball[x.length];
-        int toReturnCounter = 0;
 
         for (int i = 0; i < x.length; i++) {
             Matrix<N3, N1> result = calcPosition(x[i], y[i]);
-            toReturn[toReturnCounter++] = new Ball(result);
+            toReturn[i] = new Ball(result);
         }
 
         return toReturn;
