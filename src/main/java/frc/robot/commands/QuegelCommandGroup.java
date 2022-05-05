@@ -127,7 +127,10 @@ public class QuegelCommandGroup extends CommandGroupBase {
      */
     @Override
     public void end(boolean interrupted) {
-
+        m_shooter.stopAll();
+        m_chassis.configRampRate(0);
+        m_magazine.stopAll();
+        m_intake.stopAll();
     }
 
     /**

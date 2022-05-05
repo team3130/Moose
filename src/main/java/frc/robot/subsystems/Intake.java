@@ -52,4 +52,9 @@ public class Intake extends SubsystemBase implements GeneralUtils {
     public void disable() {
         m_motor.set(0);
     }
+
+    public void stopAll() {
+        m_motor.set(0);
+        m_solenoid.set(false);
+    }
 }
