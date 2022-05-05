@@ -34,11 +34,11 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         m_rightlimitswitch = new DigitalInput(RobotMap.RIGHT_LIMITSWITCH);
         m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
 
-        m_left_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-        m_right_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
-
         m_right_motor.configFactoryDefault();
         m_left_motor.configFactoryDefault();
+
+        m_left_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        m_right_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
         m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);

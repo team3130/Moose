@@ -10,8 +10,6 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Magazine;
 
 public class Shoot extends CommandBase {
-
-    private boolean reloading = false;
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Shooter m_shooter;
     private Limelight limelight;
@@ -64,6 +62,7 @@ public class Shoot extends CommandBase {
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         double angle = m_chassis.getSpinnyAngle() - limelight.getHeading().getDegrees();
+        m_chassis.updatePIDValues();
         m_chassis.resetPIDLoop();
         m_chassis.setSpinnySetPoint(angle);
 
@@ -84,6 +83,7 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         m_chassis.spinOutput();
+        m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(limelight.getDistanceToTarget()));
         if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.1)) {
             if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
                 State = StateMachine.INBETWEEN;
@@ -92,8 +92,7 @@ public class Shoot extends CommandBase {
                 timerShoot.start();
             }
         }
-        else if (timerShoot.hasElapsed(timeShoot)) {
-            System.out.println("State: " + State + " MODE 2");
+        if (timerShoot.hasElapsed(timeShoot)) {
             State = StateMachine.MAGAZINE;
             m_shooter.setIndexerPercent(0);
             timerShoot.stop();
@@ -101,8 +100,7 @@ public class Shoot extends CommandBase {
             timerIndexer.reset();
             timerIndexer.start();
         }
-        else if (timerIndexer.hasElapsed(0.4)) {
-            System.out.println("State: " + State + " MODE 3");
+        if (timerIndexer.hasElapsed(0.4)) {
             State = StateMachine.SHOOTING;
             m_magazine.setCenterSpeed(0.4);
             timerIndexer.stop();

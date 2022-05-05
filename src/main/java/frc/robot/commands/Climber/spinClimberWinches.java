@@ -33,7 +33,7 @@ public class spinClimberWinches extends CommandBase {
         double right = RobotContainer.m_weaponsGamepad.getRawAxis(5) * -0.85;
         if (m_climber.brokeLeft() && left <= 0) {
             left = 0;
-        } if (m_climber.getPosR() <= -4096 && right <= 0) {
+        } if (m_climber.brokeRight() && right <= 0) {
             right = 0;
         }
         m_climber.setSpeedLeft(left);

@@ -53,10 +53,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     //Create and define all standard data types needed
     public Shooter(Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
-        m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_MOTOR);
+        m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_LEFT);
         m_flywheel.setInverted(false);
         
-        m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_SHOOTER_UPPER_MOTOR);
+        m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_SHOOTER_RIGHT);
         m_flywheelFollower.setInverted(true);
 
         // restricting voltage for the flywheel
@@ -145,7 +145,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public void setFlywheelSpeed(double rpm) {
-        m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+        if (rpm != flywheelSetSpeed) {
+            m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
+            flywheelSetSpeed = rpm;
+        }
     }
 
     public void stopAll() {
@@ -198,7 +201,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     }
 
     public boolean canShoot() {
-        return Math.abs(getRPM() - shooterCurve.getSpeed(m_limelight.getDistanceToTarget())) <= 50 && hasNards();
+        return Math.abs(getRPM() - flywheelSetSpeed) <= 50 && hasNards();
     }
 
     public boolean canShootSetFlywheel(double point) {

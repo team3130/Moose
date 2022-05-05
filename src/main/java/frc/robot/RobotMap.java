@@ -37,8 +37,8 @@ public class RobotMap {
     public static final int CAN_PNMMODULE = 8;
 
     // Shooter
-    public static final int CAN_SHOOTER_MOTOR = 7;
-    public static final int CAN_SHOOTER_UPPER_MOTOR = 13;
+    public static final int CAN_SHOOTER_LEFT = 7;
+    public static final int CAN_SHOOTER_RIGHT = 13;
     public static final int CAN_HOOD_MOTOR = 14;
 
     // Intake
@@ -75,15 +75,16 @@ public class RobotMap {
 
     public static double kFlywheelP = 0.01; // 0.02;
     public static double kFlywheelI = 0;
-    public static double kFlywheelD = 1.15; //0
+    public static double kFlywheelD = 0; //0
 
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0 ;//0.5816;
-    public static double flyWheelkV = 0.070; //0.0655;
+    public static double flyWheelkV = 0.069; //0.0655;
     public static double flyWheelkA = 0; //0.0082804;
 
-    public static double kHoodP = 0.125;
+    public static double kHoodP = 1.53
+            ;
     public static double kHoodI = 0.0;
     public static double kHoodD = 0;
     public static double kHoodV = 0;
@@ -126,9 +127,9 @@ public class RobotMap {
     public static final double kChassisEncoderError = 1.0934926;
     public static double kMaxRampRate = 0.7;
 
-    public static double ChassisSpinKP = 0.013;
+    public static double ChassisSpinKP = 0.015;
     public static double ChassisSpinKI = 0;
-    public static double ChassisSpinKD = 0.0053;
+    public static double ChassisSpinKD = 0.00225;
 
     public static double ChassisLateralP = 2;
     public static double ChassisLateralI = 0;
