@@ -85,7 +85,6 @@ public class SetFlywheelRPM extends CommandBase {
     public void end(boolean interrupted) {
         m_shooter.stopAll();
         m_magazine.stopAll();
-        m_limelight.setLedState(false);
         timer.stop();
     }
 }
