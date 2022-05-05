@@ -66,11 +66,8 @@ public class Nano implements GeneralUtils {
      * @return a vector pointing to the direction but with the length = 1
      */
     public Matrix<N3, N1> levelVector(double ax, double ay) {
-        // Convert degrees from the vision to unit coordinates
-        double ux = Math.tan(Math.toRadians(ax));
-        double uy = Math.tan(Math.toRadians(ay));
         // Do two rotations: for LimeLight mount and for robot tilt
-        return rotation.times(Algebra.buildVector(ux, uy, 1)); //TODO: make negative
+        return rotation.times(Algebra.buildVector(ax, ay, 1)); //TODO: make negative
     }
 
     /**
