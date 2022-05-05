@@ -83,7 +83,7 @@ public class Shoot extends CommandBase {
     @Override
     public void execute() {
         m_chassis.spinOutput();
-        m_shooter.setFlywheelSpeed(shooterCurve.getSpeed(limelight.getDistanceToTarget()));
+        m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
         if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.1)) {
             if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
                 State = StateMachine.INBETWEEN;

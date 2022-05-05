@@ -146,8 +146,8 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void setFlywheelSpeed(double rpm) {
         if (rpm != flywheelSetSpeed) {
-            m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
             flywheelSetSpeed = rpm;
+            m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, rpm));
         }
     }
 
