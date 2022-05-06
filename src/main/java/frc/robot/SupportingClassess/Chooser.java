@@ -244,7 +244,7 @@ public class Chooser {
                 new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake), ReverseToShoot.getCmd(), shoot
                 );
 
-        m_autonChooser.addOption("Funny 2 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
+        m_autonChooser.setDefaultOption("Funny 2 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
     }
 
     public void add5Ball() {
@@ -503,7 +503,7 @@ public class Chooser {
         Shoot shoot2 = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
 
         SequentialCommandGroup commandGroup = new SequentialCommandGroup(
-                goToFirstBall.getCmd(), spinToShoot, shoot, goToSecondBall.getCmd(), spinToAngle, shoot2
+                goToFirstBall.getCmd(), spinToShoot, shoot, spinToAngle, goToSecondBall.getCmd(), spinChassisToShoot2, shoot2
         );
 
         m_autonChooser.addOption("3Ball L", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));

@@ -45,12 +45,12 @@ public class Robot extends TimedRobot {
 //    m_chooser.addAllCommands();
 //    m_chooser.add3Ball();
 //    m_chooser.addThreeBallPathTwo();
-    m_chooser.addTwoBall();
     m_chooser.addFiller();
     m_chooser.add3Ball3();
     m_chooser.add2Ball2();
     m_chooser.addSpitOut();
     m_chooser.generateFourBall();
+    m_chooser.generate3BallL();
 //    m_chooser.generateTestPath();
   }
 
