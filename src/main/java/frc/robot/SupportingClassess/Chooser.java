@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMap;
-import frc.robot.commands.Chassis.*;
+import frc.robot.commands.Chassis.FaceTarget;
+import frc.robot.commands.Chassis.SpinChassisToAbsoluteAngle;
+import frc.robot.commands.Chassis.SpinChassisToAngle;
 import frc.robot.commands.Intake.DeployAndSpintake;
-import frc.robot.commands.Intake.DeployAndSpintakeMagazineBack;
-import frc.robot.commands.Shooter.ChooseFlywheelRPM;
 import frc.robot.commands.Shooter.SetFlywheelRPM;
 import frc.robot.commands.Shooter.Shoot;
 import frc.robot.commands.doNothing;
@@ -429,5 +429,83 @@ public class Chooser {
         );
 
         m_autonChooser.addOption("Desperate 3 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
+    }
+
+    public void generateFourBall() {
+        AutonCommand goToFirstBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/4Ball/GoToBall3Ball3.wpilib.json")
+                )
+        );
+
+        RamseteCommand reverseToShoot = ramseteCommandFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/4Ball/GoToShoot3Ball3.wpilib.json")));
+
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1, container.getShooter());
+
+        AutonCommand goTo3rdAnd4thBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/4Ball/FourBallOne.wpilib.json")
+                )
+        );
+
+        CommandBase shoot = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
+
+        AutonCommand ReverseToShoot2 = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/4Ball/ReverseAfter4thBall.wpilib.json")
+                )
+        );
+
+
+        CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1, container.getShooter());
+
+        AutonCommand GoToShootLast = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/4Ball/GoToShoot4.wpilib.json")
+                )
+        );
+
+        CommandBase shoot2 = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
+
+        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+                new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake),
+                reverseToShoot,
+                shoot,
+                new ParallelDeadlineGroup(goTo3rdAnd4thBall.getCmd(), deployIntake2),
+                ReverseToShoot2.getCmd(),
+                GoToShootLast.getCmd(),
+                shoot2
+        );
+
+        m_autonChooser.addOption("Scuffed 4 Ball", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
+    }
+
+    public void generate3BallL() {
+        AutonCommand goToFirstBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3BallL/3BallLGoToBall.wpilib.json")
+                )
+        );
+        AutonCommand goToSecondBall = autonCmdFactory.apply(
+                trajectoryFactory.apply(
+                        Filesystem.getDeployDirectory().toPath().resolve("paths/3BallL/GoToShoot3BallL.wpilib.json")
+                )
+        );
+
+        SpinChassisToAngle spinToShoot = new SpinChassisToAngle(container.getChassis(), 180);
+
+        Shoot shoot = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
+
+        SpinChassisToAbsoluteAngle spinToAngle = new SpinChassisToAbsoluteAngle(container.getChassis(), goToSecondBall.getStartPosition().getRotation().getDegrees());
+
+        SpinChassisToAngle spinChassisToShoot2 = new SpinChassisToAngle(container.getChassis(), -90);
+
+        Shoot shoot2 = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
+
+        SequentialCommandGroup commandGroup = new SequentialCommandGroup(
+                goToFirstBall.getCmd(), spinToShoot, shoot, goToSecondBall.getCmd(), spinToAngle, shoot2
+        );
+
+        m_autonChooser.addOption("3Ball L", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));
     }
 }

@@ -35,7 +35,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private final ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
 
     private final NetworkTableEntry sped = tab.add("Shooter Set RPM", flywheelSetSpeed).getEntry();
-    private final NetworkTableEntry followRPM = tab.add("Follower RPM", 0).getEntry();
     private final NetworkTableEntry RPM = tab.add("Shooter Current RPM", 0).getEntry();
 
     //private final NetworkTableEntry spedHoodWheel = tab.add("Shooter Top Set RPM", hoodWheelSetSpeed).getEntry();
@@ -44,11 +43,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
     private final NetworkTableEntry I = tab.add("Top Flywheel I", RobotMap.kFlywheelI).getEntry();
     private final NetworkTableEntry D = tab.add("Top Flywheel D", RobotMap.kFlywheelD).getEntry();
     private final NetworkTableEntry V = tab.add("Top Flywheel V", RobotMap.flyWheelkV).getEntry();
-
-    private final NetworkTableEntry time = tab.add("Time until Speed", 0).getEntry();
-    private final NetworkTableEntry canShootManual = tab.add("Setpoint difference", 0).getEntry();
-
-    private double accelTime = 0;
 
 
     //Create and define all standard data types needed
@@ -64,7 +58,7 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_flywheel.enableVoltageCompensation(true);
 
         // restricting voltage for the hood wheel
-        m_flywheelFollower.configVoltageCompSaturation(9);
+        m_flywheelFollower.configVoltageCompSaturation(8);
         m_flywheelFollower.enableVoltageCompensation(true);
 
         m_flywheelFollower.follow(m_flywheel);
@@ -74,14 +68,14 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         m_indexer = new WPI_TalonSRX(RobotMap.CAN_INDEXER);
         m_indexer.setNeutralMode(NeutralMode.Brake);
         m_indexer.setInverted(true);
+        m_indexer.configVoltageCompSaturation(9);
+        m_indexer.enableVoltageCompensation(true);
 
         shooterCurve = wheelSpeedCalculations;
 
-        m_limelight = limelight;
-    }
+        m_flywheel.configMaxIntegralAccumulator(0, 0.0001);
 
-    public void setAccelTime(double in){
-        accelTime = in;
+        m_limelight = limelight;
     }
     public boolean hasNards() {
         return !breakbeam.get();
@@ -105,12 +99,13 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void outputToShuffleboard() {
         RPM.setNumber(getRPM());
-        time.setNumber(accelTime);
-        canShootManual.setNumber( Math.abs(getRPM() - getSpeedFromShuffleboard()));
+/*        time.setNumber(accelTime);
+        canShootManual.setNumber( Math.abs(getRPM() - getSpeedFromShuffleboard()));*/
 //        RPMHoodWheel.setNumber(getRPMHoodWheel());
 //        shooterVoltageOut.setNumber(m_flywheel.getMotorOutputVoltage());
         SmartDashboard.putBoolean("Can Shoot?", canShoot());
         SmartDashboard.putBoolean("Break Beam", hasNards());
+        SmartDashboard.putNumber("Setpoint", flywheelSetSpeed);
 //        indexerVoltageOut.setNumber(m_indexer.getMotorOutputVoltage());
         // pidFlywheel.setPID(P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD));
 //        SmartDashboard.putBoolean("break beam", breakbeam.get());
@@ -214,5 +209,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     public void updatePID() {
         Utils.configPIDF(m_flywheel, P.getDouble(RobotMap.kFlywheelP), I.getDouble(RobotMap.kFlywheelI), D.getDouble(RobotMap.kFlywheelD), V.getDouble(RobotMap.flyWheelkV));
+    }
+
+    public void setFlywheelSpeeds(double speedFromShuffleboard) {
+        flywheelSetSpeed = speedFromShuffleboard;
+        m_flywheel.set(ControlMode.Velocity, Util.scaleVelocityToNativeUnits(RobotMap.kFlywheelRPMtoNativeUnitsScalar, speedFromShuffleboard));
     }
 }

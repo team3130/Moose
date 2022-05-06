@@ -27,7 +27,7 @@ public class Shoot extends CommandBase {
 
     private final Timer timerSpeedUp;
 
-    private enum StateMachine {SHOOTING, INBETWEEN, MAGAZINE};
+    private enum StateMachine {SHOOTING, INDEXING, MAGAZINE};
     private StateMachine State;
 
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
@@ -74,6 +74,9 @@ public class Shoot extends CommandBase {
 
         timerSpeedUp.reset();
         timerSpeedUp.start();
+
+        timerDone.stop();
+        timerDone.reset();
     }
 
     /**
@@ -84,15 +87,22 @@ public class Shoot extends CommandBase {
     public void execute() {
         m_chassis.spinOutput();
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
-        if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.1)) {
-            if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-                State = StateMachine.INBETWEEN;
-                m_shooter.setIndexerPercent(.5);
+        if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.25)) {
+            if (m_shooter.canShootSetFlywheel(m_shooter.getFlywheelSetSpeed()) & m_chassis.getAtSetpoint()) {
+                State = StateMachine.INDEXING;
+                m_shooter.setIndexerPercent(0.6);
                 timerShoot.reset();
                 timerShoot.start();
             }
+            if (!m_shooter.hasNards()) {
+                timerDone.start();
+            }
+            else {
+                timerDone.stop();
+                timerDone.reset();
+            }
         }
-        if (timerShoot.hasElapsed(timeShoot)) {
+        else if (State == StateMachine.INDEXING && timerShoot.hasElapsed(timeShoot)) {
             State = StateMachine.MAGAZINE;
             m_shooter.setIndexerPercent(0);
             timerShoot.stop();
@@ -100,19 +110,11 @@ public class Shoot extends CommandBase {
             timerIndexer.reset();
             timerIndexer.start();
         }
-        if (timerIndexer.hasElapsed(0.4)) {
+        else if (State == StateMachine.MAGAZINE && timerIndexer.hasElapsed(0.4)) {
             State = StateMachine.SHOOTING;
             m_magazine.setCenterSpeed(0.4);
             timerIndexer.stop();
             timerIndexer.reset();
-        }
-
-        if (!m_shooter.hasNards() && (State == StateMachine.SHOOTING)) {
-            timerDone.start();
-        }
-        else {
-            timerDone.stop();
-            timerDone.reset();
         }
     }
 

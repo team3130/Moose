@@ -33,7 +33,8 @@ import java.util.List;
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
  */
-public class RobotContainer {
+public class
+RobotContainer {
     private ArrayList<GeneralUtils> m_generalUtils;
     // Supporting classes
     protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
@@ -82,7 +83,6 @@ public class RobotContainer {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_climber, m_wheelSpeedCalculations));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
-        m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
         m_chooser = new Chooser(autonChooser, this);
 
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));

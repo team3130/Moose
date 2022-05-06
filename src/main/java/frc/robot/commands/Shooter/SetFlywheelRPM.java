@@ -46,10 +46,9 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void initialize() {
-        reloading = true;
         limelight.setLedState(true);
         m_shooter.updatePID();
-        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
+        m_shooter.setFlywheelSpeeds(m_shooter.getSpeedFromShuffleboard());
 
         timerSpin.reset();
         timerSpin.start();
@@ -61,12 +60,12 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public void execute() {
-        if ((limelight.hasTrack()) ? m_shooter.canShoot() : m_shooter.canShootSetFlywheel(m_shooter.getSpeedFromShuffleboard()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
-            reloading = false;
-            m_shooter.setIndexerPercent(.5);
+        m_shooter.setFlywheelSpeed(m_shooter.getSpeedFromShuffleboard());
+        if (m_shooter.canShoot()) {
+            m_shooter.setIndexerPercent(0.6);
             timerShoot.reset();
             timerShoot.start();
-            }
+        }
     }
 
 
@@ -86,7 +85,7 @@ public class SetFlywheelRPM extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        return !m_shooter.hasNards() && timerShoot.hasElapsed(timeShoot + 0.04);
+        return false;
     }
 
     /**
