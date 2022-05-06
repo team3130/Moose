@@ -18,7 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.HOOD_WINCH;
 import static frc.robot.sensors.vision.WheelSpeedCalculations.CurveMechanism.SHOOTER;
 
 public class WheelSpeedCalculations implements GeneralUtils {
@@ -105,12 +104,9 @@ public class WheelSpeedCalculations implements GeneralUtils {
         this.mechanism = mechanism;
         FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves";
 
-        if (mechanism == SHOOTER) {
-            FILEPATH = FILEPATH + File.separator + "RapidReactThird.csv";
-        }
-        else if (mechanism == HOOD_WINCH) {
-            FILEPATH = FILEPATH + File.separator + "HoodPlaceHolder.csv";
-        }
+
+        FILEPATH = FILEPATH + File.separator + "Marriuci.csv";
+
 
 
         data_MainStorage = new ArrayList<>();
