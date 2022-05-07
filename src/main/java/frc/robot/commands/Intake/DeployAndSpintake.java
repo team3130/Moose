@@ -45,7 +45,7 @@ public class DeployAndSpintake extends CommandBase {
      */
     @Override
     public void execute() {
-        if (m_shooter.hasNards()) {
+        if (m_shooter.hasNards() && direction < 0) {
             m_magazine.setCenterSpeed(0);
         }
     }

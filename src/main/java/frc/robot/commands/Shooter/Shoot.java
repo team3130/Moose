@@ -20,14 +20,14 @@ public class Shoot extends CommandBase {
     private Timer timerShoot;
     private Timer timerDone;
     private Timer timerIndexer;
-    private double timeShoot = 0.2;
+    private double timeShoot = 0.3;
 
     private final Timer timerSpin = new Timer();
-    private final double timeSpin = 0.5;
+    private final double timeSpin = 1.5;
 
     private final Timer timerSpeedUp;
 
-    private enum StateMachine {SHOOTING, INDEXING, MAGAZINE};
+    private enum StateMachine {SHOOTING, INDEXING, INDEXER_SLOWING};
     private StateMachine State;
 
     public Shoot(Shooter subsystem, Magazine magazine, Chassis chassis, Limelight limelight) {
@@ -58,7 +58,7 @@ public class Shoot extends CommandBase {
         State = StateMachine.SHOOTING;
         limelight.setLedState(true);
         m_shooter.updatePID();
-        m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
+        m_shooter.setFlywheelSpeeds((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         double angle = m_chassis.getSpinnyAngle() - limelight.getHeading().getDegrees();
@@ -87,8 +87,8 @@ public class Shoot extends CommandBase {
     public void execute() {
         m_chassis.spinOutput();
         m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
-        if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.25)) {
-            if (m_shooter.canShootSetFlywheel(m_shooter.getFlywheelSetSpeed()) & m_chassis.getAtSetpoint()) {
+        if (State == StateMachine.SHOOTING && timerSpeedUp.hasElapsed(0.15)) {
+            if (m_shooter.canShootSetFlywheel(m_shooter.getFlywheelSetSpeed()) && (m_chassis.getAtSetpoint() || timerSpin.hasElapsed(timeSpin))) {
                 State = StateMachine.INDEXING;
                 m_shooter.setIndexerPercent(0.6);
                 timerShoot.reset();
@@ -103,14 +103,14 @@ public class Shoot extends CommandBase {
             }
         }
         else if (State == StateMachine.INDEXING && timerShoot.hasElapsed(timeShoot)) {
-            State = StateMachine.MAGAZINE;
+            State = StateMachine.INDEXER_SLOWING;
             m_shooter.setIndexerPercent(0);
             timerShoot.stop();
             timerShoot.reset();
             timerIndexer.reset();
             timerIndexer.start();
         }
-        else if (State == StateMachine.MAGAZINE && timerIndexer.hasElapsed(0.4)) {
+        else if (State == StateMachine.INDEXER_SLOWING && timerIndexer.hasElapsed(0.3)) {
             State = StateMachine.SHOOTING;
             m_magazine.setCenterSpeed(0.4);
             timerIndexer.stop();

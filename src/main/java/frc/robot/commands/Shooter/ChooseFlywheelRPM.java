@@ -30,7 +30,7 @@ public class ChooseFlywheelRPM extends CommandBase {
     public void initialize() {
         m_shooter.updatePID();
 
-        m_shooter.setFlywheelSpeed(setPoint);
+        m_shooter.setFlywheelSpeeds(setPoint);
         m_shooter.setIndexerPercent(0.5);
         
         m_magazine.feedAll();

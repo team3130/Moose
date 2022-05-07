@@ -43,7 +43,7 @@ public class BenShoot extends CommandBase {
     public void initialize() {
         limelight.setLedState(true);
 //        m_shooter.updatePID();
-        m_shooter.setFlywheelSpeed((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
+        m_shooter.setFlywheelSpeeds((limelight.hasTrack()) ? shooterCurve.getSpeed(limelight.getDistanceToTarget()) : m_shooter.getSpeedFromShuffleboard());
 
         m_chassis.configRampRate(RobotMap.kMaxRampRate);
         m_chassis.updatePIDValues();

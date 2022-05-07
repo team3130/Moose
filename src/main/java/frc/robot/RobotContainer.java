@@ -125,7 +125,7 @@ RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new SetFlywheelRPM(m_shooter, m_magazine, m_chassis, m_limelight));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_MENU).whenPressed(new DeployIntake(m_intake));
          new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenPressed(new ToggleClimber(m_climber));
-        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new ZeroClimber(m_climber));
+        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_X).whenHeld(new ZeroClimber(m_climber, 0.25, 0.25));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_Y).whenHeld(new DeployAndSpintakeMagazineBack(m_intake, m_magazine, 1));
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
 //        new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_A).whenHeld(new ZeroClimber(m_climber));
@@ -134,6 +134,8 @@ RobotContainer {
         new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_RJOYSTICKPRESS).whenPressed(() -> m_wheelSpeedCalculations.ModifySlider(true));
         // new TriggerButton(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(getClimber()));
         new PivotTrigger(m_weaponsGamepad, RobotMap.LST_POV_N).whenHeld(new ExtendArmsIGuess(m_climber));
+        new PivotTrigger(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(m_climber, 0.5, 0.5));
+        new PivotTrigger(m_weaponsGamepad, RobotMap.LST_POV_E).whenPressed(m_intake::toggleVoltageCompensation);
     }
 
     public void outputToShuffleBoard() {

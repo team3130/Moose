@@ -491,6 +491,8 @@ public class Chooser {
                         Filesystem.getDeployDirectory().toPath().resolve("paths/3BallL/GoToShoot3BallL.wpilib.json")
                 )
         );
+        CommandBase deployIntake = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1, container.getShooter());
+        CommandBase deployIntake2 = new DeployAndSpintake(container.getIntake(), container.getMagazine(), 1, container.getShooter());
 
         SpinChassisToAngle spinToShoot = new SpinChassisToAngle(container.getChassis(), 180);
 
@@ -503,7 +505,7 @@ public class Chooser {
         Shoot shoot2 = new Shoot(container.getShooter(), container.getMagazine(), container.getChassis(), container.getLimelight());
 
         SequentialCommandGroup commandGroup = new SequentialCommandGroup(
-                goToFirstBall.getCmd(), spinToShoot, shoot, spinToAngle, goToSecondBall.getCmd(), spinChassisToShoot2, shoot2
+                new ParallelDeadlineGroup(goToFirstBall.getCmd(), deployIntake), spinToShoot, shoot, spinToAngle, new ParallelDeadlineGroup(goToSecondBall.getCmd(), deployIntake2), spinChassisToShoot2, shoot2
         );
 
         m_autonChooser.addOption("3Ball L", new AutonCommand(commandGroup, goToFirstBall.getStartPosition()));

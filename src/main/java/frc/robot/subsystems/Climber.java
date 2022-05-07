@@ -60,9 +60,9 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         m_right_motor.set(speed);
     }
 
-    public void zero() {
-        m_left_motor.set(ControlMode.PercentOutput, -0.25);
-        m_right_motor.set(ControlMode.PercentOutput, -0.25);
+    public void zero(double left, double right) {
+        m_left_motor.set(ControlMode.PercentOutput, -left);
+        m_right_motor.set(ControlMode.PercentOutput, -right);
     }
 
     public boolean isDeployed() {

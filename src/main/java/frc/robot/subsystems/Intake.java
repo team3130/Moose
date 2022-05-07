@@ -23,6 +23,9 @@ public class Intake extends SubsystemBase implements GeneralUtils {
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);
 
         m_motor.setInverted(false);
+
+        m_motor.configVoltageCompSaturation(9.5);
+        m_motor.enableVoltageCompensation(true);
     }
 
     public void setSpeed(double speed) {
@@ -51,5 +54,9 @@ public class Intake extends SubsystemBase implements GeneralUtils {
     @Override
     public void disable() {
         m_motor.set(0);
+    }
+
+    public void toggleVoltageCompensation() {
+        m_motor.enableVoltageCompensation(false);
     }
 }

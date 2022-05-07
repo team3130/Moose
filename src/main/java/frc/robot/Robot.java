@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
+import frc.robot.commands.Climber.ZeroClimber;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -83,6 +84,7 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());
+    m_scheduler.schedule(new ZeroClimber(m_robotContainer.getClimber(), 0.3, 0.3));
 //    m_robotContainer.getLimelight().setLedState(true);
 /*    // week 0 auton attempt
     m_scheduler.schedule(

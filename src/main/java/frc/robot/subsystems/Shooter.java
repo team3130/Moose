@@ -47,18 +47,18 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
     //Create and define all standard data types needed
     public Shooter(Limelight limelight, WheelSpeedCalculations wheelSpeedCalculations) {
-        m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_LEFT);
-        m_flywheel.setInverted(false);
+        m_flywheel = new WPI_TalonFX(RobotMap.CAN_SHOOTER_RIGHT);
+        m_flywheel.setInverted(true);
         
-        m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_SHOOTER_RIGHT);
-        m_flywheelFollower.setInverted(true);
+        m_flywheelFollower = new WPI_TalonFX(RobotMap.CAN_SHOOTER_LEFT);
+        m_flywheelFollower.setInverted(false);
 
         // restricting voltage for the flywheel
         m_flywheel.configVoltageCompSaturation(9);
         m_flywheel.enableVoltageCompensation(true);
 
         // restricting voltage for the hood wheel
-        m_flywheelFollower.configVoltageCompSaturation(8);
+        m_flywheelFollower.configVoltageCompSaturation(9);
         m_flywheelFollower.enableVoltageCompensation(true);
 
         m_flywheelFollower.follow(m_flywheel);
@@ -74,6 +74,10 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
         shooterCurve = wheelSpeedCalculations;
 
         m_flywheel.configMaxIntegralAccumulator(0, 0.0001);
+        m_flywheel.configNominalOutputForward(0);
+        m_flywheel.configNominalOutputReverse(0);
+        m_flywheel.configPeakOutputForward(1);
+        m_flywheel.configNominalOutputReverse(-1);
 
         m_limelight = limelight;
     }

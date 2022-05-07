@@ -39,7 +39,7 @@ public class SpinChassisToAngle extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return m_chassis.getAtSetpoint() || timer.hasElapsed(2);
+        return m_chassis.getAtSetpoint() || timer.hasElapsed(1);
     }
 
     @Override
