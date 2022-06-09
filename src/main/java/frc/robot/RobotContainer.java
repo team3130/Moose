@@ -47,6 +47,7 @@ RobotContainer {
     Magazine m_magazine = new Magazine();
     Climber m_climber = new Climber();
     protected Chooser m_chooser;
+    protected SendableChooser<String> m_chooser_driver;
 
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
@@ -79,20 +80,22 @@ RobotContainer {
         return m_chooser;
     }
 
-    public RobotContainer(SendableChooser<AutonCommand> autonChooser) {
+    public RobotContainer(SendableChooser<AutonCommand> autonChooser, SendableChooser<String> driverChooser) {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_climber, m_wheelSpeedCalculations));
-        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis));
+        m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, this));
         m_chooser = new Chooser(autonChooser, this);
 
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
+
+        m_chooser_driver = driverChooser;
     }
 
     // Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
-    public void defineButtonBindings(SendableChooser<String> m_chooser_driver) {
+    public void defineButtonBindings() {
         // driver controls
         if (m_chooser_driver.getSelected().equals("Cody")) {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new FaceTarget(m_chassis, m_limelight));
@@ -148,5 +151,9 @@ RobotContainer {
 
     public void disable() {
         m_generalUtils.forEach(GeneralUtils::disable);
+    }
+
+    public SendableChooser getProfile() {
+        return m_chooser_driver;
     }
 }

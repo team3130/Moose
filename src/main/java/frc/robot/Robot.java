@@ -38,20 +38,20 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
     m_chooser_driver.addOption("Test", "Test");
+    m_chooser_driver.addOption("Maddie", "Maddie");
+    m_chooser_driver.addOption("demon spawn", "demon spawn");
     m_chooser_driver.setDefaultOption("Cody", "Cody");
     SmartDashboard.putData("Driver", m_chooser_driver);
 
-    m_robotContainer = new RobotContainer(m_autonChooser);
+    m_robotContainer = new RobotContainer(m_autonChooser, m_chooser_driver);
     m_chooser = m_robotContainer.getChooser();
 //    m_chooser.addAllCommands();
 //    m_chooser.add3Ball();
 //    m_chooser.addThreeBallPathTwo();
+    m_chooser.addTwoBall();
     m_chooser.addFiller();
     m_chooser.add3Ball3();
     m_chooser.add2Ball2();
-    m_chooser.addSpitOut();
-    m_chooser.generateFourBall();
-    m_chooser.generate3BallL();
 //    m_chooser.generateTestPath();
   }
 
@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
     m_scheduler.schedule(cmd.getCmd());
-    m_scheduler.schedule(new ZeroClimber(m_robotContainer.getClimber(), 0.3, 0.3));
 //    m_robotContainer.getLimelight().setLedState(true);
 /*    // week 0 auton attempt
     m_scheduler.schedule(
@@ -105,7 +104,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_robotContainer.defineButtonBindings(m_chooser_driver);
+    m_robotContainer.defineButtonBindings();
     m_robotContainer.teleopInit();
     m_scheduler.cancelAll();
   }
@@ -132,7 +131,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    m_robotContainer.defineButtonBindings(m_chooser_driver);
+    m_robotContainer.defineButtonBindings();
   }
 
   /** This function is called periodically during test mode. */

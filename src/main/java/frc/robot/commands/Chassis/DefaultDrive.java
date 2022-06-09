@@ -8,11 +8,13 @@ import frc.robot.subsystems.Chassis;
 public class DefaultDrive extends CommandBase {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Chassis m_chassis;
+    private final RobotContainer m_robotcontainer;
 
-    public DefaultDrive(Chassis chassis) {
+    public DefaultDrive(Chassis chassis, RobotContainer robotContainer) {
         //mapping to object passed through parameter
         m_chassis = chassis;
         m_requirements.add(chassis);
+        m_robotcontainer = robotContainer;
     }
 
     /**
@@ -33,6 +35,11 @@ public class DefaultDrive extends CommandBase {
         if (m_chassis.isShifted()) {
             moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
         }
+
+        if (((String)m_robotcontainer.getProfile().getSelected()).equals("demon spawn")) {
+            moveSpeed *= 0.4;
+        }
+
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * (m_chassis.isShifted() ? RobotMap.kMaxTurnThrottle : 0.8);
 
         m_chassis.driveArcade(moveSpeed, turnSpeed, true);
