@@ -102,6 +102,10 @@ RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
 
         }
+        else if ((m_chooser_driver.getSelected().equals("Kid"))){
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ChooseFlywheelRPM(m_shooter, m_magazine, 2000));
+            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new DeployAndSpintake(m_intake, m_magazine, 1));
+        }
         else if (m_chooser_driver.getSelected().equals("Test")) {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinChassisToAngle(m_chassis, 180));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));

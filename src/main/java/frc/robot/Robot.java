@@ -38,9 +38,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auton", m_autonChooser);
     // driver options
     m_chooser_driver.addOption("Test", "Test");
+    m_chooser_driver.setDefaultOption("Kid", "Kid");
     m_chooser_driver.addOption("Maddie", "Maddie");
-    m_chooser_driver.addOption("demon spawn", "demon spawn");
-    m_chooser_driver.setDefaultOption("Cody", "Cody");
+    m_chooser_driver.addOption("Cody", "Cody");
     SmartDashboard.putData("Driver", m_chooser_driver);
 
     m_robotContainer = new RobotContainer(m_autonChooser, m_chooser_driver);

@@ -33,7 +33,7 @@ public class DefaultDrive extends CommandBase {
     public void execute() {
         double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
         if (m_chassis.isShifted()) {
-            moveSpeed *= RobotMap.kMaxHighGearDriveSpeed;
+           // moveSpeed *= RobotMap.kMaxOutreachDriveSpeed;
         }
 
         if (((String)m_robotcontainer.getProfile().getSelected()).equals("demon spawn")) {
@@ -42,6 +42,8 @@ public class DefaultDrive extends CommandBase {
 
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * (m_chassis.isShifted() ? RobotMap.kMaxTurnThrottle : 0.8);
 
+        moveSpeed *= RobotMap.kMaxOutreachDriveSpeed;
+        
         m_chassis.driveArcade(moveSpeed, turnSpeed, true);
     }
 
