@@ -1,4 +1,3 @@
-<<<<<<< HEAD:src/main/java/frc/robot/commands/Intake/DeployIntake.java
 package frc.robot.commands.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -63,6 +62,3 @@ public class DeployIntake extends CommandBase {
 
     }
 }
-=======
-package frc.robot.commands.Intake;import edu.wpi.first.wpilibj2.command.CommandBase;import frc.robot.subsystems.Intake;public class deployintake extends CommandBase {private final Intake m_intake; public deployintake(Intake subsystem) {m_intake = subsystem;m_requirements.add(m_intake);}@Override public void initialize() {m_intake.toggleIntake();}@Override public void execute() {}@Override public boolean isFinished() {return true;}@Override public void end(boolean interrupted) {}}
->>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253:src/main/java/frc/robot/commands/Intake/deployintake.java

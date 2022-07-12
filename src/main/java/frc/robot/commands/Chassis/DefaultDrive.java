@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -80,6 +79,3 @@ public class DefaultDrive extends CommandBase {
         m_chassis.configRampRate(0);
     }
 }
-=======
-package frc.robot.commands.Chassis;import edu.wpi.first.wpilibj2.command.CommandBase;import frc.robot.RobotContainer;import frc.robot.RobotMap;import frc.robot.subsystems.Chassis;public class DefaultDrive extends CommandBase {private final Chassis m_chassis;public DefaultDrive(Chassis chassis) {m_chassis = chassis;m_requirements.add(chassis);}@Override public void initialize() {m_chassis.configRampRate(RobotMap.kMaxRampRate);}@Override public void execute() {double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1);if (m_chassis.isShifted()) {moveSpeed *= RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getMoveSpeedSensitivityFromShuffleboard() / 10);}double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * RobotMap.kMaxHighGearDriveSpeed * (m_chassis.getTurnSpeedSensitivityFromShuffleboard() / 10);m_chassis.driveArcade(moveSpeed, turnSpeed * RobotMap.kMaxTurnThrottle, true);}@Override public boolean isFinished() {return false;}@Override public void end(boolean interrupted) {m_chassis.configRampRate(0);}}
->>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253

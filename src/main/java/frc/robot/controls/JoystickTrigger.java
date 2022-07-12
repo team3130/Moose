@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -54,6 +53,3 @@ public class JoystickTrigger extends Trigger {
         return this;
     }
 }
-=======
-package frc.robot.controls;import edu.wpi.first.wpilibj.GenericHID;import edu.wpi.first.wpilibj2.command.Command;import edu.wpi.first.wpilibj2.command.button.Trigger;public class JoystickTrigger extends Trigger {private GenericHID stick;private int axis;private double threshold;public JoystickTrigger(GenericHID joystick, int axisNumber) {this.stick = joystick;this.axis = axisNumber;threshold = 0.1;}public JoystickTrigger(GenericHID joystick, int axisNumber, double threshold) {this.stick = joystick;this.axis = axisNumber;this.threshold = threshold;}@Override public boolean get() {return stick.getRawAxis(axis) > threshold;}public JoystickTrigger whenHeld(final Command command) {whileActiveOnce(command, true);return this;}}
->>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253

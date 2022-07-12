@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -61,6 +60,3 @@ public class Intake extends SubsystemBase implements GeneralUtils {
         m_motor.enableVoltageCompensation(false);
     }
 }
-=======
-package frc.robot.subsystems;import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;import edu.wpi.first.wpilibj.PneumaticsModuleType;import edu.wpi.first.wpilibj.Solenoid;import edu.wpi.first.wpilibj2.command.SubsystemBase;import frc.robot.RobotMap;public class Intake extends SubsystemBase {private WPI_TalonSRX m_motor;private Solenoid m_solenoid;private WPI_TalonSRX m_magazine;public Intake() {m_motor = new WPI_TalonSRX(RobotMap.CAN_INTAKE_MOTOR);m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_INTAKE_ACTUATOR_LEFT);m_magazine = new WPI_TalonSRX(RobotMap.CAN_MAGAZINE_MOTOR);}public void Magazine_spinny(double speed) {m_magazine.set(speed);}public boolean toggleIntake() {m_solenoid.toggle();return m_solenoid.get();}public boolean toggled() {return m_solenoid.get();}public void spinny(double speed) {m_motor.set(speed);}}
->>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253

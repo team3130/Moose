@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -64,6 +63,3 @@ public class ExampleCommand extends CommandBase {
 
     }
 }
-=======
-package frc.robot.commands;import edu.wpi.first.wpilibj2.command.Command;import edu.wpi.first.wpilibj2.command.CommandBase;import edu.wpi.first.wpilibj2.command.Subsystem; import frc.robot.subsystems.ExampleSubsystem;import java.util.Set; public class ExampleCommand extends CommandBase { private final ExampleSubsystem m_subsystem; public ExampleCommand(ExampleSubsystem subsystem) {m_subsystem = subsystem;m_requirements.add(subsystem);}public void initialize() {}@Override public void execute() {}@Override public boolean isFinished() {return false;} @Override public void end(boolean interrupted) {}}
->>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253
