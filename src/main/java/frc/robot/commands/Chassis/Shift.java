@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package frc.robot.commands.Chassis;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -63,3 +64,6 @@ public class Shift extends CommandBase {
 
     }
 }
+=======
+package frc.robot.commands.Chassis;import edu.wpi.first.wpilibj2.command.CommandBase;import frc.robot.subsystems.Chassis;import frc.robot.subsystems.ExampleSubsystem;public class Shift extends CommandBase {private final Chassis m_subsystem;public Shift(Chassis subsystem) {m_subsystem = subsystem;m_requirements.add(subsystem);}@Override public void initialize() {m_subsystem.shift();}@Override public void execute() {}@Override public boolean isFinished() {return true;}@Override public void end(boolean interrupted) {}}
+>>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253

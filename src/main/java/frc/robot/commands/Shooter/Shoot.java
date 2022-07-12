@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -155,3 +156,6 @@ public class Shoot extends CommandBase {
         timerSpin.stop();
     }
 }
+=======
+package frc.robot.commands.Shooter;import edu.wpi.first.wpilibj2.command.CommandBase;import frc.robot.subsystems.Shooter;public class Shoot extends CommandBase {private final Shooter m_shooter;public Shoot(Shooter subsystem) {m_shooter = subsystem;m_requirements.add(subsystem);}@Override public void initialize() {m_shooter.setSpeed(m_shooter.getSpeedFromShuffleboard());}@Override public void execute() {if (m_shooter.getRPM() < m_shooter.getSpeedFromShuffleboard() - 50) {m_shooter.setIndexerPercent(m_shooter.getIndexerPercentFromShuffleboard());}}@Override public boolean isFinished() {return false;}@Override public void end(boolean interrupted) {m_shooter.spinMotor(0);}}
+>>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253

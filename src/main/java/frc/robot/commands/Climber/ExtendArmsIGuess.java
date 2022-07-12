@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/main/java/frc/robot/commands/Climber/ExtendArmsIGuess.java
 package frc.robot.commands.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -62,3 +63,6 @@ public class ExtendArmsIGuess extends CommandBase {
         System.out.println("DONE");
     }
 }
+=======
+package frc.robot.commands.Intake;import edu.wpi.first.wpilibj2.command.CommandBase;import frc.robot.subsystems.Intake;public class spintake extends CommandBase {private final Intake m_intake;public spintake(Intake subsystem) {m_intake = subsystem;m_requirements.add(m_intake);}@Override public void initialize() {m_intake.spinny(-0.8);}@Override public void execute() {}@Override public boolean isFinished() {return false;}@Override public void end(boolean interrupted) {m_intake.spinny(0);}}
+>>>>>>> 14bc2c440138565f9b13fd5f6896dd93bc0ec253:src/main/java/frc/robot/commands/Intake/spintake.java
