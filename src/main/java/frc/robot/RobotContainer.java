@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
  */
-public class
-RobotContainer {
+public class RobotContainer {
     private ArrayList<GeneralUtils> m_generalUtils;
     // Supporting classes
     protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
@@ -52,30 +51,58 @@ RobotContainer {
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
+    /**
+     * getter for intake subsystem
+     * @return intake object
+     */
     public Intake getIntake() {
         return m_intake;
     }
 
+    /**
+     * getter for chassis subsystem
+     * @return chassis object
+     */
     public Chassis getChassis() {
         return m_chassis;
     }
 
+    /**
+     * getter for shooter subsystem
+     * @return shooter object
+     */
     public Shooter getShooter() {
         return m_shooter;
     }
 
+    /**
+     * getter for limelight subsystem
+     * @return limelight object
+     */
     public Limelight getLimelight() {
         return m_limelight;
     }
 
+    /**
+     * getter for climber subsystem
+     * @return climber object
+     */
     public Climber getClimber() {
         return m_climber;
     }
 
+    /**
+     * getter for magazine subsystem
+     * @return magazine object
+     */
     public Magazine getMagazine() {
         return m_magazine;
     }
 
+    /**
+     * getter for chooser subsystem
+     * @return chooser object
+     */
     public Chooser getChooser() {
         return m_chooser;
     }
@@ -95,6 +122,9 @@ RobotContainer {
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
+    /**
+     * maps buttons on the controller to its corresponding class
+     */
     public void defineButtonBindings() {
         // driver controls
         if (m_chooser_driver.getSelected().equals("Cody")) {
