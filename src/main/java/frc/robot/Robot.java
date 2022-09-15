@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled */
   public void simulationInit() {
-    m_robotContainer.defineButtonBindings(m_chooser_driver);
+    m_robotContainer.defineButtonBindings();
   }
 
   /** This Function is called periodically in simulations such as glass */
