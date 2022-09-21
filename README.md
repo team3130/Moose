@@ -1,4 +1,8 @@
 Moose is our initial repository for the 2022 Rapid React season
+
+Welcome to oneline! If you know whats best for you leave now or risk loosing your sanity.
+Have a good day!
+
 "................................,.                                              
 .................................*/.../(...,......*/............../*             
 ..............*/.................*/( *// */*.....*(.../.....,/.../( ,//.         
