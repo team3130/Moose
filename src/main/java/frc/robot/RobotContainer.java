@@ -1,5 +1,4 @@
 package frc.robot;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -26,20 +25,16 @@ import frc.robot.controls.TriggerButton;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.sensors.vision.WheelSpeedCalculations;
 import frc.robot.subsystems.*;
-
 import java.util.ArrayList;
 import java.util.List;
-
 /**
  * All objects that are going to be used that are instantiated once should be defined and accessible here
  */
-public class
-RobotContainer {
+public class RobotContainer {
     private ArrayList<GeneralUtils> m_generalUtils;
     // Supporting classes
     protected WheelSpeedCalculations m_wheelSpeedCalculations = new WheelSpeedCalculations(WheelSpeedCalculations.CurveMechanism.SHOOTER);
     protected Limelight m_limelight = new Limelight();
-
     // define subsystems here
     Shooter m_shooter = new Shooter(m_limelight, m_wheelSpeedCalculations);
     Chassis m_chassis = new Chassis();
@@ -48,63 +43,88 @@ RobotContainer {
     Climber m_climber = new Climber();
     protected Chooser m_chooser;
     protected SendableChooser<String> m_chooser_driver;
-
     // reminder that Singletons are deprecated, please do not use them even for subsystems
     // EX: private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
+    /**
+     * getter for intake subsystem
+     * @return intake object
+     */
     public Intake getIntake() {
         return m_intake;
     }
 
+    /**
+     * getter for chassis subsystem
+     * @return chassis object
+     */
     public Chassis getChassis() {
         return m_chassis;
     }
 
+    /**
+     * getter for shooter subsystem
+     * @return shooter object
+     */
     public Shooter getShooter() {
         return m_shooter;
     }
 
+    /**
+     * getter for limelight subsystem
+     * @return limelight object
+     */
     public Limelight getLimelight() {
         return m_limelight;
     }
 
+    /**
+     * getter for climber subsystem
+     * @return climber object
+     */
     public Climber getClimber() {
         return m_climber;
     }
 
+    /**
+     * getter for magazine subsystem
+     * @return magazine object
+     */
     public Magazine getMagazine() {
         return m_magazine;
     }
 
+    /**
+     * getter for chooser subsystem
+     * @return chooser object
+     */
     public Chooser getChooser() {
         return m_chooser;
     }
-
     public RobotContainer(SendableChooser<AutonCommand> autonChooser, SendableChooser<String> driverChooser) {
         m_generalUtils = new ArrayList<>();
         m_generalUtils.addAll(List.of(m_chassis, m_shooter, m_intake, m_magazine, m_limelight, m_climber, m_wheelSpeedCalculations));
         m_chassis.setDefaultCommand(new DefaultDrive(m_chassis, this));
         m_chooser = new Chooser(autonChooser, this);
-
         m_climber.setDefaultCommand(new spinClimberWinches(m_climber));
-
         m_chooser_driver = driverChooser;
     }
-
     // Joysticks
     public static Joystick m_driverGamepad = new Joystick(0);
     public static Joystick m_weaponsGamepad = new Joystick(1);
 
+    /**
+     * maps buttons on the controller to its corresponding class
+     */
     public void defineButtonBindings() {
         // driver controls
         if (m_chooser_driver.getSelected().equals("Cody")) {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new FaceTarget(m_chassis, m_limelight));
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_LJOYSTICKPRESS).whenPressed(new Shift(m_chassis));
-
         }
         else if ((m_chooser_driver.getSelected().equals("Kid"))){
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_A).whenHeld(new ChooseFlywheelRPM(m_shooter, m_magazine, 2000));
-            new JoystickButton(m_weaponsGamepad, RobotMap.LST_BTN_B).whenHeld(new DeployAndSpintake(m_intake, m_magazine, 1, m_shooter));
+            new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new DeployAndSpintake(m_intake, m_magazine, 1, m_shooter));
         }
         else if (m_chooser_driver.getSelected().equals("Test")) {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_B).whenHeld(new SpinChassisToAngle(m_chassis, 180));
@@ -121,7 +141,6 @@ RobotContainer {
             new JoystickButton(m_driverGamepad, RobotMap.LST_BTN_WINDOW).whenPressed(() -> m_limelight.toggleLEDstate());
             new JoystickButton(m_driverGamepad, RobotMap. LST_BTN_X).whenHeld(new SpinChassisToAngle(m_chassis, 180));
         }
-
         // weapons controls
         new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_RTRIGGER).whenPressed(new DeployAndSpintake(m_intake, m_magazine, 1, m_shooter)).whenReleased(new TimedSpintake(m_intake, m_magazine));
         new TriggerButton(m_weaponsGamepad, RobotMap.LST_AXS_LTRIGGER).whenHeld(new DeployAndSpintake(m_intake, m_magazine, -1, m_shooter));
@@ -144,19 +163,15 @@ RobotContainer {
         new PivotTrigger(m_weaponsGamepad, RobotMap.LST_POV_S).whenHeld(new ZeroClimber(m_climber, 0.5, 0.5));
         new PivotTrigger(m_weaponsGamepad, RobotMap.LST_POV_E).whenPressed(m_intake::toggleVoltageCompensation);
     }
-
     public void outputToShuffleBoard() {
         m_generalUtils.forEach(GeneralUtils::outputToShuffleboard);
     }
-
     public void teleopInit() {
         m_generalUtils.forEach(GeneralUtils::teleopInit);
     }
-
     public void disable() {
         m_generalUtils.forEach(GeneralUtils::disable);
     }
-
     public SendableChooser getProfile() {
         return m_chooser_driver;
     }
