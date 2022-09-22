@@ -37,7 +37,7 @@ public class spinClimberWinches extends CommandBase {
             right = 0;
         }
         m_climber.setSpeedLeft(left);
-        m_climber.setSpeedRight(right);
+        // m_climber.setSpeedRight(right);
     }
     /**
      * <p>
@@ -68,7 +68,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        m_climber.setSpeedRight(0);
+        // m_climber.setSpeedRight(0);
         m_climber.setSpeedLeft(0);
     }
 }

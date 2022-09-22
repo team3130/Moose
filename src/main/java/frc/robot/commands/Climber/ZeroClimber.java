@@ -48,13 +48,11 @@ public class ZeroClimber extends CommandBase {
 
         if (m_Climber.brokeRight()) {
             RightOutput = 0;
-            m_Climber.resetEncodersRight();
+           //  m_Climber.resetEncodersRight();
             BrokeRight = true;
         }
         m_Climber.setSpeedLeft(LeftOutput);
-        m_Climber.
-
-                setSpeedRight(RightOutput);
+        // m_Climber.setSpeedRight(RightOutput);
     }
 
     /**

@@ -19,7 +19,7 @@ public class Climber extends SubsystemBase implements GeneralUtils {
 // so that they are initialized before the constructor is called.
     //Create necessary objects
     private WPI_TalonFX m_left_motor;
-    private WPI_TalonFX m_right_motor;
+    // private WPI_TalonFX m_right_motor;
     private Solenoid m_solenoid;
     private DigitalInput m_rightlimitswitch;
     private DigitalInput m_leftlimitswitch;
@@ -30,39 +30,39 @@ public class Climber extends SubsystemBase implements GeneralUtils {
     //Create and define all standard data types needed
     public Climber() {
         m_left_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_LEFT);
-        m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
+        // m_right_motor = new WPI_TalonFX(RobotMap.CAN_CLIMBER_RIGHT);
         m_rightlimitswitch = new DigitalInput(RobotMap.RIGHT_LIMITSWITCH);
         m_leftlimitswitch = new DigitalInput(RobotMap.LEFT_LIMITSWITCH);
 
-        m_right_motor.configFactoryDefault();
+        // m_right_motor.configFactoryDefault();
         m_left_motor.configFactoryDefault();
 
         m_left_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-        m_right_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        // m_right_motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
-        m_right_motor.setInverted(true);
+        // m_right_motor.setInverted(true);
         m_left_motor.setInverted(true);
 
-        m_right_motor.setNeutralMode(NeutralMode.Brake);
+        // m_right_motor.setNeutralMode(NeutralMode.Brake);
         m_left_motor.setNeutralMode(NeutralMode.Brake);
 
         m_solenoid = new Solenoid(RobotMap.CAN_PNMMODULE, PneumaticsModuleType.CTREPCM, RobotMap.PNM_CLIMBER_ACTUATOR);
 
         Utils.configPIDF(m_left_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
-        Utils.configPIDF(m_right_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
+        // Utils.configPIDF(m_right_motor, RobotMap.kClimberP, RobotMap.kClimberI, RobotMap.kClimberD, RobotMap.kClimberS);
     }
 
     public void setSpeedLeft(double speed) {
         m_left_motor.set(speed);
     }
 
-    public void setSpeedRight(double speed) {
+    /*public void setSpeedRight(double speed) {
         m_right_motor.set(speed);
-    }
+    }*/
 
     public void zero(double left, double right) {
         m_left_motor.set(ControlMode.PercentOutput, -left);
-        m_right_motor.set(ControlMode.PercentOutput, -right);
+        // m_right_motor.set(ControlMode.PercentOutput, -right);
     }
 
     public boolean isDeployed() {
@@ -75,16 +75,16 @@ public class Climber extends SubsystemBase implements GeneralUtils {
 
     public void configRampRate(double rampSeconds){
         m_left_motor.configOpenloopRamp(rampSeconds);
-        m_right_motor.configOpenloopRamp(rampSeconds);
+        // m_right_motor.configOpenloopRamp(rampSeconds);
     }
 
     public void automateClimber() {
         m_left_motor.set(ControlMode.MotionMagic, LeftFullExtension);
-        m_right_motor.set(ControlMode.MotionMagic, RightFullExtension);
+        // m_right_motor.set(ControlMode.MotionMagic, RightFullExtension);
     }
 
     public boolean checkExtendFin() {
-        return m_left_motor.isMotionProfileFinished() && m_right_motor.isMotionProfileFinished();
+        return m_left_motor.isMotionProfileFinished();
     }
 
     public boolean brokeLeft() {
@@ -99,15 +99,15 @@ public class Climber extends SubsystemBase implements GeneralUtils {
         m_left_motor.setSelectedSensorPosition(0);
     }
 
-    public void resetEncodersRight() {
+/*    public void resetEncodersRight() {
         m_right_motor.setSelectedSensorPosition(0);
-    }
+    }*/
 
     public void outputToShuffleboard() {
         SmartDashboard.putBoolean("limit switch right:", brokeRight());
         SmartDashboard.putBoolean("limit switch left", brokeLeft());
         SmartDashboard.putNumber("left encoder reading", m_left_motor.getSelectedSensorPosition());
-        SmartDashboard.putNumber("right encoder reading", m_right_motor.getSelectedSensorPosition());
+        // SmartDashboard.putNumber("right encoder reading", m_right_motor.getSelectedSensorPosition());
     }
 
     @Override
@@ -122,15 +122,15 @@ public class Climber extends SubsystemBase implements GeneralUtils {
 
     public void stop() {
         setSpeedLeft(0);
-        setSpeedRight(0);
+//        setSpeedRight(0);
     }
 
     public double getPosL() {
         return m_left_motor.getSelectedSensorPosition();
     }
 
-    public double getPosR() {
+/*    public double getPosR() {
         return m_right_motor.getSelectedSensorPosition();
-    }
+    }*/
 }
 
