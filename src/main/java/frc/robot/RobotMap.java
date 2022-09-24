@@ -73,14 +73,14 @@ public class RobotMap {
     // this might not be actual rotations, but it doesn't matter
     public static final double HoodScalarToRotations = 4096*100; // <- mostly arbitrary numbers to lower the size of the position number
 
-    public static double kFlywheelP = 0.02; // 0.02;
+    public static double kFlywheelP = 0.05; // 0.02;
     public static double kFlywheelI = 0;
     public static double kFlywheelD = 6; //0
 
     public static double WPItoCTREFeedForwardConversion = ((1023.0/12.0) * 10.0) / 2048.0; // assuming gains are in Rotations/Sec
 
     public static double flyWheelkS = 0 ;//0.5816;
-    public static double flyWheelkV = 0.068; //0.0655;
+    public static double flyWheelkV = 0.072; //0.0680;
     public static double flyWheelkA = 0; //0.0082804;
 
     public static double kHoodP = 1.53
@@ -128,9 +128,9 @@ public class RobotMap {
     public static final double kChassisEncoderError = 1.0934926;
     public static double kMaxRampRate = 0.7;
 
-    public static double ChassisSpinKP = 0.012;
-    public static double ChassisSpinKI = 0.01;
-    public static double ChassisSpinKD = 0.002;
+    public static double ChassisSpinKP = 0.006375;
+    public static double ChassisSpinKI = 0.00;
+    public static double ChassisSpinKD = 0.000;
 
 
     // max velocity of chassis in meters per second

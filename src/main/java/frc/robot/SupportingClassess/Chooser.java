@@ -275,6 +275,8 @@ public class Chooser {
                 );
         m_autonChooser.addOption("5Ball", new AutonCommand(commandGroup, ToFirstBall.getStartPosition()));
     }
+
+    public void addWeekZero(){}
 /*
     public SequentialCommandGroup addTestRoutine(){
         AutonCommand PathOne = autonCmdFactory.apply(trajectoryFactory.apply(Filesystem.getDeployDirectory().toPath().resolve("paths/Forward1M.wpilib.json")));

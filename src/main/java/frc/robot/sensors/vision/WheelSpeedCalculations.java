@@ -105,7 +105,7 @@ public class WheelSpeedCalculations implements GeneralUtils {
         FILEPATH = Filesystem.getDeployDirectory() + File.separator + "curves";
 
 
-        FILEPATH = FILEPATH + File.separator + "Marriuci.csv";
+        FILEPATH = FILEPATH + File.separator + "EMCC.csv";
 
 
 
