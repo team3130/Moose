@@ -430,7 +430,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
         SmartDashboard.putNumber("Chassis Spinny Position Error", m_spinnyPID.getPositionError());
         SmartDashboard.putNumber("Chassis Spinny Velocity Error", m_spinnyPID.getVelocityError());
 
-//        SmartDashboard.putNumber("Chassis measurement", getSpinnyAngle());
+        SmartDashboard.putNumber("Chassis measurement", getSpinnyAngle());
 
 //        LBTemp.setNumber(m_leftMotorBack.getTemperature());
 //        RBTemp.setNumber(m_rightMotorBack.getTemperature());

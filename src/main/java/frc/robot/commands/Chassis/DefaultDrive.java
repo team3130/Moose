@@ -36,13 +36,7 @@ public class DefaultDrive extends CommandBase {
            // moveSpeed *= RobotMap.kMaxOutreachDriveSpeed;
         }
 
-        if (((String)m_robotcontainer.getProfile().getSelected()).equals("demon spawn")) {
-            moveSpeed *= 0.4;
-        }
-
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * (m_chassis.isShifted() ? RobotMap.kMaxTurnThrottle : 0.8);
-
-        moveSpeed *= RobotMap.kMaxOutreachDriveSpeed;
         
         m_chassis.driveArcade(moveSpeed, turnSpeed, true);
     }
