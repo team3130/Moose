@@ -420,6 +420,9 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 //        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
 //        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
+        SmartDashboard.putNumber("Chassis ticks R", m_rightMotorFront.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Chassis ticks L", m_leftMotorFront.getSelectedSensorPosition());
+
         // bot position
         SmartDashboard.putNumber("Robot position X", m_odometry.getPoseMeters().getX());
         SmartDashboard.putNumber("Robot position Y", m_odometry.getPoseMeters().getY());
