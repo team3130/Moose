@@ -2,6 +2,7 @@ package frc.robot.commands.Chassis;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotMap;
 import frc.robot.sensors.vision.Limelight;
 import frc.robot.subsystems.Chassis;
 
@@ -27,7 +28,7 @@ public class FaceTarget extends CommandBase {
     @Override
     public void initialize() {
         pose = m_chassis.getPose();
-        m_chassis.configRampRate(2);
+        m_chassis.configRampRate(RobotMap.kMaxRampRate);
 /*        m_chassis.resetOdometry(new Pose2d());*/
         angle = m_chassis.getAngle() - m_limelight.getHeading().getDegrees();
         m_chassis.setSpinnySetPoint(angle);

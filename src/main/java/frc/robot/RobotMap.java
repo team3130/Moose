@@ -3,7 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
-    public static final int DIO_FEEDERBEAM = 1;
+    public static final int DIO_FEEDERBEAM = 0;
     // If you start running out of RAM change everything in here to a final char
 
     public static boolean debug = true; // whether we should print stack traces
@@ -128,9 +128,9 @@ public class RobotMap {
     public static final double kChassisEncoderError = 1.0934926;
     public static double kMaxRampRate = 0.7;
 
-    public static double ChassisSpinKP = 0.006375;
+    public static double ChassisSpinKP = 0.01;
     public static double ChassisSpinKI = 0.00;
-    public static double ChassisSpinKD = 0.000;
+    public static double ChassisSpinKD = 0.00239;
 
 
     // max velocity of chassis in meters per second
