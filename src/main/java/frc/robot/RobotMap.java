@@ -120,7 +120,7 @@ public class RobotMap {
     public static final double kEncoderResolution = 2048; // checked 2/28/22
     public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
-    public static final double kWheelDiameter = Units.inchesToMeters(3.955);//taken 3/20/22 COMP
+    public static final double kWheelDiameter = Units.inchesToMeters(3.68); // calculated from experimental data on 10/5/22
     public static double kMaxTurnThrottle = 0.8;
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxOutreachDriveSpeed = 0.55;

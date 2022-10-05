@@ -75,7 +75,6 @@ public class Shooter extends SubsystemBase implements GeneralUtils {
 
         m_flywheel.configMaxIntegralAccumulator(0, 0.0001);
         m_flywheel.configNominalOutputForward(0);
-        m_flywheel.configNominalOutputReverse(0);
         m_flywheel.configPeakOutputForward(1);
         m_flywheel.configNominalOutputReverse(-1);
 

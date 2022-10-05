@@ -174,7 +174,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     private double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * RobotMap.kChassisEncoderError;
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * 10; // why times ten? idk the spreadsheet told me to do it
     }
 
     /**
@@ -184,7 +184,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     private double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * RobotMap.kChassisEncoderError;
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * 10; // why times ten? idk the spreadsheet told me to do it
     }
 
 

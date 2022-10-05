@@ -31,9 +31,9 @@ public class DefaultDrive extends CommandBase {
      */
     @Override
     public void execute() {
-        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y axis is inverted
+        double moveSpeed = -RobotContainer.m_driverGamepad.getRawAxis(1); //joystick's y-axis is inverted
         if (m_chassis.isShifted()) {
-           // moveSpeed *= RobotMap.kMaxOutreachDriveSpeed;
+           moveSpeed *= RobotMap.kMaxOutreachDriveSpeed;
         }
 
         double turnSpeed = RobotContainer.m_driverGamepad.getRawAxis(4) * (m_chassis.isShifted() ? RobotMap.kMaxTurnThrottle : 0.8);
