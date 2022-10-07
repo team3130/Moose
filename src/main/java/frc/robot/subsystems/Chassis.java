@@ -174,7 +174,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     private double getDistanceL() {
         return m_leftMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * 10; // why times ten? idk the spreadsheet told me to do it
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
 
     /**
@@ -184,7 +184,7 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
      */
     private double getDistanceR() {
         return m_rightMotorFront.getSelectedSensorPosition() / RobotMap.kEncoderResolution
-                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI) * 10; // why times ten? idk the spreadsheet told me to do it
+                * (RobotMap.kChassisGearRatio) * ((RobotMap.kWheelDiameter) * Math.PI);
     }
 
 
@@ -417,8 +417,8 @@ public class Chassis extends SubsystemBase implements GeneralUtils {
 //        SmartDashboard.putNumber("Chassis Left Output %", m_leftMotorFront.getMotorOutputPercent());
 
         // shifting
-//        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
-//        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
+        SmartDashboard.putNumber("Chassis Distance R", getDistanceR());
+        SmartDashboard.putNumber("Chassis Distance L", getDistanceL());
 
         SmartDashboard.putNumber("Chassis ticks R", m_rightMotorFront.getSelectedSensorPosition());
         SmartDashboard.putNumber("Chassis ticks L", m_leftMotorFront.getSelectedSensorPosition());

@@ -114,18 +114,19 @@ public class RobotMap {
     /**
      * Chassis
      */
-    public static final double kChassisMaxVoltage = 10.0;
+    public static final double kChassisMaxVoltage = 9d;
     // the distance between the left and the right wheels: IN METERS
     public static final double trackDistance = Units.inchesToMeters(27.089); //taken 3/20/22 COMP
     public static final double kEncoderResolution = 2048; // checked 2/28/22
-    public static final double kChassisHighGearRatio = ((double) 24/54) * ((double) 14/42); // checked 2/28/22 (For high gear)
+    public static final double kChassisHighGearRatio = (81d/500d); // checked 2/28/22 (For high gear)
     public static double kChassisGearRatio = kChassisHighGearRatio; // default is high gear, switch when shifting
     public static final double kWheelDiameter = Units.inchesToMeters(3.68); // calculated from experimental data on 10/5/22
     public static double kMaxTurnThrottle = 0.8;
     public static double kMaxHighGearDriveSpeed = 0.8;
     public static double kMaxOutreachDriveSpeed = 0.55;
     public static final double kDriveDeadband = 0.02;
-    public static final double kChassisEncoderError = 1.0934926;
+    public static final double kChassisEncoderError = 1;
+//    public static final double kChassisEncoderError = 1.0934926;
     public static double kMaxRampRate = 0.7;
 
     public static double ChassisSpinKP = 0.01;
@@ -141,17 +142,17 @@ public class RobotMap {
      * PID for Chassis
      */
             // solution found, cry harder
-    public static double LChassiskP = 2.7278; //MURA
+    public static double LChassiskP = 2.3593; //MURA
     public static double LChassiskI = 1.5;
     public static double LChassiskD = 0;
 
-    public static double RChassiskP = 2.6834;
+    public static double RChassiskP = 2.1431;
     public static double RChassiskI = 1.33;
     public static double RChassiskD = 0;
 
-    public static double ChassiskS = 0.67321;
-    public static double ChassiskV = 1.924;
-    public static double ChassiskA = 0.60662;
+    public static double ChassiskS = 0.70575;
+    public static double ChassiskV = 2.2219;
+    public static double ChassiskA = 0.58732;
 
 
     /**

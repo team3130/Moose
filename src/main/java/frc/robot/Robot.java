@@ -8,11 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.SupportingClassess.AutonCommand;
 import frc.robot.SupportingClassess.Chooser;
-import frc.robot.commands.Chassis.BadAutonDrive;
-import frc.robot.commands.Shooter.BadAutonShoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -47,14 +44,14 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer(m_autonChooser, m_chooser_driver);
     m_chooser = m_robotContainer.getChooser();
-//    m_chooser.addAllCommands();
+    m_chooser.addAllCommands();
 //    m_chooser.add3Ball();
-//    m_chooser.addThreeBallPathTwo();
+    m_chooser.addThreeBallPathTwo();
     m_chooser.addTwoBall();
     m_chooser.addFiller();
     m_chooser.add3Ball3();
     m_chooser.add2Ball2();
-//    m_chooser.generateTestPath();
+    m_chooser.generateTestPath();
   }
 
   /**
@@ -81,22 +78,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-   // AutonCommand cmd = m_autonChooser.getSelected();
+    AutonCommand cmd = m_autonChooser.getSelected();
     m_robotContainer.getLimelight().setLedState(true);
 
-    //m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
-   // m_scheduler.schedule(cmd.getCmd()); 
-//    m_robotContainer.getLimelight().setLedState(true);
+    m_robotContainer.getChassis().resetOdometry(cmd.getStartPosition());
+    m_scheduler.schedule(cmd.getCmd());
+    m_robotContainer.getLimelight().setLedState(true);
 
 
    // week 0 auton attempt
-    m_scheduler.schedule(
+/*    m_scheduler.schedule(
             new SequentialCommandGroup(
                     new BadAutonDrive(m_robotContainer.getChassis()),
                     new BadAutonShoot(m_robotContainer.getShooter(), m_robotContainer.getMagazine())
                     
             )
-    );
+    );*/
 
 
   }

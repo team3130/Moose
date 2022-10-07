@@ -49,7 +49,7 @@ public class Chooser {
         DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
                 chassis.getFeedforward(),
                 chassis.getmKinematics(),
-                10);
+                9);
 
         config = new TrajectoryConfig(RobotMap.kMaxVelocityMPS, RobotMap.kMaxAccelerationMPS);
         config.setKinematics(container.getChassis().getmKinematics()).addConstraint(autoVoltageConstraint);
