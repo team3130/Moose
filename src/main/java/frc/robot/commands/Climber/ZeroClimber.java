@@ -15,7 +15,7 @@ public class ZeroClimber extends CommandBase {
     private double leftOut, rightOut = 0;
 
     public ZeroClimber(Climber subsystem, double leftOut, double rightOut) {
-        //mapping to object passed through parameter
+        // mapping to object passed through parameter
         m_Climber = subsystem;
         m_requirements.add(subsystem);
         this.leftOut = leftOut;
@@ -48,11 +48,11 @@ public class ZeroClimber extends CommandBase {
 
         if (m_Climber.brokeRight()) {
             RightOutput = 0;
-           //  m_Climber.resetEncodersRight();
+             m_Climber.resetEncodersRight();
             BrokeRight = true;
         }
         m_Climber.setSpeedLeft(LeftOutput);
-        // m_Climber.setSpeedRight(RightOutput);
+         m_Climber.setSpeedRight(RightOutput);
     }
 
     /**

@@ -44,14 +44,14 @@ public class Robot extends TimedRobot {
 
     m_robotContainer = new RobotContainer(m_autonChooser, m_chooser_driver);
     m_chooser = m_robotContainer.getChooser();
-    m_chooser.addAllCommands();
+//    m_chooser.addAllCommands();
 //    m_chooser.add3Ball();
     m_chooser.addThreeBallPathTwo();
     m_chooser.addTwoBall();
     m_chooser.addFiller();
     m_chooser.add3Ball3();
     m_chooser.add2Ball2();
-    m_chooser.generateTestPath();
+//    m_chooser.generateTestPath();
   }
 
   /**

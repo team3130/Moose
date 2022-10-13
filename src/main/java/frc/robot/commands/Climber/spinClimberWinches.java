@@ -31,13 +31,8 @@ public class spinClimberWinches extends CommandBase {
     public void execute() {
         double left = RobotContainer.m_weaponsGamepad.getRawAxis(1) * -0.85;
         double right = RobotContainer.m_weaponsGamepad.getRawAxis(5) * -0.85;
-        if (m_climber.brokeLeft() && left <= 0) {
-            left = 0;
-        } if (m_climber.brokeRight() && right <= 0) {
-            right = 0;
-        }
         m_climber.setSpeedLeft(left);
-        // m_climber.setSpeedRight(right);
+         m_climber.setSpeedRight(right);
     }
     /**
      * <p>
@@ -68,7 +63,7 @@ public class spinClimberWinches extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        // m_climber.setSpeedRight(0);
+         m_climber.setSpeedRight(0);
         m_climber.setSpeedLeft(0);
     }
 }
