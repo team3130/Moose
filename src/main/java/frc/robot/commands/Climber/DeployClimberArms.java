@@ -1,14 +1,13 @@
 package frc.robot.commands.Climber;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.Climber;
 
-public class ToggleClimber extends InstantCommand {
+public class DeployClimberArms extends InstantCommand {
     // defining an instance to be used throughout the command and to be instantiated in the constructor of type parameter
     private final Climber m_climber;
 
-    public ToggleClimber(Climber subsystem) {
+    public DeployClimberArms(Climber subsystem) {
         //mapping to object passed through parameter
         m_climber = subsystem;
         m_requirements.add(subsystem);
